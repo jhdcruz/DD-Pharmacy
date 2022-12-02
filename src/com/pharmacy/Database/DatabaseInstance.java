@@ -1,4 +1,4 @@
-package com.database;
+package com.pharmacy.Database;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.Properties;
 /**
  * Retrieves connection for database and login verification.
  */
-public class ConnectionFactory {
+public class DatabaseInstance {
 
     static final String driver = "com.mysql.cj.jdbc.Driver";
     static final String url = "jdbc:mysql://localhost:3306/inventory";
@@ -26,7 +26,7 @@ public class ConnectionFactory {
     Statement statement = null;
     ResultSet resultSet = null;
 
-    public ConnectionFactory() {
+    public DatabaseInstance() {
         try {
             // Username and Password saved as configurable properties
             // to allow changes without recompilation.
@@ -75,14 +75,14 @@ public class ConnectionFactory {
      * @param userType user access type
      * @return login state (boolean)
      */
-    public boolean checkLogin(String username, String password, String userType) {
+    public boolean validateLogin(String username, String password, String userType) {
         String query = "SELECT * FROM users WHERE username='"
-                + username
-                + "' AND password='"
-                + password
-                + "' AND usertype='"
-                + userType
-                + "' LIMIT 1";
+            + username
+            + "' AND password='"
+            + password
+            + "' AND usertype='"
+            + userType
+            + "' LIMIT 1";
 
         try {
             resultSet = statement.executeQuery(query);

@@ -1,9 +1,9 @@
 
-package com.inventory.Controllers;
+package com.pharmacy.Controllers;
 
-import com.inventory.Models.UserModel;
-import com.database.ConnectionFactory;
-import com.inventory.Views.UsersPage;
+import com.pharmacy.Models.UserModel;
+import com.pharmacy.Database.DatabaseInstance;
+import com.pharmacy.Views.UsersPage;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -24,7 +24,7 @@ public class UserController {
 
     public UserController() {
         try {
-            conn = new ConnectionFactory().getConnection();
+            conn = new DatabaseInstance().getConnection();
             statement = conn.createStatement();
         } catch (SQLException ex) {
             ex.printStackTrace();

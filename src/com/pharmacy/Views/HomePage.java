@@ -1,7 +1,7 @@
-package com.inventory.Views;
+package com.pharmacy.Views;
 
-import com.inventory.Controllers.UserController;
-import com.inventory.Models.UserModel;
+import com.pharmacy.Controllers.UserController;
+import com.pharmacy.Models.UserModel;
 
 
 // Welcome page for the application

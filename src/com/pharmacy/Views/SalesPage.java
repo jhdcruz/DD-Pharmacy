@@ -1,8 +1,8 @@
-package com.inventory.Views;
+package com.pharmacy.Views;
 
-import com.inventory.Controllers.CustomerController;
-import com.inventory.Controllers.ProductController;
-import com.inventory.Models.ProductModel;
+import com.pharmacy.Controllers.CustomerController;
+import com.pharmacy.Controllers.ProductController;
+import com.pharmacy.Models.ProductModel;
 
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;

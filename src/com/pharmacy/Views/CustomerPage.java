@@ -1,7 +1,7 @@
-package com.inventory.Views;
+package com.pharmacy.Views;
 
-import com.inventory.Controllers.CustomerController;
-import com.inventory.Models.CustomerModel;
+import com.pharmacy.Controllers.CustomerController;
+import com.pharmacy.Models.CustomerModel;
 
 import javax.swing.JOptionPane;
 import java.sql.SQLException;

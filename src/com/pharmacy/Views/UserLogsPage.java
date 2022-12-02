@@ -1,6 +1,6 @@
-package com.inventory.Views;
+package com.pharmacy.Views;
 
-import com.inventory.Controllers.UserController;
+import com.pharmacy.Controllers.UserController;
 
 import java.sql.SQLException;
 

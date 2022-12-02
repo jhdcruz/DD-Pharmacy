@@ -1,7 +1,7 @@
-package com.inventory.Controllers;
+package com.pharmacy.Controllers;
 
-import com.inventory.Models.SupplierModel;
-import com.database.ConnectionFactory;
+import com.pharmacy.Models.SupplierModel;
+import com.pharmacy.Database.DatabaseInstance;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -24,7 +24,7 @@ public class SupplierController {
 
     public SupplierController() {
         try {
-            connection = new ConnectionFactory().getConnection();
+            connection = new DatabaseInstance().getConnection();
             statement = connection.createStatement();
         } catch (SQLException e) {
             e.printStackTrace();

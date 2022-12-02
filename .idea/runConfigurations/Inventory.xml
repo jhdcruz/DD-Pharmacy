@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Inventory" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="com.inventory.Main" />
+    <option name="MAIN_CLASS_NAME" value="com.pharmacy.Main" />
     <module name="DDPharmacy" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="com.inventory.*" />
+        <option name="PATTERN" value="com.pharmacy.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

@@ -1,4 +1,4 @@
-package com.inventory.Models;
+package com.pharmacy.Models;
 
 public class UserModel {
 

@@ -1,7 +1,7 @@
-package com.inventory.Views;
+package com.pharmacy.Views;
 
-import com.inventory.Controllers.UserController;
-import com.inventory.Models.UserModel;
+import com.pharmacy.Controllers.UserController;
+import com.pharmacy.Models.UserModel;
 
 import javax.swing.JOptionPane;
 import java.awt.CardLayout;
@@ -135,7 +135,7 @@ public class Dashboard extends javax.swing.JFrame {
         menuPanel.setPreferredSize(new java.awt.Dimension(120, 26));
 
         menuButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        menuButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/inventory/Views/Icons/menu_icon_150667.png"))); // NOI18N
+        menuButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pharmacy/Views/Icons/menu_icon_150667.png"))); // NOI18N
         menuButton.setText("MENU");
         menuButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         menuButton.addActionListener(new java.awt.event.ActionListener() {
@@ -159,7 +159,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         navPanel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        homeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/inventory/Views/Icons/homepages_home_house_icon_150665.png"))); // NOI18N
+        homeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pharmacy/Views/Icons/homepages_home_house_icon_150665.png"))); // NOI18N
         homeButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         homeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -276,11 +276,11 @@ public class Dashboard extends javax.swing.JFrame {
         displayPanel.setLayout(new java.awt.CardLayout());
 
         nameLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        nameLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/inventory/Views/Icons/user_icon_150670.png"))); // NOI18N
+        nameLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pharmacy/Views/Icons/user_icon_150670.png"))); // NOI18N
         nameLabel.setText("User: ");
         nameLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        logoutButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/inventory/Views/Icons/log-out_icon-icons.com_50106.png"))); // NOI18N
+        logoutButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pharmacy/Views/Icons/log-out_icon-icons.com_50106.png"))); // NOI18N
         logoutButton.setText("Sign out");
         logoutButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         logoutButton.addActionListener(new java.awt.event.ActionListener() {

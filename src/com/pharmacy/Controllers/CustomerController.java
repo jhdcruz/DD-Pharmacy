@@ -1,7 +1,7 @@
-package com.inventory.Controllers;
+package com.pharmacy.Controllers;
 
-import com.inventory.Models.CustomerModel;
-import com.database.ConnectionFactory;
+import com.pharmacy.Models.CustomerModel;
+import com.pharmacy.Database.DatabaseInstance;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -22,7 +22,7 @@ public class CustomerController {
 
     public CustomerController() {
         try {
-            connection = new ConnectionFactory().getConnection();
+            connection = new DatabaseInstance().getConnection();
             statement = connection.createStatement();
         } catch (SQLException e) {
             e.printStackTrace();
