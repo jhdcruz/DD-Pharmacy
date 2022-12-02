@@ -1,25 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.inventory.Controllers;
 
 import com.inventory.Models.SupplierModel;
-import com.inventory.Database.ConnectionFactory;
+import com.database.ConnectionFactory;
 
-import javax.swing.*;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Locale;
 import java.util.Vector;
 
-/**
- *
- * @author asjad
- */
-
-// Data Access Object for Suppliers
 public class SupplierController {
 
     Connection conn = null;

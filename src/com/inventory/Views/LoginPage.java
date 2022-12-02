@@ -8,7 +8,7 @@ package com.inventory.Views;
 
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDarkerIJTheme;
 import com.inventory.Models.UserModel;
-import com.inventory.Database.ConnectionFactory;
+import com.database.ConnectionFactory;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

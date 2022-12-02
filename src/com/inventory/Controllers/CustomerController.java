@@ -1,7 +1,7 @@
 package com.inventory.Controllers;
 
 import com.inventory.Models.CustomerModel;
-import com.inventory.Database.ConnectionFactory;
+import com.database.ConnectionFactory;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -136,7 +136,7 @@ public class CustomerController {
     }
 
     /**
-     * Get customer based on customer code.
+     * Get a customer based on provided customer code.
      *
      * @param customerCode customer code to be matched with customer name
      * @return customer details

@@ -1,26 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.inventory.Controllers;
 
 import com.inventory.Models.UserModel;
-import com.inventory.Database.ConnectionFactory;
+import com.database.ConnectionFactory;
 import com.inventory.Views.UsersPage;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Locale;
 import java.util.Vector;
-
-/**
- *
- * @author asjad
- */
-
-// Data Access Object class for Users
 
 public class UserController {
     Connection conn = null;
@@ -28,7 +22,6 @@ public class UserController {
     Statement statement = null;
     ResultSet resultSet = null;
 
-    // Constructor method
     public UserController() {
         try {
             conn = new ConnectionFactory().getConnection();
@@ -38,21 +31,20 @@ public class UserController {
         }
     }
 
-
     // Methods to add new user
     public void addUserDAO(UserModel userModel, String userType) {
         try {
             String query = "SELECT * FROM users WHERE name='"
                     + userModel.getName()
-                    +"' AND location='"
+                    + "' AND location='"
                     + userModel.getLocation()
-                    +"' AND phone='"
+                    + "' AND phone='"
                     + userModel.getPhone()
-                    +"' AND usertype='"
+                    + "' AND usertype='"
                     + userModel.getType()
-                    +"'";
+                    + "'";
             resultSet = statement.executeQuery(query);
-            if(resultSet.next())
+            if (resultSet.next())
                 JOptionPane.showMessageDialog(null, "User already exists");
             else
                 addFunction(userModel, userType);
@@ -60,6 +52,7 @@ public class UserController {
             ex.printStackTrace();
         }
     }
+
     public void addFunction(UserModel userModel, String userType) {
         try {
             String username = null;
@@ -68,7 +61,7 @@ public class UserController {
             String resQuery = "SELECT * FROM users";
             resultSet = statement.executeQuery(resQuery);
 
-            if(!resultSet.next()){
+            if (!resultSet.next()) {
                 username = "root";
                 password = "root";
             }
@@ -96,11 +89,11 @@ public class UserController {
             prepStatement.setString(6, userModel.getType());
             prepStatement.executeUpdate();
 
-            if("ADMINISTRATOR".equals(userType))
+            if ("ADMINISTRATOR".equals(userType))
                 JOptionPane.showMessageDialog(null, "New administrator added.");
             else JOptionPane.showMessageDialog(null, "New employee added.");
 
-        } catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -151,19 +144,20 @@ public class UserController {
 
     public ResultSet getUserDAO(String username) {
         try {
-            String query = "SELECT * FROM users WHERE username='" +username+ "'";
+            String query = "SELECT * FROM users WHERE username='" + username + "'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return resultSet;
     }
+
     public void getFullName(UserModel userModel, String username) {
         try {
-            String query = "SELECT * FROM users WHERE username='" +username+ "' LIMIT 1";
+            String query = "SELECT * FROM users WHERE username='" + username + "' LIMIT 1";
             resultSet = statement.executeQuery(query);
             String fullName = null;
-            if(resultSet.next()) fullName = resultSet.getString(2);
+            if (resultSet.next()) fullName = resultSet.getString(2);
             userModel.setName(fullName);
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -180,6 +174,7 @@ public class UserController {
         }
         return resultSet;
     }
+
     public void addUserLogin(UserModel userModel) {
         try {
             String query = "INSERT INTO userlogs (username, in_time, out_time) values(?,?,?)";
@@ -194,13 +189,13 @@ public class UserController {
         }
     }
 
-    public ResultSet getPassDAO(String username, String password){
+    public ResultSet getPassDAO(String username, String password) {
         try {
             String query = "SELECT password FROM users WHERE username='"
-                    +username
+                    + username
                     + "' AND password='"
-                    +password
-                    +"'";
+                    + password
+                    + "'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -210,13 +205,13 @@ public class UserController {
 
     public void changePass(String username, String password) {
         try {
-            String query = "UPDATE users SET password=? WHERE username='" +username+ "'";
+            String query = "UPDATE users SET password=? WHERE username='" + username + "'";
             prepStatement = (PreparedStatement) conn.prepareStatement(query);
             prepStatement.setString(1, password);
             prepStatement.setString(2, username);
             prepStatement.executeUpdate();
             JOptionPane.showMessageDialog(null, "Password has been changed.");
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
@@ -227,14 +222,14 @@ public class UserController {
         Vector<String> columnNames = new Vector<String>();
         int colCount = metaData.getColumnCount();
 
-        for (int col=1; col <= colCount; col++){
+        for (int col = 1; col <= colCount; col++) {
             columnNames.add(metaData.getColumnName(col).toUpperCase(Locale.ROOT));
         }
 
         Vector<Vector<Object>> data = new Vector<Vector<Object>>();
         while (resultSet.next()) {
             Vector<Object> vector = new Vector<Object>();
-            for (int col=1; col<=colCount; col++) {
+            for (int col = 1; col <= colCount; col++) {
                 vector.add(resultSet.getObject(col));
             }
             data.add(vector);

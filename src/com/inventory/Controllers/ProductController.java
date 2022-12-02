@@ -1,7 +1,7 @@
 package com.inventory.Controllers;
 
 import com.inventory.Models.ProductModel;
-import com.inventory.Database.ConnectionFactory;
+import com.database.ConnectionFactory;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -27,7 +27,7 @@ public class ProductController {
     String productCode;
     String customerCode;
 
-    // Availability of stock in Inventory
+    // Stock availability of certain product in inventory
     boolean available = false;
 
     public ProductController() {
