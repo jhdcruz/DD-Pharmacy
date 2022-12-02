@@ -6,7 +6,7 @@ import com.pharmacy.Database.DatabaseInstance;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
 import javax.swing.JOptionPane;
 
 public class LoginPage extends javax.swing.JFrame {
@@ -17,8 +17,6 @@ public class LoginPage extends javax.swing.JFrame {
     public LoginPage() {
         initComponents();
         userModel = new UserModel();
-
-        pack();
     }
 
     /**
@@ -132,7 +130,7 @@ public class LoginPage extends javax.swing.JFrame {
 
 
     /**
-     * Encrypts the provided password using the SHA-256 algorithm.
+     * TODO: Encrypts the provided password using the SHA-512 algorithm.
      *
      * @param pass password to encrypt.
      */
@@ -155,10 +153,8 @@ public class LoginPage extends javax.swing.JFrame {
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         String username = userText.getText();
-        String password = Arrays.toString(passText.getPassword());
+        String password = new String(passText.getPassword());
 
-        //TODO Password encryption to be added later:
-        //String password = encryptPass(pass);
         userType = (String) jComboBox1.getSelectedItem();
 
         if (new DatabaseInstance().validateLogin(username, password, userType)) {
