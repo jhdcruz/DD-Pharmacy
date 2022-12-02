@@ -415,29 +415,34 @@ public class ProductController {
     }
 
     // Sales transaction handling
-    public void sellProductDAO(ProductModel productModel, String username) {
+    public void sellProduct(ProductModel productModel, String username) {
         int quantity = 0;
         String prodCode = null;
+
         try {
             String query = "SELECT * FROM currentstock WHERE productcode='" + productModel.getProductCode() + "'";
             resultSet = statement.executeQuery(query);
+
             while (resultSet.next()) {
                 prodCode = resultSet.getString("productcode");
                 quantity = resultSet.getInt("quantity");
             }
-            if (productModel.getQuantity() > quantity)
+
+            if (productModel.getQuantity() > quantity) {
                 JOptionPane.showMessageDialog(null, "Insufficient stock for this product.");
-            else if (productModel.getQuantity() <= 0)
+            } else if (productModel.getQuantity() <= 0) {
                 JOptionPane.showMessageDialog(null, "Please enter a valid quantity");
-            else {
+            } else {
                 String stockQuery = "UPDATE currentstock SET quantity=quantity-'"
                         + productModel.getQuantity()
                         + "' WHERE productcode='"
                         + productModel.getProductCode()
                         + "'";
+
                 String salesQuery = "INSERT INTO salesinfo(date,productcode,customercode,quantity,revenue,soldby)" +
                         "VALUES('" + productModel.getDate() + "','" + productModel.getProductCode() + "','" + productModel.getCustomerCode() +
                         "','" + productModel.getQuantity() + "','" + productModel.getTotalRevenue() + "','" + username + "')";
+
                 statement.executeUpdate(stockQuery);
                 statement.executeUpdate(salesQuery);
                 JOptionPane.showMessageDialog(null, "Product sold.");
@@ -448,13 +453,14 @@ public class ProductController {
     }
 
     // Products data set retrieval for display
-    public ResultSet getQueryResult() {
+    public ResultSet getProducts() {
         try {
             String query = "SELECT productcode,productname,costprice,sellprice,brand FROM products ORDER BY pid";
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
         return resultSet;
     }
 
@@ -468,6 +474,7 @@ public class ProductController {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
         return resultSet;
     }
 
@@ -484,6 +491,7 @@ public class ProductController {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
         return resultSet;
     }
 
@@ -502,6 +510,7 @@ public class ProductController {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
         return resultSet;
     }
 
@@ -514,6 +523,7 @@ public class ProductController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return resultSet;
     }
 
@@ -521,10 +531,12 @@ public class ProductController {
         try {
             String query = "SELECT productcode,productname,costprice,sellprice,brand FROM products " +
                     "WHERE productcode='" + text + "' LIMIT 1";
+
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return resultSet;
     }
 
@@ -532,19 +544,21 @@ public class ProductController {
     public ResultSet getSalesSearch(String text) {
         try {
             String query = "SELECT salesid,salesinfo.productcode,productname,\n" +
-                    "                    salesinfo.quantity,revenue,users.name AS Sold_by\n" +
-                    "                    FROM salesinfo INNER JOIN products\n" +
-                    "                    ON salesinfo.productcode=products.productcode\n" +
-                    "                    INNER JOIN users\n" +
-                    "                    ON salesinfo.soldby=users.username\n" +
-                    "                    INNER JOIN customers\n" +
-                    "                    ON customers.customercode=salesinfo.customercode\n" +
+                    "salesinfo.quantity,revenue,users.name AS Sold_by\n" +
+                    "FROM salesinfo INNER JOIN products\n" +
+                    "ON salesinfo.productcode=products.productcode\n" +
+                    "INNER JOIN users\n" +
+                    "ON salesinfo.soldby=users.username\n" +
+                    "INNER JOIN customers\n" +
+                    "ON customers.customercode=salesinfo.customercode\n" +
                     "WHERE salesinfo.productcode LIKE '%" + text + "%' OR productname LIKE '%" + text + "%' " +
                     "OR users.name LIKE '%" + text + "%' OR customers.fullname LIKE '%" + text + "%' ORDER BY salesid;";
+
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return resultSet;
     }
 
@@ -561,21 +575,24 @@ public class ProductController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return resultSet;
     }
 
-    public ResultSet getProdName(String code) {
+    public ResultSet getProductName(String code) {
         try {
             String query = "SELECT productname FROM products WHERE productcode='" + code + "'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
         return resultSet;
     }
 
     public String getSuppName(int ID) {
         String name = null;
+
         try {
             String query = "SELECT fullname FROM suppliers " +
                     "INNER JOIN purchaseinfo ON suppliers.suppliercode=purchaseinfo.suppliercode " +
@@ -586,6 +603,7 @@ public class ProductController {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
         return name;
     }
 
@@ -601,6 +619,7 @@ public class ProductController {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
         return name;
     }
 
@@ -614,6 +633,7 @@ public class ProductController {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
         return date;
     }
 
@@ -627,28 +647,29 @@ public class ProductController {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
         return date;
     }
 
 
-    // Method to display product-related data set in tabular form
     public DefaultTableModel buildTableModel(ResultSet resultSet) throws SQLException {
         ResultSetMetaData metaData = resultSet.getMetaData();
-        Vector<String> columnNames = new Vector<String>();
+        Vector<String> columnNames = new Vector<>();
         int colCount = metaData.getColumnCount();
 
         for (int col = 1; col <= colCount; col++) {
             columnNames.add(metaData.getColumnName(col).toUpperCase(Locale.ROOT));
         }
 
-        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+        Vector<Vector<Object>> data = new Vector<>();
         while (resultSet.next()) {
-            Vector<Object> vector = new Vector<Object>();
+            Vector<Object> vector = new Vector<>();
             for (int col = 1; col <= colCount; col++) {
                 vector.add(resultSet.getObject(col));
             }
             data.add(vector);
         }
+
         return new DefaultTableModel(data, columnNames);
     }
 }

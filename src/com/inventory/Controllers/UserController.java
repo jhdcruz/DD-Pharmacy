@@ -65,18 +65,6 @@ public class UserController {
                 username = "root";
                 password = "root";
             }
-//            else {
-//                String resQuery2 = "SELECT * FROM users ORDER BY id DESC";
-//                resultSet = statement.executeQuery(resQuery2);
-//
-//                if(resultSet.next()){
-//                    oldUsername = resultSet.getString("username");
-//                    Integer uCode = Integer.parseInt(oldUsername.substring(4));
-//                    uCode++;
-//                    username = "user" + uCode;
-//                    password = "user" + uCode;
-//                }
-//            }
 
             String query = "INSERT INTO users (name,location,phone,username,password,usertype) " +
                     "VALUES(?,?,?,?,?,?)";
@@ -125,8 +113,8 @@ public class UserController {
             prepStatement.setString(1, username);
             prepStatement.executeUpdate();
             JOptionPane.showMessageDialog(null, "User Deleted.");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
         new UsersPage().loadDataSet();
     }
@@ -136,9 +124,10 @@ public class UserController {
         try {
             String query = "SELECT * FROM users";
             resultSet = statement.executeQuery(query);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
+
         return resultSet;
     }
 
@@ -146,9 +135,10 @@ public class UserController {
         try {
             String query = "SELECT * FROM users WHERE username='" + username + "'";
             resultSet = statement.executeQuery(query);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
+
         return resultSet;
     }
 
@@ -159,8 +149,8 @@ public class UserController {
             String fullName = null;
             if (resultSet.next()) fullName = resultSet.getString(2);
             userModel.setName(fullName);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
     }
 
@@ -169,9 +159,10 @@ public class UserController {
             String query = "SELECT users.name,userlogs.username,in_time,out_time,location FROM userlogs" +
                     " INNER JOIN users on userlogs.username=users.username";
             resultSet = statement.executeQuery(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
+
         return resultSet;
     }
 
@@ -197,9 +188,10 @@ public class UserController {
                     + password
                     + "'";
             resultSet = statement.executeQuery(query);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
+
         return resultSet;
     }
 
@@ -211,8 +203,8 @@ public class UserController {
             prepStatement.setString(2, username);
             prepStatement.executeUpdate();
             JOptionPane.showMessageDialog(null, "Password has been changed.");
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
     }
 
@@ -234,7 +226,7 @@ public class UserController {
             }
             data.add(vector);
         }
+
         return new DefaultTableModel(data, columnNames);
     }
-
 }
