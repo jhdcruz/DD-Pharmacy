@@ -76,7 +76,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="stockTable.setAutoCreateRowSorter(true);"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="stockTable.setAutoCreateRowSorter(true);&#xa;&#xa;DefaultTableCellRenderer centerCellRenderer = new DefaultTableCellRenderer();&#xa;centerCellRenderer.setHorizontalAlignment(SwingConstants.LEFT);&#xa;stockTable.setDefaultRenderer(Object.class, centerCellRenderer);&#xa;stockTable.getTableHeader().setDefaultRenderer(centerCellRenderer);&#xa;&#xa;stockTable.setDefaultEditor(Object.class, null);"/>
           </AuxValues>
         </Component>
       </SubComponents>

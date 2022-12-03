@@ -3,12 +3,14 @@ package com.pharmacy.Views;
 import com.pharmacy.Controllers.ProductController;
 import com.pharmacy.Controllers.SupplierController;
 import com.pharmacy.Models.ProductModel;
-import com.pharmacy.Utils.*;
+import com.pharmacy.Utils.DataTableModel;
 
-import java.awt.*;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.EventQueue;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
 
 public class PurchasePage extends javax.swing.JPanel {
 
@@ -100,6 +102,7 @@ public class PurchasePage extends javax.swing.JPanel {
             }
         });
 
+        purchaseButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         purchaseButton.setText("Purchase");
         purchaseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -116,7 +119,7 @@ public class PurchasePage extends javax.swing.JPanel {
             }
         });
 
-        clearButton.setText("CLEAR");
+        clearButton.setText("Clear");
         clearButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 clearButtonActionPerformed(evt);
@@ -223,24 +226,40 @@ public class PurchasePage extends javax.swing.JPanel {
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {deleteButton, purchaseButton});
 
+        purchaseTable.setAutoCreateRowSorter(true);
         purchaseTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object[][]{
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null}
             },
-            new String [] {
+            new String[]{
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
+        purchaseTable.setShowGrid(true);
+        purchaseTable.getTableHeader().setReorderingAllowed(false);
         purchaseTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 purchaseTableMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(purchaseTable);
-        purchaseTable.setAutoCreateRowSorter(true);
+        DefaultTableCellRenderer centerCellRenderer = new DefaultTableCellRenderer();
+        centerCellRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+        purchaseTable.setDefaultRenderer(Object.class, centerCellRenderer);
+        purchaseTable.getTableHeader().setDefaultRenderer(centerCellRenderer);
+
+        purchaseTable.setDefaultEditor(Object.class, null);
 
         refreshButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         refreshButton.setText("REFRESH");

@@ -1,9 +1,10 @@
 package com.pharmacy.Views;
 
 import com.pharmacy.Controllers.UserController;
-import com.pharmacy.Utils.*;
 
-import java.awt.*;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.EventQueue;
 import java.sql.SQLException;
 
 public class UserLogsPage extends javax.swing.JPanel {
@@ -35,21 +36,37 @@ public class UserLogsPage extends javax.swing.JPanel {
 
         logTable.setAutoCreateRowSorter(true);
         logTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object[][]{
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null}
             },
-            new String [] {
+            new String[]{
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
-        logTable.setEnabled(false);
+        ) {
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
         logTable.setFillsViewportHeight(true);
         logTable.setShowGrid(false);
+        logTable.setShowHorizontalLines(true);
+        logTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(logTable);
         logTable.setAutoCreateRowSorter(true);
+
+        DefaultTableCellRenderer centerCellRenderer = new DefaultTableCellRenderer();
+        centerCellRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+        logTable.setDefaultRenderer(Object.class, centerCellRenderer);
+        logTable.getTableHeader().setDefaultRenderer(centerCellRenderer);
+
+        logTable.setDefaultEditor(Object.class, null);
 
         refreshButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         refreshButton.setText("REFRESH");

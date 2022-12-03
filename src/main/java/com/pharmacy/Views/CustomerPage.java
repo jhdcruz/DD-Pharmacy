@@ -2,10 +2,12 @@ package com.pharmacy.Views;
 
 import com.pharmacy.Controllers.CustomerController;
 import com.pharmacy.Models.CustomerModel;
-import com.pharmacy.Utils.*;
+import com.pharmacy.Utils.DataTableModel;
 
 import javax.swing.JOptionPane;
-import java.awt.*;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.EventQueue;
 import java.sql.SQLException;
 
 public class CustomerPage extends javax.swing.JPanel {
@@ -176,17 +178,28 @@ public class CustomerPage extends javax.swing.JPanel {
 
         entryPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7});
 
+        custTable.setAutoCreateRowSorter(true);
         custTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object[][]{
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null}
             },
-            new String [] {
+            new String[]{
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
+        custTable.setShowGrid(true);
+        custTable.getTableHeader().setReorderingAllowed(false);
         custTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 custTableMouseClicked(evt);
@@ -194,6 +207,13 @@ public class CustomerPage extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(custTable);
         custTable.setAutoCreateRowSorter(true);
+
+        DefaultTableCellRenderer centerCellRenderer = new DefaultTableCellRenderer();
+        centerCellRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+        custTable.setDefaultRenderer(Object.class, centerCellRenderer);
+        custTable.getTableHeader().setDefaultRenderer(centerCellRenderer);
+
+        custTable.setDefaultEditor(Object.class, null);
 
         searchText.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {

@@ -1,10 +1,12 @@
 package com.pharmacy.Views;
 
 import com.pharmacy.Controllers.ProductController;
-import com.pharmacy.Utils.*;
+import com.pharmacy.Utils.DataTableModel;
 
-import java.awt.*;
+import java.awt.EventQueue;
 import java.sql.SQLException;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class CurrentStockPage extends javax.swing.JPanel {
 
@@ -52,6 +54,13 @@ public class CurrentStockPage extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(stockTable);
         stockTable.setAutoCreateRowSorter(true);
+
+        DefaultTableCellRenderer centerCellRenderer = new DefaultTableCellRenderer();
+        centerCellRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+        stockTable.setDefaultRenderer(Object.class, centerCellRenderer);
+        stockTable.getTableHeader().setDefaultRenderer(centerCellRenderer);
+
+        stockTable.setDefaultEditor(Object.class, null);
 
         refreshButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         refreshButton.setText("REFRESH");

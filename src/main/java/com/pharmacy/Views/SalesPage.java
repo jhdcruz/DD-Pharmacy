@@ -3,10 +3,12 @@ package com.pharmacy.Views;
 import com.pharmacy.Controllers.CustomerController;
 import com.pharmacy.Controllers.ProductController;
 import com.pharmacy.Models.ProductModel;
-import com.pharmacy.Utils.*;
+import com.pharmacy.Utils.DataTableModel;
 
 import javax.swing.JOptionPane;
-import java.awt.*;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.EventQueue;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -86,8 +88,8 @@ public class SalesPage extends javax.swing.JPanel {
             }
         });
 
-        sellButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        sellButton.setText("SELL PRODUCT");
+        sellButton.setFont(sellButton.getFont().deriveFont(sellButton.getFont().getStyle() | java.awt.Font.BOLD));
+        sellButton.setText("Proceed");
         sellButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         sellButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -210,24 +212,39 @@ public class SalesPage extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
+        salesTable.setAutoCreateRowSorter(true);
         salesTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object[][]{
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null}
             },
-            new String [] {
+            new String[]{
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
+        salesTable.getTableHeader().setReorderingAllowed(false);
         salesTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 salesTableMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(salesTable);
-        salesTable.setAutoCreateRowSorter(true);
+        DefaultTableCellRenderer centerCellRenderer = new DefaultTableCellRenderer();
+        centerCellRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+        salesTable.setDefaultRenderer(Object.class, centerCellRenderer);
+        salesTable.getTableHeader().setDefaultRenderer(centerCellRenderer);
+
+        salesTable.setDefaultEditor(Object.class, null);
 
         searchText.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -254,8 +271,7 @@ public class SalesPage extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jScrollPane1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sellPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)))
+                        .addComponent(sellPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -274,6 +290,10 @@ public class SalesPage extends javax.swing.JPanel {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE))
                 .addGap(6, 6, 6))
         );
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        salesTable.setDefaultRenderer(String.class, centerRenderer);
     }// </editor-fold>//GEN-END:initComponents
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed

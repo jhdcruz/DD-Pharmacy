@@ -184,6 +184,7 @@ public class UsersPage extends javax.swing.JPanel {
         userTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         userTable.setName("Users"); // NOI18N
         userTable.setShowGrid(true);
+        userTable.getTableHeader().setReorderingAllowed(false);
         userTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 userTableMouseClicked(evt);
@@ -197,9 +198,13 @@ public class UsersPage extends javax.swing.JPanel {
             userTable.getColumnModel().getColumn(3).setHeaderValue("Title 4");
         }
         userTable.setAutoCreateRowSorter(true);
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        userTable.setDefaultRenderer(String.class, centerRenderer);
+
+        DefaultTableCellRenderer centerCellRenderer = new DefaultTableCellRenderer();
+        centerCellRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+        userTable.setDefaultRenderer(Object.class, centerCellRenderer);
+        userTable.getTableHeader().setDefaultRenderer(centerCellRenderer);
+
+        userTable.setDefaultEditor(Object.class, null);
 
         addUserButton.setText("+ Add User");
         addUserButton.setToolTipText("");
@@ -265,7 +270,7 @@ public class UsersPage extends javax.swing.JPanel {
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(changePassword))))
                                 .addComponent(jSeparator1))))
-                .addContainerGap())
+                    .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -304,9 +309,9 @@ public class UsersPage extends javax.swing.JPanel {
         // check if a row is selected
         if (userTable.getSelectionModel().getSelectedItemsCount() == 1) {
             // then, update the user
-            if (nameText.getText().equals("") || locationText.getText().equals("") || phoneText.getText().equals(""))
+            if (nameText.getText().equals("") || locationText.getText().equals("") || phoneText.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "Please fill all the required fields.");
-            else {
+            } else {
                 userModel.setName(nameText.getText());
                 userModel.setLocation(locationText.getText());
                 userModel.setPhone(phoneText.getText());
@@ -406,7 +411,7 @@ public class UsersPage extends javax.swing.JPanel {
 
     String username;
 
-    public void loadDataSet() {
+    public final void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
                 UserController userController = new UserController();

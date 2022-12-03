@@ -316,14 +316,14 @@
             <Property name="name" type="java.lang.String" value="Users" noResource="true"/>
             <Property name="showGrid" type="boolean" value="true"/>
             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-              <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
             </Property>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="userTableMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="userTable.setAutoCreateRowSorter(true);&#xa;DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();&#xa;centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);&#xa;userTable.setDefaultRenderer(String.class, centerRenderer);"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="userTable.setAutoCreateRowSorter(true);&#xa;&#xa;DefaultTableCellRenderer centerCellRenderer = new DefaultTableCellRenderer();&#xa;centerCellRenderer.setHorizontalAlignment(SwingConstants.LEFT);&#xa;userTable.setDefaultRenderer(Object.class, centerCellRenderer);&#xa;userTable.getTableHeader().setDefaultRenderer(centerCellRenderer);&#xa;&#xa;userTable.setDefaultEditor(Object.class, null);"/>
           </AuxValues>
         </Component>
       </SubComponents>

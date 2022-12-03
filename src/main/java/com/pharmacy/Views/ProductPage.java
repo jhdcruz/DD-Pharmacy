@@ -3,10 +3,12 @@ package com.pharmacy.Views;
 import com.pharmacy.Controllers.ProductController;
 import com.pharmacy.Controllers.SupplierController;
 import com.pharmacy.Models.ProductModel;
-import com.pharmacy.Utils.*;
+import com.pharmacy.Utils.DataTableModel;
 
 import javax.swing.JOptionPane;
-import java.awt.*;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.EventQueue;
 import java.sql.SQLException;
 
 public class ProductPage extends javax.swing.JPanel {
@@ -224,18 +226,29 @@ public class ProductPage extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        productTable.setAutoCreateRowSorter(true);
         productTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object[][]{
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null}
             },
-            new String [] {
+            new String[]{
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
         productTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        productTable.setShowGrid(true);
+        productTable.getTableHeader().setReorderingAllowed(false);
         productTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 productTableMouseClicked(evt);
@@ -243,6 +256,13 @@ public class ProductPage extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(productTable);
         productTable.setAutoCreateRowSorter(true);
+
+        DefaultTableCellRenderer centerCellRenderer = new DefaultTableCellRenderer();
+        centerCellRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+        productTable.setDefaultRenderer(Object.class, centerCellRenderer);
+        productTable.getTableHeader().setDefaultRenderer(centerCellRenderer);
+
+        productTable.setDefaultEditor(Object.class, null);
 
         refreshButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         refreshButton.setText("REFRESH");
