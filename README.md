@@ -27,6 +27,21 @@ The software code has been divided into 4 major packages:
 
 - **`Database`**: Contains class and methods that is used to retrieve database connection and user authentication.
 
+- **`Utils`**: Shared utility classes used by the other packages.
+
+## Building/Running
+
+**Requires**:
+
+- IntelliJ IDEA
+- NetBeans
+
+Netbeans is used for UI changes,
+IntelliJ IDEa for code structural changes.
+
+Due to how netbeans configure directory, running through netbeans will produce error.
+Run from IntelliJ IDEA instead.
+
 ## Acknowledgements
 
 The ff. were used as templates in the development of this software:
