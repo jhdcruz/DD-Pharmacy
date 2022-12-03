@@ -4,15 +4,11 @@ import com.pharmacy.Models.CustomerModel;
 import com.pharmacy.Database.DatabaseInstance;
 
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Locale;
-import java.util.Vector;
 
 public class CustomerController {
     Connection connection = null;
@@ -69,7 +65,7 @@ public class CustomerController {
      *
      * @param customerModel Customer to be edited/updated (derived from CustomerModel)
      */
-    public void editCustomer(CustomerModel customerModel) {
+    public void updateCustomer(CustomerModel customerModel) {
         try {
             String query = "UPDATE customers SET fullname=?,location=?,phone=? WHERE customercode=?";
             preparedStatement = connection.prepareStatement(query);

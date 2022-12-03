@@ -262,7 +262,7 @@ public class CustomerPage extends javax.swing.JPanel {
                 customerModel.setName(nameText.getText());
                 customerModel.setLocation(locationText.getText());
                 customerModel.setPhone(phoneText.getText());
-                new CustomerController().editCustomer(customerModel);
+                new CustomerController().updateCustomer(customerModel);
                 loadDataSet();
             }
         }
