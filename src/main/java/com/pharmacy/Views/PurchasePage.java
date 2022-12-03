@@ -237,6 +237,7 @@ public class PurchasePage extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(purchaseTable);
+        purchaseTable.setAutoCreateRowSorter(true);
 
         refreshButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         refreshButton.setText("REFRESH");

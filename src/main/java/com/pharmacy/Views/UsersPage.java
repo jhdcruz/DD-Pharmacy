@@ -184,6 +184,7 @@ public class UsersPage extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(userTable);
+        userTable.setAutoCreateRowSorter(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

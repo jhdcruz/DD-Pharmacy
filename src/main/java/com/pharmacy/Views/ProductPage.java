@@ -237,6 +237,7 @@ public class ProductPage extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(productTable);
+        productTable.setAutoCreateRowSorter(true);
 
         refreshButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         refreshButton.setText("REFRESH");

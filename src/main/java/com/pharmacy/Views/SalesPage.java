@@ -221,6 +221,7 @@ public class SalesPage extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(salesTable);
+        salesTable.setAutoCreateRowSorter(true);
 
         searchText.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {

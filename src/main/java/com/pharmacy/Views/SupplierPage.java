@@ -195,6 +195,7 @@ public class SupplierPage extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(suppTable);
+        suppTable.setAutoCreateRowSorter(true);
 
         searchText.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
