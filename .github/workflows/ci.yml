@@ -22,4 +22,4 @@ jobs:
       run: mvn compile
 
     - name: Update dependency graph
-      uses: advanced-security/maven-dependency-submission-action@latest
+      uses: advanced-security/maven-dependency-submission-action@v2
