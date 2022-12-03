@@ -8,7 +8,7 @@ import java.awt.CardLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.*;
 
 public class Dashboard extends javax.swing.JFrame {
 
@@ -43,7 +43,7 @@ public class Dashboard extends javax.swing.JFrame {
         displayPanel.add("Customers", new CustomerPage());
         displayPanel.add("Products", new ProductPage(username, this));
         displayPanel.add("Suppliers", new SupplierPage());
-        displayPanel.add("Current Stock", new CurrentStockPage(username));
+        displayPanel.add("Stock", new CurrentStockPage(username));
         displayPanel.add("Sales", new SalesPage(username, this));
         displayPanel.add("Purchase", new PurchasePage(this));
         displayPanel.add("Logs", new UserLogsPage());
@@ -127,9 +127,6 @@ public class Dashboard extends javax.swing.JFrame {
         userPanel = new javax.swing.JPanel();
         nameLabel = new javax.swing.JLabel();
         logoutButton = new javax.swing.JButton();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Inventory Manager");
@@ -138,7 +135,6 @@ public class Dashboard extends javax.swing.JFrame {
         menuPanel.setPreferredSize(new java.awt.Dimension(120, 26));
 
         menuButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        menuButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pharmacy/Views/Icons/menu_icon_150667.png"))); // NOI18N
         menuButton.setText("MENU");
         menuButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         menuButton.addActionListener(this::menuButtonActionPerformed);
@@ -158,7 +154,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         navPanel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        homeButton.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource("/com/pharmacy/Views/Icons/homepages_home_house_icon_150665.png")))); // NOI18N
+        homeButton.setText("Dashboard");
         homeButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         homeButton.addActionListener(this::homeButtonActionPerformed);
 
@@ -166,7 +162,8 @@ public class Dashboard extends javax.swing.JFrame {
         prodButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         prodButton.addActionListener(this::prodButtonActionPerformed);
 
-        stockButton.setText("Current Stock");
+        stockButton.setText("Stocks");
+        stockButton.setToolTipText("");
         stockButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         stockButton.addActionListener(this::stockButtonActionPerformed);
 
@@ -190,7 +187,7 @@ public class Dashboard extends javax.swing.JFrame {
         purchaseButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         purchaseButton.addActionListener(this::purchaseButtonActionPerformed);
 
-        logsButton.setText("User Logs");
+        logsButton.setText("Logs");
         logsButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         logsButton.addActionListener(this::logsButtonActionPerformed);
 
@@ -203,7 +200,7 @@ public class Dashboard extends javax.swing.JFrame {
                     .addGroup(navPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(homeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(prodButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(stockButton, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+                        .addComponent(stockButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(custButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(suppButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(salesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -253,7 +250,7 @@ public class Dashboard extends javax.swing.JFrame {
         userPanelLayout.setHorizontalGroup(
             userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(userPanelLayout.createSequentialGroup()
-                    .addContainerGap(401, Short.MAX_VALUE)
+                    .addContainerGap(414, Short.MAX_VALUE)
                     .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(logoutButton))
@@ -292,16 +289,8 @@ public class Dashboard extends javax.swing.JFrame {
                     .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(displayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(navPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addContainerGap(23, Short.MAX_VALUE))
         );
-
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -397,9 +386,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JButton custButton;
     private javax.swing.JPanel displayPanel;
     private javax.swing.JButton homeButton;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JButton logoutButton;
     private javax.swing.JButton logsButton;
     private javax.swing.JPanel mainPanel;
