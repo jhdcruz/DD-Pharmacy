@@ -17,6 +17,8 @@ public class LoginPage extends javax.swing.JFrame {
     public LoginPage() {
         initComponents();
         userModel = new UserModel();
+
+        this.getRootPane().setDefaultButton(loginButton);
     }
 
     /**
