@@ -6,7 +6,7 @@ on:
       - '*'
 
 jobs:
-  build:
+  upload:
     runs-on: ubuntu-latest
     
     steps:
@@ -19,10 +19,10 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Build with Maven
-      run: mvn clean install
+    - name: Compile project
+      run: mvn clean compile assembly:single
       
-    - name: Upload to
+    - name: Upload to github releases
       uses: yakuhzi/release-asset@latest
       with:
         file: ./target/*.jar
