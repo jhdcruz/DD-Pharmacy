@@ -32,7 +32,7 @@ public class DatabaseInstance {
             // Username and Password saved as configurable properties
             // to allow changes without recompilation.
             prop = new Properties();
-            prop.loadFromXML(new FileInputStream("lib/DBCredentials.xml"));
+            prop.loadFromXML(new FileInputStream("dist/DBCredentials.xml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
