@@ -115,9 +115,26 @@ public class UserController {
         return resultSet;
     }
 
+    /**
+     * Find user by username
+     *
+     * @param username
+     * @return
+     */
     public ResultSet findUser(String username) {
         try {
             String query = "SELECT * FROM users WHERE username='" + username + "'";
+            resultSet = statement.executeQuery(query);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+
+        return resultSet;
+    }
+
+    public ResultSet searchUsers(String search) {
+        try {
+            String query = "SELECT * FROM users WHERE name LIKE '%" + search + "%' OR location LIKE '%" + search + "%' OR phone LIKE '%" + search + "%' OR usertype LIKE '%" + search + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
