@@ -1,13 +1,12 @@
 package com.pharmacy.Database;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import com.pharmacy.Utils.FileResourceUtils;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
 
 
 /**
@@ -15,36 +14,32 @@ import java.util.Properties;
  */
 public class DatabaseInstance {
 
-    static final String driver = "com.mysql.cj.jdbc.Driver";
-    static final String url = "jdbc:mysql://localhost:3306/inventory";
+    FileResourceUtils fileResourceUtils;
+    private static String username;
+    private static String password;
 
-    static String username;
-    static String password;
+    protected static String driver;
+    protected static String url;
 
-    Properties prop;
-
-    Connection conn = null;
+    Connection connection = null;
     Statement statement = null;
     ResultSet resultSet = null;
 
     public DatabaseInstance() {
-        try {
-            // Username and Password saved as configurable properties
-            // to allow changes without recompilation.
-            prop = new Properties();
-            prop.loadFromXML(new FileInputStream("dist/DBCredentials.xml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        fileResourceUtils = new FileResourceUtils();
 
-        // Get username and password from properties file
-        username = prop.getProperty("username");
-        password = prop.getProperty("password");
+        // Get database properties
+        String resourceFile = "database/datasource.properties";
+        username = fileResourceUtils.getProperty("datasource.username", resourceFile);
+        password = fileResourceUtils.getProperty("datasource.password", resourceFile);
+        driver = fileResourceUtils.getProperty("datasource.driver", resourceFile);
+        url = fileResourceUtils.getProperty("datasource.url", resourceFile);
 
         try {
             Class.forName(driver);
-            conn = DriverManager.getConnection(url, username, password);
-            statement = conn.createStatement();
+            connection = DriverManager.getConnection(url, username, password);
+
+            statement = connection.createStatement();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -58,14 +53,12 @@ public class DatabaseInstance {
     public Connection getConnection() {
         try {
             Class.forName(driver);
-            conn = DriverManager.getConnection(url, username, password);
-
-            System.out.println("Connected successfully.");
+            connection = DriverManager.getConnection(url, username, password);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
 
-        return conn;
+        return connection;
     }
 
     /**
@@ -74,7 +67,6 @@ public class DatabaseInstance {
      * @param username user login
      * @param password user password
      * @param userType user access type
-     *
      * @return login state (boolean)
      */
     public boolean validateLogin(String username, String password, String userType) {
