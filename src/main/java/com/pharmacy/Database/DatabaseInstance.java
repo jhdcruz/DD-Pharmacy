@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
@@ -44,7 +45,7 @@ public class DatabaseInstance {
             Class.forName(driver);
             conn = DriverManager.getConnection(url, username, password);
             statement = conn.createStatement();
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -60,7 +61,7 @@ public class DatabaseInstance {
             conn = DriverManager.getConnection(url, username, password);
 
             System.out.println("Connected successfully.");
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
 
@@ -73,6 +74,7 @@ public class DatabaseInstance {
      * @param username user login
      * @param password user password
      * @param userType user access type
+     *
      * @return login state (boolean)
      */
     public boolean validateLogin(String username, String password, String userType) {
@@ -87,7 +89,7 @@ public class DatabaseInstance {
         try {
             resultSet = statement.executeQuery(query);
             if (resultSet.next()) return true;
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
