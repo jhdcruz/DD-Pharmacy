@@ -6,9 +6,17 @@ import com.pharmacy.Database.DatabaseInstance;
 import com.pharmacy.Views.UsersPage;
 
 import javax.swing.JOptionPane;
-import javax.swing.table.*;
-import java.sql.*;
-import java.util.*;
+import javax.swing.table.DefaultTableModel;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import java.util.Vector;
 
 public class UserController {
     Connection conn = null;
@@ -133,7 +141,7 @@ public class UserController {
     public ResultSet getUserLogs() {
         try {
             String query = "SELECT users.name,userlogs.username,in_time,out_time,location FROM userlogs" +
-                " INNER JOIN users on userlogs.username=users.username";
+                " INNER JOIN users on userlogs.username=users.username ORDER BY in_time DESC";
             resultSet = statement.executeQuery(query);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -203,6 +211,45 @@ public class UserController {
 
             // remove password index
             dataRow.remove(5);
+        }
+
+        return new DefaultTableModel(data, columnNames);
+    }
+
+    /**
+     * Display database results and headers in a table.
+     *
+     * @param resultSet database result
+     * @return table model that contains data and the data columns
+     * @throws SQLException SQL exception thrown when database error occurs
+     */
+    public DefaultTableModel buildUserLogsTable(ResultSet resultSet) throws SQLException {
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        Vector<String> columnNames = new Vector<>();
+        int columnCount = metaData.getColumnCount();
+
+        // add column names to the table column headers
+        for (int col = 1; col <= columnCount; col++) {
+            columnNames.add(metaData.getColumnName(col).toUpperCase(Locale.ROOT));
+        }
+
+
+        Vector<Vector<Object>> data = new Vector<>();
+        while (resultSet.next()) {
+            Vector<Object> dataRow = new Vector<>();
+
+            for (int col = 1; col <= columnCount; col++) {
+                dataRow.add(resultSet.getObject(col));
+
+                // replace time values with human-readable ones
+                if (col == 3 || col == 4) {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a - MMM dd, yyyy", Locale.getDefault());
+                    LocalDateTime dateTime = LocalDateTime.parse(dataRow.get(col - 1).toString());
+                    dataRow.set(col - 1, dateTime.format(formatter));
+                }
+            }
+
+            data.add(dataRow);
         }
 
         return new DefaultTableModel(data, columnNames);

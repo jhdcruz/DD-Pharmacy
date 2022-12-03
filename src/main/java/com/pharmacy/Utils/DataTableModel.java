@@ -1,10 +1,11 @@
 package com.pharmacy.Utils;
 
-import jdk.jfr.*;
-
-import javax.swing.table.*;
-import java.sql.*;
-import java.util.*;
+import javax.swing.table.DefaultTableModel;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.Locale;
+import java.util.Vector;
 
 public class DataTableModel {
 
