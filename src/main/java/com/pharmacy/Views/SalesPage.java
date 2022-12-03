@@ -3,6 +3,7 @@ package com.pharmacy.Views;
 import com.pharmacy.Controllers.CustomerController;
 import com.pharmacy.Controllers.ProductController;
 import com.pharmacy.Models.ProductModel;
+import com.pharmacy.Utils.*;
 
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
@@ -272,15 +273,15 @@ public class SalesPage extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Please select an entry from the table you wish to delete.");
         else {
             int opt = JOptionPane.showConfirmDialog(
-                    this,
-                    "Are you sure you want to delete this sale from the database?",
-                    "Confirmation",
-                    JOptionPane.YES_NO_OPTION);
+                this,
+                "Are you sure you want to delete this sale from the database?",
+                "Confirmation",
+                JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
                 new ProductController().deleteSalesInfo(Integer.parseInt(
-                        salesTable.getValueAt(salesTable.getSelectedRow(), 0).toString()));
+                    salesTable.getValueAt(salesTable.getSelectedRow(), 0).toString()));
                 new ProductController().updateSoldStock(
-                        salesTable.getValueAt(salesTable.getSelectedRow(), 1).toString(), quantity);
+                    salesTable.getValueAt(salesTable.getSelectedRow(), 1).toString(), quantity);
                 loadDataSet();
             }
         }
@@ -305,7 +306,7 @@ public class SalesPage extends javax.swing.JPanel {
 
     private void sellButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellButtonActionPerformed
         if (custCodeText.getText().equals("") || prodCodeText.getText().equals("")
-                || jDateChooser1.getDate() == null || quantityText.getText().equals("") || priceText.getText().equals(""))
+            || jDateChooser1.getDate() == null || quantityText.getText().equals("") || priceText.getText().equals(""))
             JOptionPane.showMessageDialog(this, "Please fill all the required fields.");
         else {
             try {
@@ -323,7 +324,7 @@ public class SalesPage extends javax.swing.JPanel {
                     loadDataSet();
                 } else
                     JOptionPane.showMessageDialog(this, "This customer does not exist.\n" +
-                            "Add new customer or use a valid customer code.");
+                        "Add new customer or use a valid customer code.");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -345,9 +346,9 @@ public class SalesPage extends javax.swing.JPanel {
             ResultSet resultSet = new CustomerController().getCustomer(custCodeText.getText());
             if (resultSet.next())
                 custNameLabel.setText("Name: "
-                        + resultSet.getString("fullname")
-                        + " | Location: "
-                        + resultSet.getString("location"));
+                    + resultSet.getString("fullname")
+                    + " | Location: "
+                    + resultSet.getString("location"));
             else
                 custNameLabel.setText("||   Customer doesn't exist in database.   ||");
             custNameLabel.setVisible(true);
@@ -361,9 +362,9 @@ public class SalesPage extends javax.swing.JPanel {
             ResultSet resultSet = new CustomerController().getProdName(prodCodeText.getText());
             if (resultSet.next()) {
                 prodNameLabel.setText("Name: "
-                        + resultSet.getString("productname")
-                        + " | Available quantity: "
-                        + resultSet.getString("quantity"));
+                    + resultSet.getString("productname")
+                    + " | Available quantity: "
+                    + resultSet.getString("quantity"));
                 Double sellPrice = new ProductController().getProductSellPrice(prodCodeText.getText());
                 priceText.setText(sellPrice.toString());
             } else
@@ -382,7 +383,7 @@ public class SalesPage extends javax.swing.JPanel {
     public void loadDataSet() {
         try {
             ProductController productController = new ProductController();
-            salesTable.setModel(productController.buildTableModel(productController.getSalesInfo()));
+            salesTable.setModel(new DataTableModel().buildTableModel(productController.getSalesInfo()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -392,7 +393,7 @@ public class SalesPage extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         try {
             ProductController productController = new ProductController();
-            salesTable.setModel(productController.buildTableModel(productController.getSalesSearch(text)));
+            salesTable.setModel(new DataTableModel().buildTableModel(productController.getSalesSearch(text)));
         } catch (SQLException e) {
             e.printStackTrace();
         }

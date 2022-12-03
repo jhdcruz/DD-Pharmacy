@@ -648,26 +648,4 @@ public class ProductController {
 
         return date;
     }
-
-
-    public DefaultTableModel buildTableModel(ResultSet resultSet) throws SQLException {
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        Vector<String> columnNames = new Vector<>();
-        int colCount = metaData.getColumnCount();
-
-        for (int col = 1; col <= colCount; col++) {
-            columnNames.add(metaData.getColumnName(col).toUpperCase(Locale.ROOT));
-        }
-
-        Vector<Vector<Object>> data = new Vector<>();
-        while (resultSet.next()) {
-            Vector<Object> vector = new Vector<>();
-            for (int col = 1; col <= colCount; col++) {
-                vector.add(resultSet.getObject(col));
-            }
-            data.add(vector);
-        }
-
-        return new DefaultTableModel(data, columnNames);
-    }
 }

@@ -2,6 +2,7 @@ package com.pharmacy.Views;
 
 import com.pharmacy.Controllers.CustomerController;
 import com.pharmacy.Models.CustomerModel;
+import com.pharmacy.Utils.*;
 
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
@@ -235,7 +236,7 @@ public class CustomerPage extends javax.swing.JPanel {
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         if (codeText.getText().equals("") || nameText.getText().equals("")
-                || locationText.getText().equals("") || phoneText.getText().equals(""))
+            || locationText.getText().equals("") || phoneText.getText().equals(""))
             JOptionPane.showMessageDialog(this, "Please enter all the required details.");
         else {
             CustomerModel customerModel = new CustomerModel();
@@ -253,7 +254,7 @@ public class CustomerPage extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Select a customer from the table.");
         else {
             if (codeText.getText().equals("") || nameText.getText().equals("")
-                    || locationText.getText().equals("") || phoneText.getText().equals(""))
+                || locationText.getText().equals("") || phoneText.getText().equals(""))
                 JOptionPane.showMessageDialog(this, "Please enter all the required details.");
             else {
                 CustomerModel customerModel = new CustomerModel();
@@ -272,10 +273,10 @@ public class CustomerPage extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Select a customer from the table.");
         else {
             int opt = JOptionPane.showConfirmDialog(
-                    this,
-                    "Are you sure you want to delete this customer?",
-                    "Confirmation",
-                    JOptionPane.YES_NO_OPTION);
+                this,
+                "Are you sure you want to delete this customer?",
+                "Confirmation",
+                JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
                 new CustomerController().deleteCustomer(custTable.getValueAt(custTable.getSelectedRow(), 0).toString());
                 loadDataSet();
@@ -311,7 +312,7 @@ public class CustomerPage extends javax.swing.JPanel {
     public void loadDataSet() {
         try {
             CustomerController customerController = new CustomerController();
-            custTable.setModel(customerController.buildTableModel(customerController.getQueryResult()));
+            custTable.setModel(new DataTableModel().buildTableModel(customerController.getQueryResult()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -320,7 +321,7 @@ public class CustomerPage extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         try {
             CustomerController customerController = new CustomerController();
-            custTable.setModel(customerController.buildTableModel(customerController.getCustomerSearch(text)));
+            custTable.setModel(new DataTableModel().buildTableModel(customerController.getCustomerSearch(text)));
         } catch (SQLException e) {
             e.printStackTrace();
         }

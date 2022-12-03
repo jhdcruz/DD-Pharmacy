@@ -14,7 +14,7 @@ public class Main {
         try {
             javax.swing.UIManager.setLookAndFeel(new FlatMaterialDarkerIJTheme());
         } catch (UnsupportedLookAndFeelException lookAndFeelException) {
-            Logger.getLogger(LoginPage.class.getName()).log(Level.SEVERE, null, lookAndFeelException);
+            Logger.getLogger(LoginPage.class.getName()).log(Level.INFO, null, lookAndFeelException);
         }
 
         /* Create and display the form */

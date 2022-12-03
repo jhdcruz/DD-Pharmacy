@@ -1,6 +1,7 @@
 package com.pharmacy.Views;
 
 import com.pharmacy.Controllers.ProductController;
+import com.pharmacy.Utils.*;
 
 import java.sql.SQLException;
 
@@ -96,7 +97,7 @@ public class CurrentStockPage extends javax.swing.JPanel {
     public void loadDataSet() {
         try {
             ProductController productController = new ProductController();
-            stockTable.setModel(productController.buildTableModel(productController.getCurrentStockInfo()));
+            stockTable.setModel(new DataTableModel().buildTableModel(productController.getCurrentStockInfo()));
         } catch (SQLException e) {
             e.printStackTrace();
         }

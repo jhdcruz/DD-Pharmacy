@@ -371,7 +371,7 @@ public class Dashboard extends javax.swing.JFrame {
     // Method to display the user currently logged in
     public void currentUserSession() {
         UserModel userModel = new UserModel();
-        new UserController().getFullName(userModel, username);
+        new UserController().getUserFullName(userModel, username);
         nameLabel.setText("User: " + userModel.getName() + " (" + userSelect + ")");
     }
 

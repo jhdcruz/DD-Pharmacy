@@ -1,6 +1,7 @@
 package com.pharmacy.Views;
 
 import com.pharmacy.Controllers.UserController;
+import com.pharmacy.Utils.*;
 
 import java.sql.SQLException;
 
@@ -108,7 +109,7 @@ public class UserLogsPage extends javax.swing.JPanel {
     public void loadDataSet() {
         try {
             UserController userController = new UserController();
-            logTable.setModel(userController.buildTableModel(userController.getUserLogsDAO()));
+            logTable.setModel(new DataTableModel().buildTableModel(userController.getUserLogs()));
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -239,7 +239,7 @@ public class UsersPage extends javax.swing.JPanel {
             userModel.setUsername(usernameText.getText());
             userModel.setPassword(passText.getText());
             userModel.setType(userType);
-            new UserController().addUserDAO(userModel, userType);
+            new UserController().addUser(userModel, userType);
             loadDataSet();
         }
     }//GEN-LAST:event_addButtonActionPerformed
@@ -249,15 +249,15 @@ public class UsersPage extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Please select an entry from the table");
         else {
             int opt = JOptionPane.showConfirmDialog(
-                    null,
-                    "Are you sure you want to delete this user?",
-                    "Confirmation",
-                    JOptionPane.YES_NO_OPTION);
+                null,
+                "Are you sure you want to delete this user?",
+                "Confirmation",
+                JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
-                new UserController().deleteUserDAO(
-                        String.valueOf(
-                                userTable.getValueAt
-                                        (userTable.getSelectedRow(), 4)));
+                new UserController().deleteUser(
+                    String.valueOf(
+                        userTable.getValueAt
+                            (userTable.getSelectedRow(), 4)));
                 loadDataSet();
             }
         }
@@ -283,7 +283,7 @@ public class UsersPage extends javax.swing.JPanel {
     public void loadDataSet() {
         try {
             UserController userController = new UserController();
-            userTable.setModel(userController.buildTableModel(userController.getQueryResult()));
+            userTable.setModel(userController.buildUsersTable(userController.getUsers()));
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

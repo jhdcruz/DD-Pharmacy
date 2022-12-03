@@ -2,6 +2,7 @@ package com.pharmacy.Views;
 
 import com.pharmacy.Controllers.SupplierController;
 import com.pharmacy.Models.SupplierModel;
+import com.pharmacy.Utils.*;
 
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
@@ -319,7 +320,7 @@ public class SupplierPage extends javax.swing.JPanel {
     public void loadDataSet() {
         try {
             SupplierController supplierController = new SupplierController();
-            suppTable.setModel(supplierController.buildTableModel(supplierController.getSuppliers()));
+            suppTable.setModel(new DataTableModel().buildTableModel(supplierController.getSuppliers()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -329,7 +330,7 @@ public class SupplierPage extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         try {
             SupplierController supplierController = new SupplierController();
-            suppTable.setModel(supplierController.buildTableModel(supplierController.searchSuppliers(text)));
+            suppTable.setModel(new DataTableModel().buildTableModel(supplierController.searchSuppliers(text)));
         } catch (SQLException e) {
             e.printStackTrace();
         }

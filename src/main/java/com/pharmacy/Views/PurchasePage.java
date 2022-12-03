@@ -3,6 +3,7 @@ package com.pharmacy.Views;
 import com.pharmacy.Controllers.ProductController;
 import com.pharmacy.Controllers.SupplierController;
 import com.pharmacy.Models.ProductModel;
+import com.pharmacy.Utils.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -409,7 +410,7 @@ public class PurchasePage extends javax.swing.JPanel {
     public void loadDataSet() {
         try {
             ProductController productController = new ProductController();
-            purchaseTable.setModel(productController.buildTableModel(productController.getPurchaseInfo()));
+            purchaseTable.setModel(new DataTableModel().buildTableModel(productController.getPurchaseInfo()));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -419,7 +420,7 @@ public class PurchasePage extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         try {
             ProductController productController = new ProductController();
-            purchaseTable.setModel(productController.buildTableModel(productController.getPurchaseSearch(text)));
+            purchaseTable.setModel(new DataTableModel().buildTableModel(productController.getPurchaseSearch(text)));
         } catch (SQLException e) {
             e.printStackTrace();
         }
