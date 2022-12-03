@@ -393,7 +393,7 @@ public class Dashboard extends javax.swing.JFrame {
     public void currentUserSession() {
         UserModel userModel = new UserModel();
         new UserController().getUserFullName(userModel, username);
-        nameLabel.setText("User: " + userModel.getName() + " (" + userSelect + ")");
+        nameLabel.setText(userModel.getName() + " (" + userSelect + ")");
     }
 
     // Allows only the ADMINISTRATOR type user to view and manipulate 'Users' and 'User Logs'
