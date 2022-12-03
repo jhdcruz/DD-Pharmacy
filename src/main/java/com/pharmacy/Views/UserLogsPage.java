@@ -3,6 +3,7 @@ package com.pharmacy.Views;
 import com.pharmacy.Controllers.UserController;
 import com.pharmacy.Utils.*;
 
+import java.awt.*;
 import java.sql.SQLException;
 
 public class UserLogsPage extends javax.swing.JPanel {
@@ -74,11 +75,11 @@ public class UserLogsPage extends javax.swing.JPanel {
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel2)
+                            .addGap(6, 6, 6)
                             .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -87,15 +88,15 @@ public class UserLogsPage extends javax.swing.JPanel {
                     .addContainerGap()
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(refreshButton)
-                            .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
-                    .addGap(0, 0, 0))
+                    .addGap(6, 6, 6))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -108,12 +109,14 @@ public class UserLogsPage extends javax.swing.JPanel {
 
 
     public void loadDataSet() {
-        try {
-            UserController userController = new UserController();
-            logTable.setModel(new DataTableModel().buildTableModel(userController.getUserLogs()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        EventQueue.invokeLater(() -> {
+            try {
+                UserController userController = new UserController();
+                logTable.setModel(userController.buildUserLogsTable(userController.getUserLogs()));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

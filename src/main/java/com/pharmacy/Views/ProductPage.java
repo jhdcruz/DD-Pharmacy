@@ -6,6 +6,7 @@ import com.pharmacy.Models.ProductModel;
 import com.pharmacy.Utils.*;
 
 import javax.swing.JOptionPane;
+import java.awt.*;
 import java.sql.SQLException;
 
 public class ProductPage extends javax.swing.JPanel {
@@ -209,11 +210,11 @@ public class ProductPage extends javax.swing.JPanel {
                     .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(brandText, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -268,7 +269,7 @@ public class ProductPage extends javax.swing.JPanel {
                             .addComponent(jLabel9)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(refreshButton))
                         .addComponent(jSeparator1)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -280,18 +281,15 @@ public class ProductPage extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel9))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                .addComponent(jLabel9)
+                                .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -307,7 +305,7 @@ public class ProductPage extends javax.swing.JPanel {
         else {
             productModel = new ProductModel();
             if (nameText.getText().equals("") || costText.getText().equals("")
-                    || sellText.getText().equals("") || brandText.getText().equals(""))
+                || sellText.getText().equals("") || brandText.getText().equals(""))
                 JOptionPane.showMessageDialog(null, "Please enter all the required details.");
             else {
                 productModel.setProductCode(codeText.getText());
@@ -328,7 +326,7 @@ public class ProductPage extends javax.swing.JPanel {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         productModel = new ProductModel();
         if (nameText.getText().equals("") || costText.getText().equals("")
-                || sellText.getText().equals("") || brandText.getText().equals(""))
+            || sellText.getText().equals("") || brandText.getText().equals(""))
             JOptionPane.showMessageDialog(null, "Please enter all the required details.");
         else {
             productModel.setProductCode(codeText.getText());
@@ -350,14 +348,14 @@ public class ProductPage extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Please select product from the table.");
         else {
             int opt = JOptionPane.showConfirmDialog(
-                    null,
-                    "Are you sure you want to delete this product?",
-                    "Confirmation",
-                    JOptionPane.YES_NO_OPTION);
+                null,
+                "Are you sure you want to delete this product?",
+                "Confirmation",
+                JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
                 new ProductController().deleteProduct(
-                        (String) productTable.getValueAt(
-                                productTable.getSelectedRow(), 0));
+                    (String) productTable.getValueAt(
+                        productTable.getSelectedRow(), 0));
                 loadDataSet();
             }
         }
@@ -409,32 +407,38 @@ public class ProductPage extends javax.swing.JPanel {
 
     // Method to update combo box containing supplier names
     public void loadComboBox() {
-        try {
-            SupplierController supplierController = new SupplierController();
-            suppCombo.setModel(supplierController.setComboItems(supplierController.getSuppliers()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        EventQueue.invokeLater(() -> {
+            try {
+                SupplierController supplierController = new SupplierController();
+                suppCombo.setModel(supplierController.setComboItems(supplierController.getSuppliers()));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     // Method to load data into table
     public void loadDataSet() {
-        try {
-            ProductController productController = new ProductController();
-            productTable.setModel(new DataTableModel().buildTableModel(productController.getProducts()));
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        EventQueue.invokeLater(() -> {
+            try {
+                ProductController productController = new ProductController();
+                productTable.setModel(new DataTableModel().buildTableModel(productController.getProducts()));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
     }
 
     // Method to display search result in table
     public void loadSearchData(String text) {
-        try {
-            ProductController productController = new ProductController();
-            productTable.setModel(new DataTableModel().buildTableModel(productController.getProductSearch(text)));
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        EventQueue.invokeLater(() -> {
+            try {
+                ProductController productController = new ProductController();
+                productTable.setModel(new DataTableModel().buildTableModel(productController.getProductSearch(text)));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

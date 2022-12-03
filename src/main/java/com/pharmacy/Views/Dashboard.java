@@ -15,7 +15,6 @@ public class Dashboard extends javax.swing.JFrame {
     CardLayout layout;
     String userSelect;
     String username;
-    String fullName;
     UserModel userModel;
     LocalDateTime outTime;
 
@@ -34,8 +33,6 @@ public class Dashboard extends javax.swing.JFrame {
         if ("EMPLOYEE".equalsIgnoreCase(userType)) {
             notForEmployee();
         }
-
-        currentUserSession();
 
         // Panel Layout set to Card Layout to allow switching between different sections
         displayPanel.setLayout(layout);
@@ -61,7 +58,6 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
-        setTitle("D&D Pharmacy System");
         setVisible(true);
         setMinimumSize(new Dimension(1200, 630));
     }
@@ -123,16 +119,16 @@ public class Dashboard extends javax.swing.JFrame {
         usersButton = new javax.swing.JButton();
         purchaseButton = new javax.swing.JButton();
         logsButton = new javax.swing.JButton();
-        displayPanel = new javax.swing.JPanel();
-        userPanel = new javax.swing.JPanel();
-        nameLabel = new javax.swing.JLabel();
         logoutButton = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        displayPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Inventory Manager");
+        setTitle("D&D Pharmacy System");
         setBounds(new java.awt.Rectangle(400, 100, 0, 0));
 
-        navPanel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        navPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         homeButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         homeButton.setText("Dashboard");
@@ -216,6 +212,17 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
+        logoutButton.setBackground(new java.awt.Color(255, 51, 51));
+        logoutButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        logoutButton.setLabel("Log out");
+        logoutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logoutButtonActionPerformed(evt);
+            }
+        });
+
+        jSeparator2.setPreferredSize(new java.awt.Dimension(50, 5));
+
         javax.swing.GroupLayout navPanelLayout = new javax.swing.GroupLayout(navPanel);
         navPanel.setLayout(navPanelLayout);
         navPanelLayout.setHorizontalGroup(
@@ -223,7 +230,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(navPanelLayout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(navPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(homeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(homeButton, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
                         .addComponent(prodButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(stockButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(custButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -231,7 +238,16 @@ public class Dashboard extends javax.swing.JFrame {
                         .addComponent(salesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(usersButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(purchaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(logsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(logsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(logoutButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(navPanelLayout.createSequentialGroup()
+                            .addGap(0, 0, Short.MAX_VALUE)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, navPanelLayout.createSequentialGroup()
+                            .addGap(0, 0, Short.MAX_VALUE)
+                            .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(2, 2, 2)))
                     .addContainerGap())
         );
         navPanelLayout.setVerticalGroup(
@@ -239,60 +255,32 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(navPanelLayout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(homeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(prodButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(stockButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(custButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(suppButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(salesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(purchaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(usersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(logsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, 0)
+                    .addComponent(prodButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(stockButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(custButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(suppButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(salesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(purchaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(usersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(logsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, 0)
+                    .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap())
         );
 
         displayPanel.setLayout(new java.awt.CardLayout());
-
-        nameLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        nameLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pharmacy/Views/Icons/user_icon_150670.png"))); // NOI18N
-        nameLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-
-        logoutButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pharmacy/Views/Icons/log-out_icon-icons.com_50106.png"))); // NOI18N
-        logoutButton.setText("Sign out");
-        logoutButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        logoutButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                logoutButtonActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout userPanelLayout = new javax.swing.GroupLayout(userPanel);
-        userPanel.setLayout(userPanelLayout);
-        userPanelLayout.setHorizontalGroup(
-            userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(userPanelLayout.createSequentialGroup()
-                    .addContainerGap(378, Short.MAX_VALUE)
-                    .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(logoutButton))
-        );
-        userPanelLayout.setVerticalGroup(
-            userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(userPanelLayout.createSequentialGroup()
-                    .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, userPanelLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(0, 0, Short.MAX_VALUE))
-        );
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -301,18 +289,13 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(mainPanelLayout.createSequentialGroup()
                     .addComponent(navPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(displayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(userPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(displayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 759, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(mainPanelLayout.createSequentialGroup()
                     .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(mainPanelLayout.createSequentialGroup()
-                            .addComponent(userPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(displayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE))
+                        .addComponent(displayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 598, Short.MAX_VALUE)
                         .addComponent(navPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGap(0, 0, 0))
         );
@@ -389,13 +372,6 @@ public class Dashboard extends javax.swing.JFrame {
         addLogsPage();
     }//GEN-LAST:event_logsButtonActionPerformed
 
-    // Method to display the user currently logged in
-    public void currentUserSession() {
-        UserModel userModel = new UserModel();
-        new UserController().getUserFullName(userModel, username);
-        nameLabel.setText(userModel.getName() + " (" + userSelect + ")");
-    }
-
     // Allows only the ADMINISTRATOR type user to view and manipulate 'Users' and 'User Logs'
     public void notForEmployee() {
         navPanel.remove(usersButton);
@@ -407,17 +383,17 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JButton custButton;
     private javax.swing.JPanel displayPanel;
     private javax.swing.JButton homeButton;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JButton logoutButton;
     private javax.swing.JButton logsButton;
     private javax.swing.JPanel mainPanel;
-    private javax.swing.JLabel nameLabel;
     private javax.swing.JPanel navPanel;
     private javax.swing.JButton prodButton;
     private javax.swing.JButton purchaseButton;
     private javax.swing.JButton salesButton;
     private javax.swing.JButton stockButton;
     private javax.swing.JButton suppButton;
-    private javax.swing.JPanel userPanel;
     private javax.swing.JButton usersButton;
     // End of variables declaration//GEN-END:variables
 }
