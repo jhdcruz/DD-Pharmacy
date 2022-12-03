@@ -374,8 +374,6 @@ public class ProductController {
 
             preparedStatement.executeUpdate();
             preparedStatement2.executeUpdate();
-
-            JOptionPane.showMessageDialog(null, "Product has been removed.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
