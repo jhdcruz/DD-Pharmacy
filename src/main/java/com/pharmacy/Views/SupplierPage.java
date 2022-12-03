@@ -5,6 +5,7 @@ import com.pharmacy.Models.SupplierModel;
 import com.pharmacy.Utils.*;
 
 import javax.swing.JOptionPane;
+import java.awt.*;
 import java.sql.SQLException;
 
 public class SupplierPage extends javax.swing.JPanel {
@@ -258,7 +259,7 @@ public class SupplierPage extends javax.swing.JPanel {
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         if (codeText.getText().equals("") || nameText.getText().equals("")
-                || locationText.getText().equals("") || phoneText.getText().equals(""))
+            || locationText.getText().equals("") || phoneText.getText().equals(""))
             JOptionPane.showMessageDialog(this, "Please enter all the required details.");
         else {
             SupplierModel supplierModel = new SupplierModel();
@@ -276,7 +277,7 @@ public class SupplierPage extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Please select an entry to edit from the table.");
         else {
             if (codeText.getText().equals("") || nameText.getText().equals("")
-                    || locationText.getText().equals("") || phoneText.getText().equals(""))
+                || locationText.getText().equals("") || phoneText.getText().equals(""))
                 JOptionPane.showMessageDialog(this, "Please enter all the required details.");
             else {
                 SupplierModel supplierModel = new SupplierModel();
@@ -295,13 +296,15 @@ public class SupplierPage extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Please select an entry from the table to be deleted.");
         else {
             int opt = JOptionPane.showConfirmDialog(
-                    this,
-                    "Are you sure you want to delete this supplier?",
-                    "Confirmation",
-                    JOptionPane.YES_NO_OPTION);
+                this,
+                "Are you sure you want to delete this supplier?",
+                "Confirmation",
+                JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
-                new SupplierController().deleteSupplier(suppTable.getValueAt(suppTable.getSelectedRow(), 0).toString());
-                loadDataSet();
+                EventQueue.invokeLater(() -> {
+                    new SupplierController().deleteSupplier(suppTable.getValueAt(suppTable.getSelectedRow(), 0).toString());
+                    loadDataSet();
+                });
             }
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
@@ -322,22 +325,26 @@ public class SupplierPage extends javax.swing.JPanel {
 
     // Method to load data into table
     public void loadDataSet() {
-        try {
-            SupplierController supplierController = new SupplierController();
-            suppTable.setModel(new DataTableModel().buildTableModel(supplierController.getSuppliers()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        EventQueue.invokeLater(() -> {
+            try {
+                SupplierController supplierController = new SupplierController();
+                suppTable.setModel(new DataTableModel().buildTableModel(supplierController.getSuppliers()));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     // Method to display search result in table
     public void loadSearchData(String text) {
-        try {
-            SupplierController supplierController = new SupplierController();
-            suppTable.setModel(new DataTableModel().buildTableModel(supplierController.searchSuppliers(text)));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        EventQueue.invokeLater(() -> {
+            try {
+                SupplierController supplierController = new SupplierController();
+                suppTable.setModel(new DataTableModel().buildTableModel(supplierController.searchSuppliers(text)));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -3,10 +3,11 @@ package com.pharmacy.Views;
 import com.pharmacy.Models.UserModel;
 import com.pharmacy.Database.DatabaseInstance;
 
+import java.awt.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 public class LoginPage extends javax.swing.JFrame {
 
@@ -167,7 +168,6 @@ public class LoginPage extends javax.swing.JFrame {
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         String username = userText.getText();
         String password = new String(passText.getPassword());
-
         userType = (String) jComboBox1.getSelectedItem();
 
         if (new DatabaseInstance().validateLogin(username, password, userType)) {
@@ -175,7 +175,10 @@ public class LoginPage extends javax.swing.JFrame {
             userModel.setInTime(String.valueOf(inTime));
 
             dispose();
-            new Dashboard(username, userType, userModel);
+
+            SwingUtilities.invokeLater(() -> {
+                new Dashboard(username, userType, userModel);
+            });
         } else {
             JOptionPane.showMessageDialog(
                 null,

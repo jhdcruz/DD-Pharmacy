@@ -6,6 +6,7 @@ import com.pharmacy.Models.ProductModel;
 import com.pharmacy.Utils.*;
 
 import javax.swing.JOptionPane;
+import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -379,22 +380,26 @@ public class SalesPage extends javax.swing.JPanel {
 
     // Method to load data into table
     public void loadDataSet() {
-        try {
-            ProductController productController = new ProductController();
-            salesTable.setModel(new DataTableModel().buildTableModel(productController.getSalesInfo()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        EventQueue.invokeLater(() -> {
+            try {
+                ProductController productController = new ProductController();
+                salesTable.setModel(new DataTableModel().buildTableModel(productController.getSalesInfo()));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     // Method to display search result in table
     public void loadSearchData(String text) {
-        try {
-            ProductController productController = new ProductController();
-            salesTable.setModel(new DataTableModel().buildTableModel(productController.getSalesSearch(text)));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        EventQueue.invokeLater(() -> {
+            try {
+                ProductController productController = new ProductController();
+                salesTable.setModel(new DataTableModel().buildTableModel(productController.getSalesSearch(text)));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -4,6 +4,7 @@ import com.pharmacy.Controllers.UserController;
 import com.pharmacy.Models.UserModel;
 
 import javax.swing.JOptionPane;
+import java.awt.*;
 import java.sql.SQLException;
 
 public class UsersPage extends javax.swing.JPanel {
@@ -286,12 +287,14 @@ public class UsersPage extends javax.swing.JPanel {
     }//GEN-LAST:event_userTableMouseClicked
 
     public void loadDataSet() {
-        try {
-            UserController userController = new UserController();
-            userTable.setModel(userController.buildUsersTable(userController.getUsers()));
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        EventQueue.invokeLater(() -> {
+            try {
+                UserController userController = new UserController();
+                userTable.setModel(userController.buildUsersTable(userController.getUsers()));
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

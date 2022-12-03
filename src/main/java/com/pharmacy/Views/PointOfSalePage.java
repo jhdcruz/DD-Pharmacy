@@ -5,11 +5,12 @@ import com.pharmacy.Controllers.SupplierController;
 import com.pharmacy.Models.ProductModel;
 import com.pharmacy.Utils.*;
 
+import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
-public class PurchasePage extends javax.swing.JPanel {
+public class PointOfSalePage extends javax.swing.JPanel {
 
     ProductModel productModel;
     String username = null;
@@ -18,7 +19,7 @@ public class PurchasePage extends javax.swing.JPanel {
     int quantity;
     String prodCode = null;
 
-    public PurchasePage(Dashboard dashboard) {
+    public PointOfSalePage(Dashboard dashboard) {
         initComponents();
         this.dashboard = dashboard;
         loadComboBox();
@@ -307,7 +308,7 @@ public class PurchasePage extends javax.swing.JPanel {
     private void purchaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchaseButtonActionPerformed
         productModel = new ProductModel();
         if (codeText.getText().equals("") || jDateChooser1.getDate() == null
-                || quantityText.getText().equals(""))
+            || quantityText.getText().equals(""))
             JOptionPane.showMessageDialog(null, "Please enter all the required details.");
         else {
             productModel.setSupplierCode(new ProductController().getSupplierCode(suppCombo.getSelectedItem().toString()));
@@ -315,21 +316,17 @@ public class PurchasePage extends javax.swing.JPanel {
             try {
                 ResultSet resultSet = new ProductController().getProductName(codeText.getText());
                 if (resultSet.next()) {
-                    //productDTO.setProdName(nameText.getText());
                     productModel.setDate(jDateChooser1.getDate().toString());
                     productModel.setQuantity(Integer.parseInt(quantityText.getText()));
-                    //productDTO.setCostPrice(Double.parseDouble(costText.getText()));
-                    //productDTO.setSellPrice(Double.parseDouble(sellText.getText()));
-                    //productDTO.setBrand(brandText.getText());
-                    Double costPrice = Double.parseDouble(costText.getText());
-                    Double totalCost = costPrice * Integer.parseInt(quantityText.getText());
+                    double costPrice = Double.parseDouble(costText.getText());
+                    double totalCost = costPrice * Integer.parseInt(quantityText.getText());
                     productModel.setTotalCost(totalCost);
 
                     new ProductController().addPurchaseInfo(productModel);
                     loadDataSet();
                 } else
                     JOptionPane.showMessageDialog(null, "This seems to be a new product" +
-                            " that hasn't been added yet.\nPlease add this product in the \"Products\" section before proceeding.");
+                        " that hasn't been added yet.\nPlease add this product in the \"Products\" section before proceeding.");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -341,14 +338,16 @@ public class PurchasePage extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Please select a transaction from the table.");
         else {
             int opt = JOptionPane.showConfirmDialog(
-                    null,
-                    "Are you sure you want to delete this purchase?",
-                    "Confirmation",
-                    JOptionPane.YES_NO_OPTION);
+                null,
+                "Are you sure you want to delete this purchase?",
+                "Confirmation",
+                JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
-                new ProductController().deletePurchaseInfo((int) purchaseTable.getValueAt(purchaseTable.getSelectedRow(), 0));
-                new ProductController().updatePurchaseStock(prodCode, quantity);
-                loadDataSet();
+                EventQueue.invokeLater(() -> {
+                    new ProductController().deletePurchaseInfo((int) purchaseTable.getValueAt(purchaseTable.getSelectedRow(), 0));
+                    new ProductController().updatePurchaseStock(prodCode, quantity);
+                    loadDataSet();
+                });
             }
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
@@ -402,32 +401,38 @@ public class PurchasePage extends javax.swing.JPanel {
 
     // Method to load and update combo box containing supplier names
     public void loadComboBox() {
-        try {
-            SupplierController supplierController = new SupplierController();
-            suppCombo.setModel(supplierController.setComboItems(supplierController.getSuppliers()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        EventQueue.invokeLater(() -> {
+            try {
+                SupplierController supplierController = new SupplierController();
+                suppCombo.setModel(supplierController.setComboItems(supplierController.getSuppliers()));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     // Method to load data into table
     public void loadDataSet() {
-        try {
-            ProductController productController = new ProductController();
-            purchaseTable.setModel(new DataTableModel().buildTableModel(productController.getPurchaseInfo()));
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        EventQueue.invokeLater(() -> {
+            try {
+                ProductController productController = new ProductController();
+                purchaseTable.setModel(new DataTableModel().buildTableModel(productController.getPurchaseInfo()));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
     }
 
     // Method to display search result in table
     public void loadSearchData(String text) {
-        try {
-            ProductController productController = new ProductController();
-            purchaseTable.setModel(new DataTableModel().buildTableModel(productController.getPurchaseSearch(text)));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        EventQueue.invokeLater(() -> {
+            try {
+                ProductController productController = new ProductController();
+                purchaseTable.setModel(new DataTableModel().buildTableModel(productController.getPurchaseSearch(text)));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 

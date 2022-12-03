@@ -43,7 +43,7 @@ public class Dashboard extends javax.swing.JFrame {
         displayPanel.add("Suppliers", new SupplierPage());
         displayPanel.add("Stock", new CurrentStockPage(username));
         displayPanel.add("Sales", new SalesPage(username, this));
-        displayPanel.add("Purchase", new PurchasePage(this));
+        displayPanel.add("POS", new PointOfSalePage(this));
         displayPanel.add("Logs", new UserLogsPage());
 
         this.addWindowListener(new WindowAdapter() {
@@ -91,8 +91,8 @@ public class Dashboard extends javax.swing.JFrame {
         layout.show(displayPanel, "Sales");
     }
 
-    public void addPurchasePage() {
-        layout.show(displayPanel, "Purchase");
+    public void addPOSPage() {
+        layout.show(displayPanel, "POS");
     }
 
     public void addLogsPage() {
@@ -330,8 +330,8 @@ public class Dashboard extends javax.swing.JFrame {
             new UserController().addUserLogin(userModel);
             dispose();
 
-            LoginPage logPage = new LoginPage();
-            logPage.setVisible(true);
+            LoginPage loginPage = new LoginPage();
+            loginPage.setVisible(true);
         }
     }//GEN-LAST:event_logoutButtonActionPerformed
 
@@ -365,7 +365,7 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_homeButtonActionPerformed
 
     private void purchaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchaseButtonActionPerformed
-        addPurchasePage();
+        addPOSPage();
     }//GEN-LAST:event_purchaseButtonActionPerformed
 
     private void logsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logsButtonActionPerformed
