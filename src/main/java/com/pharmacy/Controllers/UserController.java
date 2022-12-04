@@ -39,8 +39,6 @@ public class UserController {
         try {
             String duplicateQuery = "SELECT * FROM users WHERE name='"
                 + userModel.getName()
-                + "' AND location='"
-                + userModel.getLocation()
                 + "' AND phone='"
                 + userModel.getPhone()
                 + "' AND user_type='"
@@ -51,11 +49,10 @@ public class UserController {
             if (resultSet.next()) {
                 JOptionPane.showMessageDialog(null, "User already exists");
             } else {
-                String insertQuery = "INSERT INTO users (name,location,phone,username,password,user_type) " +
+                String insertQuery = "INSERT INTO users (name,phone,username,password,user_type) " +
                     "VALUES(?,?,?,?,?,?)";
                 prepStatement = conn.prepareStatement(insertQuery);
                 prepStatement.setString(1, userModel.getName());
-                prepStatement.setString(2, userModel.getLocation());
                 prepStatement.setString(3, userModel.getPhone());
                 prepStatement.setString(4, userModel.getUsername());
                 prepStatement.setString(5, userModel.getPassword());
@@ -78,13 +75,12 @@ public class UserController {
     public void updateUser(UserModel userModel) {
 
         try {
-            String query = "UPDATE users SET name=?,location=?,phone=?,user_type=? WHERE username=?";
+            String query = "UPDATE users SET name=?,phone=?,user_type=? WHERE username=?";
             prepStatement = conn.prepareStatement(query);
             prepStatement.setString(1, userModel.getName());
-            prepStatement.setString(2, userModel.getLocation());
-            prepStatement.setString(3, userModel.getPhone());
-            prepStatement.setString(4, userModel.getType());
-            prepStatement.setString(5, userModel.getUsername());
+            prepStatement.setString(2, userModel.getPhone());
+            prepStatement.setString(3, userModel.getType());
+            prepStatement.setString(4, userModel.getUsername());
 
             prepStatement.executeUpdate();
         } catch (SQLException throwables) {
@@ -120,7 +116,7 @@ public class UserController {
 
     public ResultSet searchUsers(String search) {
         try {
-            String query = "SELECT * FROM users WHERE name LIKE '%" + search + "%' OR location LIKE '%" + search + "%' OR phone LIKE '%" + search + "%' OR user_type LIKE '%" + search + "%'";
+            String query = "SELECT * FROM users WHERE name LIKE '%" + search + "%' OR phone LIKE '%" + search + "%' OR user_type LIKE '%" + search + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -143,7 +139,7 @@ public class UserController {
 
     public ResultSet getUserLogs() {
         try {
-            String query = "SELECT users.name,userlogs.username,in_time,out_time,location FROM userlogs" +
+            String query = "SELECT users.name,userlogs.username,in_time,out_time FROM userlogs" +
                 " INNER JOIN users on userlogs.username=users.username ORDER BY in_time DESC";
             resultSet = statement.executeQuery(query);
         } catch (SQLException sqlException) {

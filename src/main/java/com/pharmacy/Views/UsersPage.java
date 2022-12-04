@@ -30,12 +30,10 @@ public class UsersPage extends javax.swing.JPanel {
         jSeparator1 = new javax.swing.JSeparator();
         entryPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         nameText = new javax.swing.JTextField();
-        locationText = new javax.swing.JTextField();
         phoneText = new javax.swing.JTextField();
         usernameText = new javax.swing.JTextField();
         passText = new javax.swing.JPasswordField();
@@ -56,8 +54,6 @@ public class UsersPage extends javax.swing.JPanel {
         entryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Enter User Details"));
 
         jLabel2.setText("Full Name:");
-
-        jLabel3.setText("Location:");
 
         jLabel4.setText("Contact:");
 
@@ -100,10 +96,6 @@ public class UsersPage extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(entryPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(23, 23, 23)
-                        .addComponent(locationText))
-                    .addGroup(entryPanelLayout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(23, 23, 23)
                         .addComponent(phoneText))
@@ -122,7 +114,7 @@ public class UsersPage extends javax.swing.JPanel {
                 .addGap(4, 4, 4))
         );
 
-        entryPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel2, jLabel3, jLabel4, jLabel5, jLabel6});
+        entryPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[]{jLabel2, jLabel4, jLabel5, jLabel6});
 
         entryPanelLayout.setVerticalGroup(
             entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -131,10 +123,6 @@ public class UsersPage extends javax.swing.JPanel {
                 .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(nameText, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(locationText, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -156,9 +144,9 @@ public class UsersPage extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        entryPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {locationText, nameText, passText, phoneText, usernameText});
+        entryPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[]{nameText, passText, phoneText, usernameText});
 
-        entryPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel2, jLabel3, jLabel4, jLabel5, jLabel6});
+        entryPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[]{jLabel2, jLabel4, jLabel5, jLabel6});
 
         userTable.setAutoCreateRowSorter(true);
         userTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -306,11 +294,10 @@ public class UsersPage extends javax.swing.JPanel {
         // check if a row is selected
         if (userTable.getSelectionModel().getSelectedItemsCount() == 1) {
             // then, update the user
-            if (nameText.getText().equals("") || locationText.getText().equals("") || phoneText.getText().equals("")) {
+            if (nameText.getText().equals("") || phoneText.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "Please fill all the required fields.");
             } else {
                 userModel.setName(nameText.getText());
-                userModel.setLocation(locationText.getText());
                 userModel.setPhone(phoneText.getText());
                 userModel.setUsername(usernameText.getText());
                 userType = (String) userTypeCombo.getSelectedItem();
@@ -362,10 +349,9 @@ public class UsersPage extends javax.swing.JPanel {
         }
 
         nameText.setText(val[1].toString());
-        locationText.setText(val[2].toString());
-        phoneText.setText(val[3].toString());
-        usernameText.setText(val[4].toString());
-        userTypeCombo.setSelectedItem(val[5].toString());
+        phoneText.setText(val[2].toString());
+        usernameText.setText(val[3].toString());
+        userTypeCombo.setSelectedItem(val[4].toString());
     }//GEN-LAST:event_userTableMouseClicked
 
     private void searchTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextKeyReleased
@@ -426,14 +412,12 @@ public class UsersPage extends javax.swing.JPanel {
     private javax.swing.JPanel entryPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField locationText;
     private javax.swing.JTextField nameText;
     private javax.swing.JPasswordField passText;
     private javax.swing.JTextField phoneText;

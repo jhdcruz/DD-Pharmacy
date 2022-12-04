@@ -148,7 +148,6 @@ CREATE TABLE `users`
 (
     `id`        int          NOT NULL AUTO_INCREMENT,
     `name`      varchar(45)  NOT NULL,
-    `location`  varchar(45)  NOT NULL,
     `phone`     varchar(12)  NOT NULL,
     `username`  varchar(20)  NOT NULL,
     `password`  varchar(200) NOT NULL,
@@ -168,7 +167,7 @@ LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users`
     DISABLE KEYS */;
 INSERT INTO `users`
-VALUES (0, 'Admin', 'Unknown', '00000000000', 'admin', 'admin', 'ADMINISTRATOR');
+VALUES (0, 'Admin', '00000000000', 'admin', 'admin', 'ADMINISTRATOR');
 /*!40000 ALTER TABLE `users`
     ENABLE KEYS */;
 UNLOCK TABLES;

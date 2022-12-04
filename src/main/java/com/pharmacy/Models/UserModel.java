@@ -3,7 +3,7 @@ package com.pharmacy.Models;
 public class UserModel {
 
     private int id;
-    private String name, location, phone, username, password, type;
+    private String name, phone, username, password, type;
 
     public String getInTime() {
         return inTime;
@@ -37,14 +37,6 @@ public class UserModel {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public String getPhone() {

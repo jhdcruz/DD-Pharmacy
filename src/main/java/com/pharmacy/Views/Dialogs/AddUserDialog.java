@@ -47,12 +47,10 @@ public class AddUserDialog extends JDialog {
 
         entryPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         nameText = new javax.swing.JTextField();
-        locationText = new javax.swing.JTextField();
         phoneText = new javax.swing.JTextField();
         usernameText = new javax.swing.JTextField();
         passText = new javax.swing.JPasswordField();
@@ -67,8 +65,6 @@ public class AddUserDialog extends JDialog {
         entryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Enter User Details"));
 
         jLabel2.setText("Full Name:");
-
-        jLabel3.setText("Location:");
 
         jLabel4.setText("Contact:");
 
@@ -100,11 +96,9 @@ public class AddUserDialog extends JDialog {
         entryPanelLayout.setHorizontalGroup(
             entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(phoneText, javax.swing.GroupLayout.Alignment.CENTER)
-                .addComponent(locationText, javax.swing.GroupLayout.Alignment.CENTER)
                 .addComponent(nameText, javax.swing.GroupLayout.Alignment.CENTER)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.CENTER)
                 .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, entryPanelLayout.createSequentialGroup()
                     .addGap(88, 88, 88)
@@ -129,10 +123,6 @@ public class AddUserDialog extends JDialog {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(nameText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(locationText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(4, 4, 4)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(phoneText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -182,11 +172,10 @@ public class AddUserDialog extends JDialog {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         UserModel userModel = new UserModel();
 
-        if (nameText.getText().equals("") || locationText.getText().equals("") || phoneText.getText().equals(""))
+        if (nameText.getText().equals("") || phoneText.getText().equals(""))
             JOptionPane.showMessageDialog(null, "Please fill all the required fields.");
         else {
             userModel.setName(nameText.getText());
-            userModel.setLocation(locationText.getText());
             userModel.setPhone(phoneText.getText());
             userModel.setUsername(usernameText.getText());
             userModel.setPassword(new String(passText.getPassword()));
@@ -217,12 +206,10 @@ public class AddUserDialog extends JDialog {
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel entryPanel;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField locationText;
     private javax.swing.JTextField nameText;
     private javax.swing.JPasswordField passText;
     private javax.swing.JTextField phoneText;
