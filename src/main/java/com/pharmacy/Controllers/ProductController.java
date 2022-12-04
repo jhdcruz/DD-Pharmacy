@@ -170,22 +170,16 @@ public class ProductController {
      */
     public void updateProduct(ProductModel productModel) {
         try {
-            String productQuery = "UPDATE products SET product_name=?,cost_price=?,sell_price=?,brand=? WHERE product_code=?";
+            String productQuery = "UPDATE products SET product_name=?,cost_price=?,sell_price=?,brand=?,quantity=? WHERE product_code=?";
             preparedStatement = connection.prepareStatement(productQuery);
             preparedStatement.setString(1, productModel.getProductName());
             preparedStatement.setDouble(2, productModel.getCostPrice());
             preparedStatement.setDouble(3, productModel.getSellPrice());
             preparedStatement.setString(4, productModel.getBrand());
             preparedStatement.setString(5, productModel.getProductCode());
-
-            String stockQuery = "UPDATE products SET quantity=? WHERE product_code=?";
-            preparedStatement2 = connection.prepareStatement(stockQuery);
-            preparedStatement2.setInt(1, productModel.getQuantity());
-            preparedStatement2.setString(2, productModel.getProductCode());
+            preparedStatement.setInt(6, productModel.getQuantity());
 
             preparedStatement.executeUpdate();
-            preparedStatement2.executeUpdate();
-
             JOptionPane.showMessageDialog(null, "Product details updated.");
         } catch (SQLException throwable) {
             throwable.printStackTrace();
