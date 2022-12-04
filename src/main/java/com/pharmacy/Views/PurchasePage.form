@@ -134,9 +134,9 @@
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="purchaseButton" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="deleteButton" min="-2" pref="91" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="purchaseButton" max="32767" attributes="0"/>
                       </Group>
                       <Component id="clearButton" max="32767" attributes="0"/>
                   </Group>
@@ -195,9 +195,9 @@
                       <Component id="brandText" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="deleteButton" linkSize="3" min="-2" pref="45" max="-2" attributes="0"/>
-                      <Component id="purchaseButton" linkSize="3" alignment="0" min="-2" pref="45" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="deleteButton" linkSize="3" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
+                      <Component id="purchaseButton" linkSize="3" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="clearButton" min="-2" pref="35" max="-2" attributes="0"/>
@@ -228,7 +228,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="addSuppButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Click to add a new Supplier"/>
+            <Property name="text" type="java.lang.String" value="+ Add New Supplier"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addSuppButtonActionPerformed"/>

@@ -109,20 +109,20 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="prodButton" min="-2" pref="60" max="-2" attributes="0"/>
+                      <Component id="prodButton" min="-2" pref="55" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="custButton" min="-2" pref="60" max="-2" attributes="0"/>
+                      <Component id="custButton" min="-2" pref="55" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="suppButton" min="-2" pref="60" max="-2" attributes="0"/>
+                      <Component id="suppButton" min="-2" pref="55" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="salesButton" min="-2" pref="60" max="-2" attributes="0"/>
+                      <Component id="salesButton" min="-2" pref="55" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="purchaseButton" min="-2" pref="60" max="-2" attributes="0"/>
+                      <Component id="purchaseButton" min="-2" pref="55" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="usersButton" min="-2" pref="60" max="-2" attributes="0"/>
+                      <Component id="usersButton" min="-2" pref="55" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="logsButton" min="-2" pref="60" max="-2" attributes="0"/>
-                      <EmptySpace pref="22" max="32767" attributes="0"/>
+                      <Component id="logsButton" min="-2" pref="55" max="-2" attributes="0"/>
+                      <EmptySpace pref="57" max="32767" attributes="0"/>
                       <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="logoutButton" min="-2" pref="40" max="-2" attributes="0"/>

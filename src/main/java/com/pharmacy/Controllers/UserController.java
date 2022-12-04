@@ -183,7 +183,6 @@ public class UserController {
             String query = "UPDATE users SET password=? WHERE username='" + username + "'";
             prepStatement = conn.prepareStatement(query);
             prepStatement.setString(1, password);
-            prepStatement.setString(2, username);
 
             prepStatement.executeUpdate();
         } catch (SQLException sqlException) {
