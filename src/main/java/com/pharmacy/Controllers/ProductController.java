@@ -113,9 +113,9 @@ public class ProductController {
                 preparedStatement.setString(1, productModel.getProductCode());
                 preparedStatement.setString(2, productModel.getProductName());
                 preparedStatement.setDouble(3, productModel.getCostPrice());
-                preparedStatement.setInt(3, productModel.getQuantity());
-                preparedStatement.setDouble(4, productModel.getSellPrice());
-                preparedStatement.setString(5, productModel.getBrand());
+                preparedStatement.setInt(4, productModel.getQuantity());
+                preparedStatement.setDouble(5, productModel.getSellPrice());
+                preparedStatement.setString(6, productModel.getBrand());
 
                 preparedStatement.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Product added and ready for sale.");
