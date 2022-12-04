@@ -411,8 +411,6 @@ public class UsersPage extends javax.swing.JPanel {
         });
     }
 
-    String username;
-
     public final void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {

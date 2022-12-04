@@ -371,7 +371,7 @@ public class SalesPage extends javax.swing.JPanel {
             ResultSet resultSet = new CustomerController().getCustomer(custCodeText.getText());
             if (resultSet.next())
                 custNameLabel.setText("Name: "
-                    + resultSet.getString("fullname")
+                    + resultSet.getString("full_name")
                     + " | Location: "
                     + resultSet.getString("location"));
             else
@@ -387,7 +387,7 @@ public class SalesPage extends javax.swing.JPanel {
             ResultSet resultSet = new CustomerController().getProdName(prodCodeText.getText());
             if (resultSet.next()) {
                 prodNameLabel.setText("Name: "
-                    + resultSet.getString("productname")
+                    + resultSet.getString("product_name")
                     + " | Available quantity: "
                     + resultSet.getString("quantity"));
                 Double sellPrice = new ProductController().getProductSellPrice(prodCodeText.getText());
