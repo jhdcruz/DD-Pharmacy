@@ -28,4 +28,4 @@ jobs:
         file: ./target/*.jar
 
     - name: Update dependency graph
-      uses: advanced-security/maven-dependency-submission-action@v2
+      uses: advanced-security/maven-dependency-submission-action@multi-module
