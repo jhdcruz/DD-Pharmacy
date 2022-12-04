@@ -216,7 +216,7 @@ public class UserController {
         }
 
         // Do not display passwords column
-        columnNames.remove("PASSWORD");
+        columnNames.remove("Password");
 
         Vector<Vector<Object>> data = new Vector<>();
         while (resultSet.next()) {
