@@ -21,11 +21,11 @@ public class Dashboard extends javax.swing.JFrame {
     public Dashboard(String username, String userType, UserModel userModel) {
         initComponents();
 
-        navPanel.setVisible(false);
         layout = new CardLayout();
         userSelect = userType;
         this.username = username;
         this.userModel = userModel;
+        setLocationRelativeTo(null);
 
         // show navigation panel
         navPanel.setVisible(true);
