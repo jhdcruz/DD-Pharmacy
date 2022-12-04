@@ -125,7 +125,7 @@
                       <Component id="addButton" linkSize="2" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                       <Component id="cancelButton" linkSize="2" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

@@ -163,6 +163,9 @@
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Select a supplier"/>
           </Properties>
+          <Events>
+            <EventHandler event="popupMenuWillBecomeVisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="suppComboPopupMenuWillBecomeVisible"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>

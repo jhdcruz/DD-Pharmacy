@@ -201,11 +201,14 @@
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="1">
-                <StringItem index="0" value="Select a supplier"/>
+                <StringItem index="0" value="Select a supplier..."/>
               </StringArray>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Select a supplier"/>
           </Properties>
+          <Events>
+            <EventHandler event="popupMenuWillBecomeVisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="suppComboPopupMenuWillBecomeVisible"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>

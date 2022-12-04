@@ -21,7 +21,6 @@ public class AddCustomerDialog extends javax.swing.JDialog {
         this.custTable = custTable;
         initComponents();
 
-        setMinimumSize(new Dimension(324, 358));
         setResizable(false);
 
         setTitle("Add Customer");
