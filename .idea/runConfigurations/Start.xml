@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Start" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="com.pharmacy.Main" />
-    <module name="DDPharmacy" />
+    <module name="DD-Pharmacy" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="com.pharmacy.*" />
