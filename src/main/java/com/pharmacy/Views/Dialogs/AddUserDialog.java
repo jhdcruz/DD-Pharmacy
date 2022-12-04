@@ -3,10 +3,15 @@ package com.pharmacy.Views.Dialogs;
 import com.pharmacy.Controllers.UserController;
 import com.pharmacy.Models.UserModel;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.sql.*;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.KeyStroke;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.event.KeyEvent;
+import java.sql.SQLException;
 
 public class AddUserDialog extends JDialog {
 
@@ -174,24 +179,21 @@ public class AddUserDialog extends JDialog {
         this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
-    String userType;
-
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         UserModel userModel = new UserModel();
 
         if (nameText.getText().equals("") || locationText.getText().equals("") || phoneText.getText().equals(""))
             JOptionPane.showMessageDialog(null, "Please fill all the required fields.");
         else {
-            userType = (String) userTypeCombo.getSelectedItem();
             userModel.setName(nameText.getText());
             userModel.setLocation(locationText.getText());
             userModel.setPhone(phoneText.getText());
             userModel.setUsername(usernameText.getText());
             userModel.setPassword(new String(passText.getPassword()));
-            userModel.setType(userType);
+            userModel.setType((String) userTypeCombo.getSelectedItem());
 
             EventQueue.invokeLater(() -> {
-                new UserController().addUser(userModel, userType);
+                new UserController().addUser(userModel);
                 loadDataSet();
                 this.dispose();
             });

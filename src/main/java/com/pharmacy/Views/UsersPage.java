@@ -47,7 +47,6 @@ public class UsersPage extends javax.swing.JPanel {
         addUserButton = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         searchText = new javax.swing.JTextField();
-        jSeparator2 = new javax.swing.JSeparator();
         changePassword = new javax.swing.JButton();
         refreshButton = new javax.swing.JButton();
 
@@ -223,8 +222,6 @@ public class UsersPage extends javax.swing.JPanel {
             }
         });
 
-        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
-
         changePassword.setText("Change Password");
         changePassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -249,14 +246,13 @@ public class UsersPage extends javax.swing.JPanel {
                         .addGroup(layout.createSequentialGroup()
                             .addContainerGap()
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(0, 0, 0)
-                            .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGap(15, 15, 15)
                             .addComponent(jLabel8)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(searchText)
-                            .addGap(248, 248, 248)
-                            .addComponent(refreshButton))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(refreshButton)
+                            .addGap(242, 242, 242))
                         .addGroup(layout.createSequentialGroup()
                             .addGap(6, 6, 6)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -279,9 +275,8 @@ public class UsersPage extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
-                    .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -297,6 +292,8 @@ public class UsersPage extends javax.swing.JPanel {
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[]{addUserButton, changePassword});
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[]{refreshButton, searchText});
 
         addUserButton.getAccessibleContext().setAccessibleName("");
     }// </editor-fold>//GEN-END:initComponents
@@ -394,7 +391,7 @@ public class UsersPage extends javax.swing.JPanel {
 
         // update password
         EventQueue.invokeLater(() -> {
-            new UserController().changePass(username, password);
+            new UserController().updatePass(username, password);
         });
     }//GEN-LAST:event_changePasswordActionPerformed
 
@@ -436,7 +433,6 @@ public class UsersPage extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField locationText;
     private javax.swing.JTextField nameText;
     private javax.swing.JPasswordField passText;

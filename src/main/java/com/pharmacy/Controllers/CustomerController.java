@@ -1,7 +1,7 @@
 package com.pharmacy.Controllers;
 
-import com.pharmacy.Models.CustomerModel;
 import com.pharmacy.Database.DatabaseInstance;
+import com.pharmacy.Models.CustomerModel;
 
 import javax.swing.JOptionPane;
 import java.sql.Connection;
@@ -33,7 +33,7 @@ public class CustomerController {
     public void addCustomer(CustomerModel customerModel) {
         try {
             // check if customer already exists
-            String validateQuery = "SELECT * FROM customers WHERE fullname='" + customerModel.getName() + "' AND location='" + customerModel.getLocation() + "' AND phone='" + customerModel.getPhone() + "'";
+            String validateQuery = "SELECT * FROM customers WHERE full_name='" + customerModel.getName() + "' AND location='" + customerModel.getLocation() + "' AND phone='" + customerModel.getPhone() + "'";
             resultSet = statement.executeQuery(validateQuery);
 
             if (resultSet.next()) {
@@ -67,7 +67,7 @@ public class CustomerController {
      */
     public void updateCustomer(CustomerModel customerModel) {
         try {
-            String query = "UPDATE customers SET fullname=?,location=?,phone=? WHERE customercode=?";
+            String query = "UPDATE customers SET full_name=?,location=?,phone=? WHERE customer_code=?";
             preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setString(1, customerModel.getName());
@@ -89,7 +89,7 @@ public class CustomerController {
      */
     public void deleteCustomer(String customerCode) {
         try {
-            String query = "DELETE FROM customers WHERE customercode='" + customerCode + "'";
+            String query = "DELETE FROM customers WHERE customer_code='" + customerCode + "'";
 
             statement.executeUpdate(query);
             JOptionPane.showMessageDialog(null, "Customer" + customerCode + "removed.");
@@ -103,9 +103,9 @@ public class CustomerController {
      *
      * @return database result
      */
-    public ResultSet getQueryResult() {
+    public ResultSet getCustomers() {
         try {
-            String query = "SELECT customercode, fullname, location, phone FROM customers";
+            String query = "SELECT customer_code, full_name, location, phone FROM customers";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -122,7 +122,7 @@ public class CustomerController {
      */
     public ResultSet getCustomerSearch(String searchQuery) {
         try {
-            String query = "SELECT customercode,fullname,location,phone FROM customers " + "WHERE customercode LIKE '%" + searchQuery + "%' OR fullname LIKE '%" + searchQuery + "%' OR " + "location LIKE '%" + searchQuery + "%' OR phone LIKE '%" + searchQuery + "%'";
+            String query = "SELECT customer_code,full_name,location,phone FROM customers " + "WHERE customer_code LIKE '%" + searchQuery + "%' OR full_name LIKE '%" + searchQuery + "%' OR " + "location LIKE '%" + searchQuery + "%' OR phone LIKE '%" + searchQuery + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -139,7 +139,7 @@ public class CustomerController {
      */
     public ResultSet getCustomer(String customerCode) {
         try {
-            String query = "SELECT * FROM customers WHERE customercode='" + customerCode + "'";
+            String query = "SELECT * FROM customers WHERE customer_code='" + customerCode + "'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -149,14 +149,15 @@ public class CustomerController {
     }
 
     /**
-     * TODO: Add description
+     * Get product info based on provided product code.
+     * This method is tailored for sales/pos usage.
      *
      * @param prodCode product code
      * @return result set of product details
      */
     public ResultSet getProdName(String prodCode) {
         try {
-            String query = "SELECT productname,currentstock.quantity FROM products " + "INNER JOIN currentstock ON products.productcode=currentstock.productcode " + "WHERE currentstock.productcode='" + prodCode + "'";
+            String query = "SELECT product_name, quantity, sell_price FROM products WHERE product_code='" + prodCode + "'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();

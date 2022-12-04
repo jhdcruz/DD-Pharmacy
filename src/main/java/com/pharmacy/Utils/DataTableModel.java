@@ -1,10 +1,11 @@
 package com.pharmacy.Utils;
 
+import org.apache.commons.text.WordUtils;
+
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Locale;
 import java.util.Vector;
 
 public class DataTableModel {
@@ -23,7 +24,12 @@ public class DataTableModel {
 
         // add column names to the table column headers
         for (int col = 1; col <= columnCount; col++) {
-            columnNames.add(metaData.getColumnName(col).toUpperCase(Locale.ROOT));
+            // replace underscores with spaces
+            String columnName = metaData.getColumnName(col).replaceAll("_", " ");
+            // capitalize the first letter of each word
+            columnName = WordUtils.capitalizeFully(columnName);
+
+            columnNames.add(columnName);
         }
 
         Vector<Vector<Object>> data = new Vector<>();

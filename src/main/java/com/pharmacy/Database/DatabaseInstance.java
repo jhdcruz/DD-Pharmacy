@@ -74,7 +74,7 @@ public class DatabaseInstance {
             + username
             + "' AND password='"
             + password
-            + "' AND usertype='"
+            + "' AND user_type='"
             + userType
             + "' LIMIT 1";
 

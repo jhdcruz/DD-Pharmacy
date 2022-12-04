@@ -1,18 +1,15 @@
 package com.pharmacy.Controllers;
 
-import com.pharmacy.Models.SupplierModel;
 import com.pharmacy.Database.DatabaseInstance;
+import com.pharmacy.Models.SupplierModel;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Locale;
 import java.util.Vector;
 
 public class SupplierController {
@@ -39,13 +36,13 @@ public class SupplierController {
     public void addSupplier(SupplierModel supplierModel) {
         try {
             // check if supplier already exists
-            String duplicateQuery = "SELECT * FROM suppliers WHERE fullname='"
-                    + supplierModel.getSupplierName()
-                    + "' AND location='"
-                    + supplierModel.getLocation()
-                    + "' AND mobile='"
-                    + supplierModel.getPhone()
-                    + "'";
+            String duplicateQuery = "SELECT * FROM suppliers WHERE full_name='"
+                + supplierModel.getSupplierName()
+                + "' AND location='"
+                + supplierModel.getLocation()
+                + "' AND mobile='"
+                + supplierModel.getPhone()
+                + "'";
             resultSet = statement.executeQuery(duplicateQuery);
 
             if (resultSet.next()) {
@@ -58,6 +55,7 @@ public class SupplierController {
                 preparedStatement.setString(2, supplierModel.getSupplierName());
                 preparedStatement.setString(3, supplierModel.getLocation());
                 preparedStatement.setString(4, supplierModel.getPhone());
+
                 preparedStatement.executeUpdate();
                 JOptionPane.showMessageDialog(null, "New supplier has been added successfully.");
             }
@@ -73,7 +71,7 @@ public class SupplierController {
      */
     public void updateSupplier(SupplierModel supplierModel) {
         try {
-            String query = "UPDATE suppliers SET fullname=?,location=?,mobile=? WHERE suppliercode=?";
+            String query = "UPDATE suppliers SET full_name=?,location=?,mobile=? WHERE supplier_code=?";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, supplierModel.getSupplierName());
             preparedStatement.setString(2, supplierModel.getLocation());
@@ -94,7 +92,7 @@ public class SupplierController {
      */
     public void deleteSupplier(String supplierCode) {
         try {
-            String query = "DELETE FROM suppliers WHERE suppliercode='" + supplierCode + "'";
+            String query = "DELETE FROM suppliers WHERE supplier_code='" + supplierCode + "'";
 
             statement.executeUpdate(query);
             JOptionPane.showMessageDialog(null, "Supplier has been removed.");
@@ -110,7 +108,7 @@ public class SupplierController {
      */
     public ResultSet getSuppliers() {
         try {
-            String query = "SELECT suppliercode, fullname, location, mobile FROM suppliers";
+            String query = "SELECT supplier_code, full_name, location, mobile FROM suppliers";
             resultSet = statement.executeQuery(query);
         } catch (Exception e) {
             e.printStackTrace();
@@ -127,9 +125,9 @@ public class SupplierController {
      */
     public ResultSet searchSuppliers(String searchText) {
         try {
-            String query = "SELECT suppliercode, fullname, location, mobile FROM suppliers " +
-                    "WHERE suppliercode LIKE '%" + searchText + "%' OR location LIKE '%" + searchText + "%' " +
-                    "OR fullname LIKE '%" + searchText + "%' OR mobile LIKE '%" + searchText + "%'";
+            String query = "SELECT supplier_code, full_name, location, mobile FROM suppliers " +
+                "WHERE supplier_code LIKE '%" + searchText + "%' OR location LIKE '%" + searchText + "%' " +
+                "OR full_name LIKE '%" + searchText + "%' OR mobile LIKE '%" + searchText + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -142,7 +140,7 @@ public class SupplierController {
         Vector<String> supplierNames = new Vector<>();
 
         while (resultSet.next()) {
-            supplierNames.add(resultSet.getString("fullname"));
+            supplierNames.add(resultSet.getString("full_name"));
         }
 
         return new DefaultComboBoxModel<>(supplierNames);

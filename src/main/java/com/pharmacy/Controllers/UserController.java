@@ -1,9 +1,10 @@
 
 package com.pharmacy.Controllers;
 
-import com.pharmacy.Models.UserModel;
 import com.pharmacy.Database.DatabaseInstance;
+import com.pharmacy.Models.UserModel;
 import com.pharmacy.Views.UsersPage;
+import org.apache.commons.text.WordUtils;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     // Methods to add new user
-    public void addUser(UserModel userModel, String userType) {
+    public void addUser(UserModel userModel) {
         try {
             String duplicateQuery = "SELECT * FROM users WHERE name='"
                 + userModel.getName()
@@ -42,7 +43,7 @@ public class UserController {
                 + userModel.getLocation()
                 + "' AND phone='"
                 + userModel.getPhone()
-                + "' AND usertype='"
+                + "' AND user_type='"
                 + userModel.getType()
                 + "'";
             resultSet = statement.executeQuery(duplicateQuery);
@@ -50,11 +51,7 @@ public class UserController {
             if (resultSet.next()) {
                 JOptionPane.showMessageDialog(null, "User already exists");
             } else {
-                String username = null;
-                String password = null;
-                String oldUsername = null;
-
-                String insertQuery = "INSERT INTO users (name,location,phone,username,password,usertype) " +
+                String insertQuery = "INSERT INTO users (name,location,phone,username,password,user_type) " +
                     "VALUES(?,?,?,?,?,?)";
                 prepStatement = conn.prepareStatement(insertQuery);
                 prepStatement.setString(1, userModel.getName());
@@ -71,11 +68,17 @@ public class UserController {
         }
     }
 
-    // Method to edit existing user
+    /**
+     * Update existing user (password excluded!)
+     * <p>
+     * See {@link #updatePass(String username, String password)} for updating password
+     *
+     * @param userModel populated UserModel
+     */
     public void updateUser(UserModel userModel) {
 
         try {
-            String query = "UPDATE users SET name=?,location=?,phone=?,usertype=? WHERE username=?";
+            String query = "UPDATE users SET name=?,location=?,phone=?,user_type=? WHERE username=?";
             prepStatement = conn.prepareStatement(query);
             prepStatement.setString(1, userModel.getName());
             prepStatement.setString(2, userModel.getLocation());
@@ -115,26 +118,9 @@ public class UserController {
         return resultSet;
     }
 
-    /**
-     * Find user by username
-     *
-     * @param username
-     * @return
-     */
-    public ResultSet findUser(String username) {
-        try {
-            String query = "SELECT * FROM users WHERE username='" + username + "'";
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
-
-        return resultSet;
-    }
-
     public ResultSet searchUsers(String search) {
         try {
-            String query = "SELECT * FROM users WHERE name LIKE '%" + search + "%' OR location LIKE '%" + search + "%' OR phone LIKE '%" + search + "%' OR usertype LIKE '%" + search + "%'";
+            String query = "SELECT * FROM users WHERE name LIKE '%" + search + "%' OR location LIKE '%" + search + "%' OR phone LIKE '%" + search + "%' OR user_type LIKE '%" + search + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -196,8 +182,24 @@ public class UserController {
         return resultSet;
     }
 
+    public void updatePass(String username, String password) {
+        try {
+            String query = "UPDATE users SET password=? WHERE username='" + username + "'";
+            prepStatement = conn.prepareStatement(query);
+            prepStatement.setString(1, password);
+            prepStatement.setString(2, username);
+
+            prepStatement.executeUpdate();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+    }
+
     /**
      * Display database results and headers in a table.
+     * <p>
+     * this table model also removes the password column
+     * compared to the DataTableModel class which displays all columns
      *
      * @param resultSet database result
      * @return table model that contains data and the data columns
@@ -210,7 +212,12 @@ public class UserController {
 
         // add column names to the table column headers
         for (int col = 1; col <= columnCount; col++) {
-            columnNames.add(metaData.getColumnName(col).toUpperCase(Locale.ROOT));
+            // replace underscores with spaces
+            String columnName = metaData.getColumnName(col).replaceAll("_", " ");
+            // capitalize the first letter of each word
+            columnName = WordUtils.capitalizeFully(columnName);
+
+            columnNames.add(columnName);
         }
 
         // Do not display passwords column
@@ -235,6 +242,9 @@ public class UserController {
 
     /**
      * Display database results and headers in a table.
+     * <p>
+     * This table model parses the in_time and out_time columns
+     * to a human-readable format
      *
      * @param resultSet database result
      * @return table model that contains data and the data columns
@@ -247,7 +257,12 @@ public class UserController {
 
         // add column names to the table column headers
         for (int col = 1; col <= columnCount; col++) {
-            columnNames.add(metaData.getColumnName(col).toUpperCase(Locale.ROOT));
+            // replace underscores with spaces
+            String columnName = metaData.getColumnName(col).replaceAll("_", " ");
+            // capitalize the first letter of each word
+            columnName = WordUtils.capitalizeFully(columnName);
+
+            columnNames.add(columnName);
         }
 
 
@@ -270,18 +285,5 @@ public class UserController {
         }
 
         return new DefaultTableModel(data, columnNames);
-    }
-
-    public void changePass(String username, String password) {
-        try {
-            String query = "UPDATE users SET password=? WHERE username='" + username + "'";
-            prepStatement = conn.prepareStatement(query);
-            prepStatement.setString(1, password);
-            prepStatement.setString(2, username);
-
-            prepStatement.executeUpdate();
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
     }
 }
