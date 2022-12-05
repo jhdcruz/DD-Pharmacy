@@ -197,6 +197,7 @@ public class Dashboard extends javax.swing.JFrame {
         });
 
         logoutButton.setBackground(new java.awt.Color(255, 51, 51));
+        logoutButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         logoutButton.setForeground(new java.awt.Color(51, 51, 51));
         logoutButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         logoutButton.setLabel("Log out");

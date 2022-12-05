@@ -66,25 +66,24 @@ public class DatabaseInstance {
      *
      * @param username user login
      * @param password user password
-     * @param userType user access type
-     * @return login state (boolean)
+     * @return user role / user type
      */
-    public boolean validateLogin(String username, String password, String userType) {
+    public String authUser(String username, String password) {
         String query = "SELECT * FROM users WHERE username='"
             + username
             + "' AND password='"
             + password
-            + "' AND user_type='"
-            + userType
-            + "' LIMIT 1";
+            + "'";
 
         try {
             resultSet = statement.executeQuery(query);
-            if (resultSet.next()) return true;
+            if (resultSet.next()) {
+                return resultSet.getString("user_type");
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
-        return false;
+        return null;
     }
 }

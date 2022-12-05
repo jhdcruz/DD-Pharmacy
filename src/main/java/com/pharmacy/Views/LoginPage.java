@@ -17,6 +17,8 @@ public class LoginPage extends javax.swing.JFrame {
         userModel = new UserModel();
 
         this.getRootPane().setDefaultButton(loginButton);
+
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -34,7 +36,6 @@ public class LoginPage extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         userText = new javax.swing.JTextField();
         passText = new javax.swing.JPasswordField();
-        jComboBox1 = new javax.swing.JComboBox<>();
         loginButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -61,13 +62,7 @@ public class LoginPage extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"ADMINISTRATOR", "EMPLOYEE"}));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
-
+        loginButton.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
         loginButton.setText("LOGIN");
         loginButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         loginButton.addActionListener(new java.awt.event.ActionListener() {
@@ -81,21 +76,17 @@ public class LoginPage extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(userText, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(passText))
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addContainerGap())
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(68, 68, 68))))
+                    .addGap(0, 0, 0)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(loginButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel1)
+                                .addComponent(userText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
+                                .addComponent(passText, javax.swing.GroupLayout.Alignment.TRAILING))))
+                    .addGap(0, 0, 0))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[]{passText, userText});
@@ -109,15 +100,13 @@ public class LoginPage extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(userText, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addComponent(jLabel2)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(passText, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(24, 24, 24)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                    .addGap(31, 31, 31)
                     .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap())
+                    .addContainerGap(33, Short.MAX_VALUE))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[]{passText, userText});
@@ -134,22 +123,22 @@ public class LoginPage extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(50, 50, 50)
+                    .addGap(44, 44, 44)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap(41, Short.MAX_VALUE))
+                    .addContainerGap(42, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    String userType;
-
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         String username = userText.getText();
         String password = new String(passText.getPassword());
-        userType = (String) jComboBox1.getSelectedItem();
 
-        if (new DatabaseInstance().validateLogin(username, password, userType)) {
+        // authenticate user
+        String userType = new DatabaseInstance().authUser(username, password);
+
+        if (userType != null) {
             inTime = LocalDateTime.now();
             userModel.setInTime(String.valueOf(inTime));
 
@@ -168,12 +157,7 @@ public class LoginPage extends javax.swing.JFrame {
         loginButtonActionPerformed(evt);
     }//GEN-LAST:event_passTextActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
