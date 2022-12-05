@@ -2,21 +2,23 @@ package com.pharmacy.Controllers;
 
 import com.pharmacy.Database.DatabaseInstance;
 import com.pharmacy.Models.ProductModel;
+import org.apache.commons.text.WordUtils;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Vector;
 
 public class ProductController {
 
     Connection connection = null;
     PreparedStatement preparedStatement = null;
-    PreparedStatement preparedStatement2 = null;
     Statement statement = null;
-    Statement statement2 = null;
     ResultSet resultSet = null;
 
     String supplierCode;
@@ -30,7 +32,6 @@ public class ProductController {
         try {
             connection = new DatabaseInstance().getConnection();
             statement = connection.createStatement();
-            statement2 = connection.createStatement();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -118,7 +119,6 @@ public class ProductController {
                 preparedStatement.setString(6, productModel.getBrand());
 
                 preparedStatement.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Product added and ready for sale.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -137,7 +137,6 @@ public class ProductController {
             preparedStatement.setDouble(5, productModel.getTotalCost());
 
             preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Purchase log added.");
         } catch (SQLException throwable) {
             throwable.printStackTrace();
         }
@@ -159,8 +158,6 @@ public class ProductController {
         } else if (!checkStock(prodCode)) { // available = false
             addProduct(productModel);
         }
-
-        deleteStock();
     }
 
     /**
@@ -180,7 +177,6 @@ public class ProductController {
             preparedStatement.setInt(6, productModel.getQuantity());
 
             preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Product details updated.");
         } catch (SQLException throwable) {
             throwable.printStackTrace();
         }
@@ -235,21 +231,6 @@ public class ProductController {
     }
 
     /**
-     * Delete product stocks
-     */
-    public void deleteStock() {
-        try {
-            String productsQuery = "DELETE FROM products WHERE product_code NOT IN(SELECT product_code FROM purchaseinfo)";
-            String salesInfoQuery = "DELETE FROM salesinfo WHERE product_code NOT IN(SELECT product_code FROM products)";
-
-            statement.executeUpdate(productsQuery);
-            statement.executeUpdate(salesInfoQuery);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    /**
      * Delete product from the database.
      *
      * @param code product code to be deleted
@@ -260,17 +241,10 @@ public class ProductController {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, code);
 
-            String query2 = "DELETE FROM products WHERE product_code=?";
-            preparedStatement2 = connection.prepareStatement(query2);
-            preparedStatement2.setString(1, code);
-
             preparedStatement.executeUpdate();
-            preparedStatement2.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        deleteStock();
     }
 
     public void deletePurchaseInfo(int id) {
@@ -278,14 +252,11 @@ public class ProductController {
             String query = "DELETE FROM purchaseinfo WHERE purchase_id=?";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
 
-            JOptionPane.showMessageDialog(null, "Transaction has been removed.");
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        deleteStock();
     }
 
     public void deleteSalesInfo(int id) {
@@ -296,12 +267,9 @@ public class ProductController {
             preparedStatement.setInt(1, id);
 
             preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Transaction has been removed.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        deleteStock();
     }
 
     // Sales transaction handling
@@ -335,7 +303,6 @@ public class ProductController {
 
                 statement.executeUpdate(stockQuery);
                 statement.executeUpdate(salesQuery);
-                JOptionPane.showMessageDialog(null, "Product sold.");
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -345,7 +312,7 @@ public class ProductController {
     // Products data set retrieval for display
     public ResultSet getProducts() {
         try {
-            String query = "SELECT product_code,product_name,cost_price,sell_price,brand FROM products ORDER BY pid";
+            String query = "SELECT * FROM products ORDER BY pid";
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -390,7 +357,7 @@ public class ProductController {
     // Search method for products
     public ResultSet getProductSearch(String text) {
         try {
-            String query = "SELECT product_code,product_name,cost_price,sell_price,brand FROM products " +
+            String query = "SELECT * FROM products " +
                 "WHERE product_code LIKE '%" + text + "%' OR product_name LIKE '%" + text + "%' OR brand LIKE '%" + text + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
@@ -402,7 +369,7 @@ public class ProductController {
 
     public ResultSet getProdFromCode(String text) {
         try {
-            String query = "SELECT product_code,product_name,cost_price,sell_price,brand FROM products " +
+            String query = "SELECT * FROM products " +
                 "WHERE product_code='" + text + "' LIMIT 1";
 
             resultSet = statement.executeQuery(query);
@@ -417,7 +384,7 @@ public class ProductController {
     public ResultSet getSalesSearch(String text) {
         try {
             String query = "SELECT sales_id,salesinfo.product_code,product_name,\n" +
-                "salesinfo.quantity,revenue,users.name AS Sold_by\n" +
+                "salesinfo.quantity,revenue,customers.full_name AS Sold_by\n" +
                 "FROM salesinfo INNER JOIN products\n" +
                 "ON salesinfo.product_code=products.product_code\n" +
                 "INNER JOIN users\n" +

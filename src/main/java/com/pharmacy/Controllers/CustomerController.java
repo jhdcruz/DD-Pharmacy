@@ -50,7 +50,6 @@ public class CustomerController {
                     preparedStatement.setString(4, customerModel.getPhone());
 
                     preparedStatement.executeUpdate();
-                    JOptionPane.showMessageDialog(null, "New customer has been added.");
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -76,7 +75,6 @@ public class CustomerController {
             preparedStatement.setString(4, customerModel.getCode());
 
             preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Customer details have been updated.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -92,7 +90,6 @@ public class CustomerController {
             String query = "DELETE FROM customers WHERE customer_code='" + customerCode + "'";
 
             statement.executeUpdate(query);
-            JOptionPane.showMessageDialog(null, "Customer" + customerCode + "removed.");
         } catch (SQLException e) {
             e.printStackTrace();
         }

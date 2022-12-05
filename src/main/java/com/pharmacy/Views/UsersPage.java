@@ -84,7 +84,7 @@ public class UsersPage extends javax.swing.JPanel {
         });
 
         addUserButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
-        addUserButton.setText("+ Add New User");
+        addUserButton.setText("+  Add New User");
         addUserButton.setToolTipText("");
         addUserButton.setActionCommand("addUserDialog");
         addUserButton.addActionListener(new java.awt.event.ActionListener() {

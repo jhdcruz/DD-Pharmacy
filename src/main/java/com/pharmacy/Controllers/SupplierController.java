@@ -57,7 +57,6 @@ public class SupplierController {
                 preparedStatement.setString(4, supplierModel.getPhone());
 
                 preparedStatement.executeUpdate();
-                JOptionPane.showMessageDialog(null, "New supplier has been added successfully.");
             }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -77,9 +76,8 @@ public class SupplierController {
             preparedStatement.setString(2, supplierModel.getLocation());
             preparedStatement.setString(3, supplierModel.getPhone());
             preparedStatement.setString(4, supplierModel.getSupplierCode());
-            preparedStatement.executeUpdate();
 
-            JOptionPane.showMessageDialog(null, "Supplier details have been updated.");
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -93,9 +91,7 @@ public class SupplierController {
     public void deleteSupplier(String supplierCode) {
         try {
             String query = "DELETE FROM suppliers WHERE supplier_code='" + supplierCode + "'";
-
             statement.executeUpdate(query);
-            JOptionPane.showMessageDialog(null, "Supplier has been removed.");
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }

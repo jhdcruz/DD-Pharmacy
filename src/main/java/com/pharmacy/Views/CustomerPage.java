@@ -92,7 +92,7 @@ public class CustomerPage extends javax.swing.JPanel {
         });
 
         addButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
-        addButton.setText("+ Add New Customer");
+        addButton.setText("+  Add New Customer");
         addButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
