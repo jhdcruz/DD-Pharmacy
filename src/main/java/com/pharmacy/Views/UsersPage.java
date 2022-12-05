@@ -342,7 +342,7 @@ public class UsersPage extends javax.swing.JPanel {
 
             if (opt == JOptionPane.YES_OPTION) {
                 EventQueue.invokeLater(() -> {
-                    new UserController().deleteUser(String.valueOf(userTable.getValueAt(userTable.getSelectedRow(), 4)));
+                    new UserController().deleteUser(String.valueOf(userTable.getValueAt(userTable.getSelectedRow(), 3)));
                     loadDataSet();
                 });
             }
@@ -363,9 +363,7 @@ public class UsersPage extends javax.swing.JPanel {
         nameText.setText(val[1].toString());
         phoneText.setText(val[2].toString());
         usernameText.setText(val[3].toString());
-        userTypeCombo.setSelectedItem((String) val[4]);
-
-        System.out.println(val[4].toString());
+        userTypeCombo.setSelectedItem(val[4].toString());
     }//GEN-LAST:event_userTableMouseClicked
 
     private void searchTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextKeyReleased
@@ -410,6 +408,11 @@ public class UsersPage extends javax.swing.JPanel {
             try {
                 UserController userController = new UserController();
                 userTable.setModel(userController.buildUsersTable(userController.searchUsers(text)));
+
+                // hide PID column (data still accessible)
+                userTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+                userTable.getColumnModel().getColumn(0).setMinWidth(0);
+                userTable.getColumnModel().getColumn(0).setMaxWidth(0);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -421,6 +424,11 @@ public class UsersPage extends javax.swing.JPanel {
             try {
                 UserController userController = new UserController();
                 userTable.setModel(userController.buildUsersTable(userController.getUsers()));
+
+                // hide PID column (data still accessible)
+                userTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+                userTable.getColumnModel().getColumn(0).setMinWidth(0);
+                userTable.getColumnModel().getColumn(0).setMaxWidth(0);
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
