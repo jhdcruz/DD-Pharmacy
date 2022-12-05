@@ -313,8 +313,7 @@ public class Dashboard extends javax.swing.JFrame {
             new UserController().addUserLogin(userModel);
             dispose();
 
-            LoginPage loginPage = new LoginPage();
-            loginPage.setVisible(true);
+            new LoginPage();
         }
     }//GEN-LAST:event_logoutButtonActionPerformed
 

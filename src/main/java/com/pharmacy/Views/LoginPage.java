@@ -19,6 +19,7 @@ public class LoginPage extends javax.swing.JFrame {
         this.getRootPane().setDefaultButton(loginButton);
 
         setLocationRelativeTo(null);
+        setVisible(true);
     }
 
     /**
