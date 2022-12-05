@@ -201,7 +201,7 @@ public class ProductController {
     /**
      * Handling of stocks in Sales page (+)
      *
-     * @param code product code
+     * @param code     product code
      * @param quantity quantity of product
      */
     public void updateSoldStock(String code, int quantity) {
