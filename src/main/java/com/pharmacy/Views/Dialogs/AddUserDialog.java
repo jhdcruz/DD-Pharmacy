@@ -72,7 +72,7 @@ public class AddUserDialog extends JDialog {
 
         jLabel6.setText("Password:");
 
-        userTypeCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"ADMINISTRATOR", "EMPLOYEE"}));
+        userTypeCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Administrator", "Employee"}));
 
         addButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         addButton.setText("Save");
@@ -100,21 +100,18 @@ public class AddUserDialog extends JDialog {
                     .addContainerGap()
                     .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(entryPanelLayout.createSequentialGroup()
-                            .addComponent(cancelButton, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                            .addComponent(cancelButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, entryPanelLayout.createSequentialGroup()
                             .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel5)
                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(userTypeCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, entryPanelLayout.createSequentialGroup()
-                                    .addGap(0, 0, Short.MAX_VALUE)
-                                    .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(passText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-                                        .addComponent(usernameText, javax.swing.GroupLayout.Alignment.TRAILING)))))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                            .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(passText, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(usernameText, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(userTypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addComponent(nameText, javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(phoneText, javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -189,8 +186,10 @@ public class AddUserDialog extends JDialog {
             userModel.setPassword(new String(passText.getPassword()));
             userModel.setType((String) userTypeCombo.getSelectedItem());
 
-            new UserController().addUser(userModel);
-            loadDataSet();
+            EventQueue.invokeLater(() -> {
+                new UserController().addUser(userModel);
+                loadDataSet();
+            });
 
             this.dispose();
         }

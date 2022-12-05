@@ -167,7 +167,7 @@ LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users`
     DISABLE KEYS */;
 INSERT INTO `users`
-VALUES (0, 'Admin', '00000000000', 'admin', 'admin', 'ADMINISTRATOR');
+VALUES (0, 'Admin', '00000000000', 'admin', 'admin', 'Administrator');
 /*!40000 ALTER TABLE `users`
     ENABLE KEYS */;
 UNLOCK TABLES;

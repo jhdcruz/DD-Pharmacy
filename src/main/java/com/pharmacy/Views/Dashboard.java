@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 public class Dashboard extends javax.swing.JFrame {
 
     CardLayout layout;
-    String userSelect;
     String username;
     UserModel userModel;
     LocalDateTime outTime;
@@ -22,7 +21,6 @@ public class Dashboard extends javax.swing.JFrame {
         initComponents();
 
         layout = new CardLayout();
-        userSelect = userType;
         this.username = username;
         this.userModel = userModel;
         setLocationRelativeTo(null);
@@ -30,7 +28,7 @@ public class Dashboard extends javax.swing.JFrame {
         // show navigation panel
         navPanel.setVisible(true);
 
-        if ("EMPLOYEE".equalsIgnoreCase(userType)) {
+        if ("Employee".equalsIgnoreCase(userType)) {
             notForEmployee();
         }
 
@@ -58,7 +56,14 @@ public class Dashboard extends javax.swing.JFrame {
         });
 
         setVisible(true);
-        setMinimumSize(new Dimension(1200, 650));
+        setMinimumSize(new Dimension(1220, 660));
+    }
+
+
+    // Allows only the ADMINISTRATOR type user to view and manipulate 'Users' and 'User Logs'
+    public void notForEmployee() {
+        navPanel.remove(usersButton);
+        navPanel.remove(logsButton);
     }
 
     // Methods to display different sections in the mainframe
@@ -349,13 +354,6 @@ public class Dashboard extends javax.swing.JFrame {
     private void logsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logsButtonActionPerformed
         addLogsPage();
     }//GEN-LAST:event_logsButtonActionPerformed
-
-    // Allows only the ADMINISTRATOR type user to view and manipulate 'Users' and 'User Logs'
-    public void notForEmployee() {
-        navPanel.remove(usersButton);
-        navPanel.remove(logsButton);
-        //navPanel.remove(salesButton);
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton custButton;

@@ -26,7 +26,6 @@ public class PurchasePage extends javax.swing.JPanel {
 
         initComponents();
         loadDataSet();
-        loadComboBox();
     }
 
     /**
@@ -360,11 +359,14 @@ public class PurchasePage extends javax.swing.JPanel {
                     double totalCost = costPrice * Integer.parseInt(quantityText.getText());
                     productModel.setTotalCost(totalCost);
 
-                    new ProductController().addPurchaseInfo(productModel);
-                    loadDataSet();
+                    EventQueue.invokeLater(() -> {
+                        new ProductController().addPurchaseInfo(productModel);
+                        loadDataSet();
+                    });
                 } else {
-                    JOptionPane.showMessageDialog(null, "This seems to be a new product"
-                            + " that hasn't been added yet.\nPlease add this product in the \"Products\" section before proceeding.");
+                    JOptionPane.showMessageDialog(this, """
+                        This seems to be a new product that hasn't been added yet.
+                        Please add this product in the "Products" section before proceeding.""");
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -374,13 +376,13 @@ public class PurchasePage extends javax.swing.JPanel {
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         if (purchaseTable.getSelectedRow() < 0)
-            JOptionPane.showMessageDialog(null, "Please select a transaction from the table.");
+            JOptionPane.showMessageDialog(this, "Please select a transaction from the table.");
         else {
             int opt = JOptionPane.showConfirmDialog(
-                    null,
-                    "Are you sure you want to delete this purchase?",
-                    "Confirmation",
-                    JOptionPane.YES_NO_OPTION);
+                this,
+                "Are you sure you want to delete this purchase?",
+                "Confirmation",
+                JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
                 EventQueue.invokeLater(() -> {
                     new ProductController().deletePurchaseInfo((int) purchaseTable.getValueAt(purchaseTable.getSelectedRow(), 0));
