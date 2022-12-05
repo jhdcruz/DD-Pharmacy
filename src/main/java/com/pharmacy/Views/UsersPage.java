@@ -62,7 +62,7 @@ public class UsersPage extends javax.swing.JPanel {
 
         jLabel6.setText("Password:");
 
-        userTypeCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"ADMINISTRATOR", "EMPLOYEE"}));
+        userTypeCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Administrator", "Employee"}));
 
         updateButton.setFont(new java.awt.Font("Liberation Sans", 0, 15)); // NOI18N
         updateButton.setText("Update");
@@ -128,8 +128,8 @@ public class UsersPage extends javax.swing.JPanel {
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                                     .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(updateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(userTypeCombo, 0, 223, Short.MAX_VALUE)
-                                        .addComponent(changePassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addComponent(changePassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(userTypeCombo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGroup(entryPanelLayout.createSequentialGroup()
                                     .addComponent(jLabel4)
                                     .addGap(23, 23, 23)
@@ -306,6 +306,9 @@ public class UsersPage extends javax.swing.JPanel {
             if (nameText.getText().equals("") || phoneText.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "Please fill all the required fields.");
             } else {
+                String oldUsername = userTable.getValueAt(userTable.getSelectedRow(), 3).toString();
+
+                userModel.setUsername(usernameText.getText());
                 userModel.setName(nameText.getText());
                 userModel.setPhone(phoneText.getText());
                 userModel.setUsername(usernameText.getText());
@@ -313,7 +316,7 @@ public class UsersPage extends javax.swing.JPanel {
                 userModel.setType(userType);
 
                 EventQueue.invokeLater(() -> {
-                    new UserController().updateUser(userModel);
+                    new UserController().updateUser(userModel, oldUsername);
                     loadDataSet();
                 });
             }
@@ -360,7 +363,9 @@ public class UsersPage extends javax.swing.JPanel {
         nameText.setText(val[1].toString());
         phoneText.setText(val[2].toString());
         usernameText.setText(val[3].toString());
-        userTypeCombo.setSelectedItem(val[4].toString());
+        userTypeCombo.setSelectedItem((String) val[4]);
+
+        System.out.println(val[4].toString());
     }//GEN-LAST:event_userTableMouseClicked
 
     private void searchTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextKeyReleased
@@ -381,7 +386,7 @@ public class UsersPage extends javax.swing.JPanel {
         int row = userTable.getSelectedRow();
 
         if (userTable.getSelectionModel().getSelectedItemsCount() == 1) {
-            String username = userTable.getValueAt(row, 4).toString();
+            String username = userTable.getValueAt(row, 3).toString();
 
             // change password prompt
             String password = JOptionPane.showInputDialog(this, "Enter new password for " + username + ":", "Change Password", JOptionPane.PLAIN_MESSAGE);
@@ -389,7 +394,7 @@ public class UsersPage extends javax.swing.JPanel {
             if (password != null) {
                 EventQueue.invokeLater(() -> {
                     new UserController().updatePass(username, password);
-                    loadDataSet();
+                    JOptionPane.showMessageDialog(this, "Password changed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 });
             }
         } else if (userTable.getSelectionModel().getSelectedItemsCount() > 1) {

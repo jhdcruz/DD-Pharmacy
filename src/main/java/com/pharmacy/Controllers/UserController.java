@@ -50,13 +50,13 @@ public class UserController {
                 JOptionPane.showMessageDialog(null, "User already exists");
             } else {
                 String insertQuery = "INSERT INTO users (name,phone,username,password,user_type) " +
-                    "VALUES(?,?,?,?,?,?)";
+                    "VALUES(?,?,?,?,?)";
                 prepStatement = conn.prepareStatement(insertQuery);
                 prepStatement.setString(1, userModel.getName());
-                prepStatement.setString(3, userModel.getPhone());
-                prepStatement.setString(4, userModel.getUsername());
-                prepStatement.setString(5, userModel.getPassword());
-                prepStatement.setString(6, userModel.getType());
+                prepStatement.setString(2, userModel.getPhone());
+                prepStatement.setString(3, userModel.getUsername());
+                prepStatement.setString(4, userModel.getPassword());
+                prepStatement.setString(5, userModel.getType());
 
                 prepStatement.executeUpdate();
             }
@@ -72,15 +72,16 @@ public class UserController {
      *
      * @param userModel populated UserModel
      */
-    public void updateUser(UserModel userModel) {
+    public void updateUser(UserModel userModel, String oldUsername) {
 
         try {
-            String query = "UPDATE users SET name=?,phone=?,user_type=? WHERE username=?";
+            String query = "UPDATE users SET username=?,name=?,phone=?,user_type=? WHERE username=?";
             prepStatement = conn.prepareStatement(query);
-            prepStatement.setString(1, userModel.getName());
-            prepStatement.setString(2, userModel.getPhone());
-            prepStatement.setString(3, userModel.getType());
-            prepStatement.setString(4, userModel.getUsername());
+            prepStatement.setString(1, userModel.getUsername());
+            prepStatement.setString(2, userModel.getName());
+            prepStatement.setString(3, userModel.getPhone());
+            prepStatement.setString(4, userModel.getType());
+            prepStatement.setString(5, oldUsername);
 
             prepStatement.executeUpdate();
         } catch (SQLException throwables) {
@@ -215,7 +216,7 @@ public class UserController {
             columnNames.add(columnName);
         }
 
-        // Do not display passwords column
+        // !! Do not display passwords column !!
         columnNames.remove("Password");
 
         Vector<Vector<Object>> data = new Vector<>();
@@ -228,8 +229,8 @@ public class UserController {
 
             data.add(dataRow);
 
-            // remove password index
-            dataRow.remove(5);
+            // !! Remove password cell data !!
+            dataRow.remove(4);
         }
 
         return new DefaultTableModel(data, columnNames);
