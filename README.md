@@ -9,10 +9,6 @@
 - Transactions
 - Logs
 
-## Dependencies:
-
-All the project dependencies are available in the [`lib`](lib/) directory.
-
 ## Structure
 
 The software code are divided into multiple packages for modularity:
@@ -75,15 +71,10 @@ Create a new user:
 Prepare the database with the software's schema located in:
 `src/main/resources/database/dd_pharmacy_schema.sql`
 
-Or,
-
-You can use `src/main/resources/database/dd_pharmacy_dump.sql` instead for
-pre-populated database (sample data)
-
 ```
 Default admin account:
 user: admin
-pass: adminadmin
+pass: admin
 
 Create your own personal admin account, then delete the default account
 for security purposes.
@@ -108,7 +99,7 @@ After, you can now use the software.
 
 ## Acknowledgements
 
-This software was based and heavily modified on the ff.
+This software was based and heavily modified of the ff.
 
 - [Inventory Management System by Asjad Iqbal](https://github.com/AsjadIqbal/InventoryManagementSystem/tree/fa42a6b59265870256b4d1d0cc13e526ddb9679e)
   _(Unlicensed, at the time of forking)_
