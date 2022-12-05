@@ -41,14 +41,12 @@ public class ProductPage extends javax.swing.JPanel {
         addSuppButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         codeText = new javax.swing.JTextField();
         nameText = new javax.swing.JTextField();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         quantityText = new javax.swing.JTextField();
         costText = new javax.swing.JTextField();
         sellText = new javax.swing.JTextField();
@@ -74,8 +72,10 @@ public class ProductPage extends javax.swing.JPanel {
         suppCombo.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
+
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
             }
+
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
                 suppComboPopupMenuWillBecomeVisible(evt);
             }
@@ -93,8 +93,6 @@ public class ProductPage extends javax.swing.JPanel {
 
         jLabel3.setText("Product Name:");
 
-        jLabel4.setText("Date:");
-
         jLabel5.setText("Quantity:");
 
         jLabel6.setText("Cost Price:");
@@ -102,8 +100,6 @@ public class ProductPage extends javax.swing.JPanel {
         jLabel7.setText("Selling Price:");
 
         jLabel8.setText("Brand:");
-
-        jDateChooser1.setForeground(new java.awt.Color(102, 102, 102));
 
         addButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         addButton.setText("+  Add New Product");
@@ -152,10 +148,6 @@ public class ProductPage extends javax.swing.JPanel {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(nameText))
                         .addGroup(entryPanelLayout.createSequentialGroup()
-                            .addComponent(jLabel4)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))
-                        .addGroup(entryPanelLayout.createSequentialGroup()
                             .addComponent(jLabel5)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(quantityText))
@@ -176,11 +168,11 @@ public class ProductPage extends javax.swing.JPanel {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(brandText)
-                                .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))))
                     .addContainerGap())
         );
 
-        entryPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[]{jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8});
+        entryPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[]{jLabel2, jLabel3, jLabel5, jLabel6, jLabel7, jLabel8});
 
         entryPanelLayout.setVerticalGroup(
             entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,10 +191,6 @@ public class ProductPage extends javax.swing.JPanel {
                     .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel3)
                         .addComponent(nameText, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel5)
@@ -339,7 +327,6 @@ public class ProductPage extends javax.swing.JPanel {
             } else {
                 productModel.setProductCode(codeText.getText());
                 productModel.setProductName(nameText.getText());
-                productModel.setDate(jDateChooser1.getDateFormatString());
                 productModel.setQuantity(Integer.parseInt(quantityText.getText()));
                 productModel.setCostPrice(Double.parseDouble(costText.getText()));
                 productModel.setSellPrice(Double.parseDouble(sellText.getText()));
@@ -435,6 +422,11 @@ public class ProductPage extends javax.swing.JPanel {
             try {
                 ProductController productController = new ProductController();
                 productTable.setModel(new DataTableModel().buildTableModel(productController.getProducts()));
+
+                // hide PID column (data still accessible)
+                productTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+                productTable.getColumnModel().getColumn(0).setMinWidth(0);
+                productTable.getColumnModel().getColumn(0).setMaxWidth(0);
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -447,6 +439,11 @@ public class ProductPage extends javax.swing.JPanel {
             try {
                 ProductController productController = new ProductController();
                 productTable.setModel(new DataTableModel().buildTableModel(productController.getProductSearch(text)));
+
+                // hide PID column (data still accessible)
+                productTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+                productTable.getColumnModel().getColumn(0).setMinWidth(0);
+                productTable.getColumnModel().getColumn(0).setMaxWidth(0);
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -462,11 +459,9 @@ public class ProductPage extends javax.swing.JPanel {
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton editButton;
     private javax.swing.JPanel entryPanel;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;

@@ -13,8 +13,9 @@ public class HomePage extends javax.swing.JPanel {
     public HomePage(String username) {
         initComponents();
         UserModel userModel = new UserModel();
+
         new UserController().getUserFullName(userModel, username);
-        welcomeLabel.setText("Welcome,  " + userModel.getName() + ".");
+        welcomeLabel.setText("Welcome, " + userModel.getName() + ".");
     }
 
     /**

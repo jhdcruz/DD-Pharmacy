@@ -75,7 +75,6 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -85,7 +84,6 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="costText" linkSize="6" alignment="1" min="-2" pref="227" max="-2" attributes="0"/>
                                       <Component id="quantityText" linkSize="6" alignment="1" min="-2" pref="227" max="-2" attributes="0"/>
-                                      <Component id="jDateChooser1" linkSize="6" alignment="1" min="-2" pref="227" max="-2" attributes="0"/>
                                       <Component id="codeText" linkSize="6" alignment="1" min="-2" pref="227" max="-2" attributes="0"/>
                                       <Component id="nameText" linkSize="6" min="-2" pref="227" max="-2" attributes="0"/>
                                       <Component id="brandText" linkSize="6" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
@@ -117,11 +115,6 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="nameText" linkSize="2" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="jDateChooser1" linkSize="2" alignment="0" pref="35" max="32767" attributes="0"/>
-                      <Component id="jLabel4" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -191,11 +184,6 @@
             <Property name="text" type="java.lang.String" value="Product Name:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel4">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Date:"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
             <Property name="text" type="java.lang.String" value="Quantity:"/>
@@ -219,13 +207,6 @@
         <Component class="javax.swing.JTextField" name="codeText">
         </Component>
         <Component class="javax.swing.JTextField" name="nameText">
-        </Component>
-        <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser1">
-          <Properties>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="66" green="66" red="66" type="rgb"/>
-            </Property>
-          </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="quantityText">
         </Component>
