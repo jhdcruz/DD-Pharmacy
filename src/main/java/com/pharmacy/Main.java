@@ -1,6 +1,6 @@
 package com.pharmacy;
 
-import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.pharmacy.Views.LoginPage;
 
 import javax.swing.UnsupportedLookAndFeelException;
@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
         // setting UI theme and LookAndFeel of the application
         try {
-            javax.swing.UIManager.setLookAndFeel(new FlatDarkLaf());
+            javax.swing.UIManager.setLookAndFeel(new FlatLightLaf());
         } catch (UnsupportedLookAndFeelException lookAndFeelException) {
             Logger.getLogger(LoginPage.class.getName()).log(Level.INFO, null, lookAndFeelException);
         }
