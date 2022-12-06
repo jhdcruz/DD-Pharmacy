@@ -18,6 +18,6 @@ public class Main {
             Logger.getLogger(LoginPage.class.getName()).log(Level.INFO, null, lookAndFeelException);
         }
 
-        EventQueue.invokeLater(() -> new LoginPage());
+        EventQueue.invokeLater(LoginPage::new);
     }
 }
