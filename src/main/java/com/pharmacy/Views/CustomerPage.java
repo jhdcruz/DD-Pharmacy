@@ -265,13 +265,17 @@ public class CustomerPage extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Please enter all the required details.");
             } else {
                 CustomerModel customerModel = new CustomerModel();
+                String oldCustomerCode = custTable.getValueAt(custTable.getSelectedRow(), 0).toString();
+
                 customerModel.setCode(codeText.getText());
                 customerModel.setName(nameText.getText());
                 customerModel.setLocation(locationText.getText());
                 customerModel.setPhone(phoneText.getText());
 
-                new CustomerController().updateCustomer(customerModel);
-                loadDataSet();
+                EventQueue.invokeLater(() -> {
+                    new CustomerController().updateCustomer(customerModel, oldCustomerCode);
+                    loadDataSet();
+                });
             }
         }
     }//GEN-LAST:event_updateButtonActionPerformed

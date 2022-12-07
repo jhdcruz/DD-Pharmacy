@@ -17,10 +17,6 @@ public class ProductController {
     Statement statement = null;
     ResultSet resultSet = null;
 
-    String supplierCode;
-    String productCode;
-    String customerCode;
-
     // Stock availability of certain product in inventory
     boolean available = false;
 
@@ -50,21 +46,6 @@ public class ProductController {
         return sellPrice;
     }
 
-    public String getSupplierCode(String supplierName) {
-        try {
-            String query = "SELECT supplier_code FROM suppliers WHERE full_name='" + supplierName + "'";
-            resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                supplierCode = resultSet.getString("supplier_code");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return supplierCode;
-    }
-
     public boolean checkStock(String productCode) {
         try {
             String query = "SELECT quantity FROM products WHERE product_code='" + productCode + "'";
@@ -86,6 +67,7 @@ public class ProductController {
      * @param productModel product model object
      */
     public void addProduct(ProductModel productModel) {
+        java.sql.Date date = new java.sql.Date(productModel.getExpirationDate().getTime());
         // check if product already exists
         try {
             String duplicateQuery = "SELECT * FROM products WHERE product_name='"
@@ -94,22 +76,25 @@ public class ProductController {
                 + productModel.getCostPrice()
                 + "' AND sell_price='"
                 + productModel.getSellPrice()
-                + "' AND brand='"
-                + productModel.getBrand()
+                + "' AND supplied_by='"
+                + productModel.getSuppliedBy()
                 + "'";
             resultSet = statement.executeQuery(duplicateQuery);
 
             if (resultSet.next()) {
                 JOptionPane.showMessageDialog(null, "Product record already exists.");
             } else {
-                String productQuery = "INSERT INTO products VALUES(null,?,?,?,?,?,?)";
+                String productQuery = "INSERT INTO products VALUES(null,?,?,?,?,?,?,?,?,DEFAULT)";
                 preparedStatement = connection.prepareStatement(productQuery);
+
                 preparedStatement.setString(1, productModel.getProductCode());
                 preparedStatement.setString(2, productModel.getProductName());
-                preparedStatement.setDouble(3, productModel.getCostPrice());
-                preparedStatement.setInt(4, productModel.getQuantity());
+                preparedStatement.setString(3, productModel.getDescription());
+                preparedStatement.setDouble(4, productModel.getCostPrice());
                 preparedStatement.setDouble(5, productModel.getSellPrice());
-                preparedStatement.setString(6, productModel.getBrand());
+                preparedStatement.setInt(6, productModel.getQuantity());
+                preparedStatement.setString(7, productModel.getSuppliedBy());
+                preparedStatement.setDate(8, date);
 
                 preparedStatement.executeUpdate();
             }
@@ -119,13 +104,15 @@ public class ProductController {
     }
 
     public void addPurchaseInfo(ProductModel productModel) {
+        java.sql.Date date = new java.sql.Date(productModel.getDate().getTime());
+
         try {
             String query = "INSERT INTO purchaseinfo VALUES(null,?,?,?,?,?)";
 
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, productModel.getSupplierCode());
             preparedStatement.setString(2, productModel.getProductCode());
-            preparedStatement.setString(3, productModel.getDate());
+            preparedStatement.setDate(3, date);
             preparedStatement.setInt(4, productModel.getQuantity());
             preparedStatement.setDouble(5, productModel.getTotalCost());
 
@@ -159,15 +146,18 @@ public class ProductController {
      * @param productModel product model object
      */
     public void updateProduct(ProductModel productModel) {
+        java.sql.Date date = new java.sql.Date(productModel.getExpirationDate().getTime());
+
         try {
-            String productQuery = "UPDATE products SET product_name=?,cost_price=?,sell_price=?,brand=?,quantity=? WHERE product_code=?";
+            String productQuery = "UPDATE products SET product_name=?,cost_price=?,sell_price=?,quantity=?,expiration_date=?,supplied_by=?, description=? WHERE product_code=?";
             preparedStatement = connection.prepareStatement(productQuery);
             preparedStatement.setString(1, productModel.getProductName());
             preparedStatement.setDouble(2, productModel.getCostPrice());
             preparedStatement.setDouble(3, productModel.getSellPrice());
-            preparedStatement.setString(4, productModel.getBrand());
-            preparedStatement.setString(5, productModel.getProductCode());
-            preparedStatement.setInt(6, productModel.getQuantity());
+            preparedStatement.setInt(4, productModel.getQuantity());
+            preparedStatement.setDate(5, date);
+            preparedStatement.setString(6, productModel.getSuppliedBy());
+            preparedStatement.setString(7, productModel.getDescription());
 
             preparedStatement.executeUpdate();
         } catch (SQLException throwable) {
@@ -265,15 +255,14 @@ public class ProductController {
 
     // Sales transaction handling
     public void sellProduct(ProductModel productModel, String username) {
+        java.sql.Date date = new java.sql.Date(productModel.getDate().getTime());
         int quantity = 0;
-        String prodCode = null;
 
         try {
             String query = "SELECT * FROM products WHERE product_code='" + productModel.getProductCode() + "'";
             resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-                prodCode = resultSet.getString("product_code");
                 quantity = resultSet.getInt("quantity");
             }
 
@@ -289,7 +278,7 @@ public class ProductController {
                     + "'";
 
                 String salesQuery = "INSERT INTO salesinfo(date,product_code,customer_code,quantity,revenue,sold_by)"
-                    + "VALUES('" + productModel.getDate() + "','" + productModel.getProductCode() + "','" + productModel.getCustomerCode()
+                    + "VALUES('" + date + "','" + productModel.getProductCode() + "','" + productModel.getCustomerCode()
                     + "','" + productModel.getQuantity() + "','" + productModel.getTotalRevenue() + "','" + username + "')";
 
                 statement.executeUpdate(stockQuery);
@@ -303,7 +292,10 @@ public class ProductController {
     // Products data set retrieval for display
     public ResultSet getProducts() {
         try {
-            String query = "SELECT * FROM products ORDER BY pid";
+            String query = """
+                SELECT * FROM products;
+                """;
+
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -330,13 +322,12 @@ public class ProductController {
     public ResultSet getSalesInfo() {
         try {
             String query = """
-                SELECT sales_id,salesinfo.product_code,product_name,
-                salesinfo.quantity,revenue,users.name AS sold_by
-                FROM salesinfo INNER JOIN products
-                ON salesinfo.product_code=products.product_code
-                INNER JOIN users
-                ON salesinfo.sold_by=users.username;
+                SELECT sales_id, products.product_name AS products_code, customers.full_name AS customer_code, salesinfo.quantity, revenue, date, sold_by
+                FROM salesinfo
+                INNER JOIN products ON salesinfo.product_code=products.product_code
+                INNER JOIN customers ON salesinfo.customer_code = customers.customer_code;
                 """;
+
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -349,7 +340,7 @@ public class ProductController {
     public ResultSet getProductSearch(String text) {
         try {
             String query = "SELECT * FROM products "
-                + "WHERE product_code LIKE '%" + text + "%' OR product_name LIKE '%" + text + "%' OR brand LIKE '%" + text + "%'";
+                + "WHERE product_code LIKE '%" + text + "%' OR product_name LIKE '%" + text + "%' OR supplied_by LIKE '%" + text + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -374,16 +365,20 @@ public class ProductController {
     // Search method for sales
     public ResultSet getSalesSearch(String text) {
         try {
-            String query = "SELECT sales_id,salesinfo.product_code,product_name,\n"
-                + "salesinfo.quantity,revenue,customers.full_name AS Sold_by\n"
-                + "FROM salesinfo INNER JOIN products\n"
-                + "ON salesinfo.product_code=products.product_code\n"
-                + "INNER JOIN users\n"
-                + "ON salesinfo.sold_by=users.username\n"
-                + "INNER JOIN customers\n"
-                + "ON customers.customer_code=salesinfo.customer_code\n"
-                + "WHERE salesinfo.product_code LIKE '%" + text + "%' OR product_name LIKE '%" + text + "%' "
-                + "OR users.name LIKE '%" + text + "%' OR customers.full_name LIKE '%" + text + "%' ORDER BY sales_id;";
+            String query = """
+                SELECT sales_id,salesinfo.product_code,product_name,
+                salesinfo.quantity,revenue,customers.full_name AS Sold_by
+                FROM salesinfo INNER JOIN products
+                ON salesinfo.product_code=products.product_code
+                INNER JOIN users
+                ON salesinfo.sold_by=users.username
+                INNER JOIN customers
+                ON customers.customer_code=salesinfo.customer_code
+                WHERE salesinfo.product_code LIKE '%""" + text + "%'"
+                + "OR product_name LIKE '%" + text + "%' "
+                + "OR users.name LIKE '%" + text + "%'"
+                + "OR customers.full_name LIKE '%" + text + "%'"
+                + "ORDER BY sales_id;";
 
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {

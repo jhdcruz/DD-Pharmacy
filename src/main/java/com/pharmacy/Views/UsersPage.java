@@ -208,6 +208,7 @@ public class UsersPage extends javax.swing.JPanel {
         });
         userTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         userTable.setName("Users"); // NOI18N
+        userTable.setRowHeight(30);
         userTable.setShowGrid(true);
         userTable.getTableHeader().setReorderingAllowed(false);
         userTable.addMouseListener(new java.awt.event.MouseAdapter() {

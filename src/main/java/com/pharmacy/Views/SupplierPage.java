@@ -179,6 +179,7 @@ public class SupplierPage extends javax.swing.JPanel {
             }
         });
         suppTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        suppTable.setRowHeight(30);
         suppTable.setShowGrid(true);
         suppTable.getTableHeader().setReorderingAllowed(false);
         suppTable.addMouseListener(new java.awt.event.MouseAdapter() {

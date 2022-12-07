@@ -2,6 +2,7 @@ package com.pharmacy.Views.Dialogs;
 
 import com.pharmacy.Controllers.UserController;
 import com.pharmacy.Models.UserModel;
+import com.pharmacy.Utils.DataTableModel;
 
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -199,7 +200,7 @@ public class AddUserDialog extends JDialog {
         EventQueue.invokeLater(() -> {
             try {
                 UserController userController = new UserController();
-                userTable.setModel(userController.buildUsersTable(userController.getUsers()));
+                userTable.setModel(new DataTableModel().buildTableModel(userController.getUsers()));
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }

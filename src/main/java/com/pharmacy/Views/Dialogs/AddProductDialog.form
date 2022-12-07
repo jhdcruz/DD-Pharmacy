@@ -61,37 +61,36 @@
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
+                          <Component id="cancelButton" min="-2" pref="147" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="addButton" min="-2" pref="178" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="addSuppButton" alignment="0" pref="330" max="32767" attributes="0"/>
+                          <Component id="suppCombo" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="cancelButton" min="-2" pref="147" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="addButton" min="-2" pref="178" max="-2" attributes="0"/>
+                              <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel8" alignment="0" min="-2" pref="72" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="addSuppButton" alignment="0" pref="330" max="32767" attributes="0"/>
-                                  <Component id="suppCombo" alignment="0" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel8" alignment="0" min="-2" pref="72" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="costText" linkSize="6" alignment="1" min="-2" pref="227" max="-2" attributes="0"/>
-                                      <Component id="quantityText" linkSize="6" alignment="1" min="-2" pref="227" max="-2" attributes="0"/>
-                                      <Component id="codeText" linkSize="6" alignment="1" min="-2" pref="227" max="-2" attributes="0"/>
-                                      <Component id="nameText" linkSize="6" min="-2" pref="227" max="-2" attributes="0"/>
-                                      <Component id="brandText" linkSize="6" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
-                                      <Component id="sellText" linkSize="6" min="-2" pref="227" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
+                              <Component id="jLabel11" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
+                              <Component id="costText" linkSize="6" alignment="1" pref="227" max="32767" attributes="0"/>
+                              <Component id="quantityText" linkSize="6" alignment="1" pref="227" max="32767" attributes="0"/>
+                              <Component id="codeText" linkSize="6" alignment="1" pref="227" max="32767" attributes="0"/>
+                              <Component id="nameText" linkSize="6" alignment="1" pref="227" max="32767" attributes="0"/>
+                              <Component id="sellText" linkSize="6" alignment="1" pref="227" max="32767" attributes="0"/>
+                              <Component id="expirationDate" alignment="1" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
               </Group>
@@ -132,11 +131,16 @@
                       <Component id="sellText" linkSize="2" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="brandText" linkSize="2" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="expirationDate" min="-2" pref="35" max="-2" attributes="0"/>
+                      <Component id="jLabel8" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jLabel11" min="-2" pref="27" max="-2" attributes="0"/>
+                      <Component id="jScrollPane2" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="addButton" linkSize="5" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                       <Component id="cancelButton" linkSize="5" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
@@ -201,7 +205,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel8">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Brand:"/>
+            <Property name="text" type="java.lang.String" value="Expiration"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="codeText">
@@ -213,8 +217,6 @@
         <Component class="javax.swing.JTextField" name="costText">
         </Component>
         <Component class="javax.swing.JTextField" name="sellText">
-        </Component>
-        <Component class="javax.swing.JTextField" name="brandText">
         </Component>
         <Component class="javax.swing.JButton" name="addButton">
           <Properties>
@@ -242,6 +244,33 @@
           </Events>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator2">
+        </Component>
+        <Component class="com.toedter.calendar.JDateChooser" name="expirationDate">
+          <Properties>
+            <Property name="dateFormatString" type="java.lang.String" value="MMM dd, yyyy"/>
+          </Properties>
+        </Component>
+        <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+          <AuxValues>
+            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+          </AuxValues>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Component class="javax.swing.JTextArea" name="descriptionText">
+              <Properties>
+                <Property name="columns" type="int" value="20"/>
+                <Property name="lineWrap" type="boolean" value="true"/>
+                <Property name="rows" type="int" value="5"/>
+                <Property name="wrapStyleWord" type="boolean" value="true"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Component class="javax.swing.JLabel" name="jLabel11">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Description:"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

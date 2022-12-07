@@ -41,7 +41,7 @@ public class CustomerController {
             } else {
                 // else, save customer to database
                 try {
-                    String insertQuery = "INSERT INTO customers VALUES(null,?,?,?,?)";
+                    String insertQuery = "INSERT INTO customers VALUES(null,?,?,?,?,null)";
                     preparedStatement = connection.prepareStatement(insertQuery);
 
                     preparedStatement.setString(1, customerModel.getCode());
@@ -64,11 +64,13 @@ public class CustomerController {
      *
      * @param customerModel Customer to be edited/updated (derived from CustomerModel)
      */
-    public void updateCustomer(CustomerModel customerModel) {
+    public void updateCustomer(CustomerModel customerModel, String oldCustomerCode) {
         try {
-            String query = "UPDATE customers SET full_name=?,location=?,phone=? WHERE customer_code=?";
+            String query = "UPDATE customers SET customer_code=?, full_name=?,location=?,phone=?" +
+                "WHERE customer_code=?";
             preparedStatement = connection.prepareStatement(query);
 
+            preparedStatement.setString(1, oldCustomerCode);
             preparedStatement.setString(1, customerModel.getName());
             preparedStatement.setString(2, customerModel.getLocation());
             preparedStatement.setString(3, customerModel.getPhone());
@@ -102,7 +104,7 @@ public class CustomerController {
      */
     public ResultSet getCustomers() {
         try {
-            String query = "SELECT customer_code, full_name, location, phone FROM customers";
+            String query = "SELECT customer_code, full_name, location, phone, last_updated FROM customers";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();

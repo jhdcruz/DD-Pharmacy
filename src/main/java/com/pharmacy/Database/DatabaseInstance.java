@@ -2,6 +2,7 @@ package com.pharmacy.Database;
 
 import com.pharmacy.Utils.FileResourceUtils;
 
+import javax.swing.JOptionPane;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -42,6 +43,7 @@ public class DatabaseInstance {
             statement = connection.createStatement();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Cannot establish connection to the database.", "Database error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

@@ -14,9 +14,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import java.util.Vector;
 
 public class UserController {
@@ -230,54 +227,7 @@ public class UserController {
             data.add(dataRow);
 
             // !! Remove password cell data !!
-            dataRow.remove(4);
-        }
-
-        return new DefaultTableModel(data, columnNames);
-    }
-
-    /**
-     * Display database results and headers in a table.
-     * <p>
-     * This table model parses the in_time and out_time columns
-     * to a human-readable format
-     *
-     * @param resultSet database result
-     * @return table model that contains data and the data columns
-     * @throws SQLException SQL exception thrown when database error occurs
-     */
-    public DefaultTableModel buildUserLogsTable(ResultSet resultSet) throws SQLException {
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        Vector<String> columnNames = new Vector<>();
-        int columnCount = metaData.getColumnCount();
-
-        // add column names to the table column headers
-        for (int col = 1; col <= columnCount; col++) {
-            // replace underscores with spaces
-            String columnName = metaData.getColumnName(col).replaceAll("_", " ");
-            // capitalize the first letter of each word
-            columnName = WordUtils.capitalizeFully(columnName);
-
-            columnNames.add(columnName);
-        }
-
-
-        Vector<Vector<Object>> data = new Vector<>();
-        while (resultSet.next()) {
-            Vector<Object> dataRow = new Vector<>();
-
-            for (int col = 1; col <= columnCount; col++) {
-                dataRow.add(resultSet.getObject(col));
-
-                // replace time values with human-readable ones
-                if (col == 3 || col == 4) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a - MMM dd, yyyy", Locale.getDefault());
-                    LocalDateTime dateTime = LocalDateTime.parse(dataRow.get(col - 1).toString());
-                    dataRow.set(col - 1, dateTime.format(formatter));
-                }
-            }
-
-            data.add(dataRow);
+            dataRow.remove(2);
         }
 
         return new DefaultTableModel(data, columnNames);

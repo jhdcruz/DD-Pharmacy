@@ -4,6 +4,7 @@ import com.pharmacy.Controllers.ProductController;
 import com.pharmacy.Controllers.SupplierController;
 import com.pharmacy.Models.ProductModel;
 import com.pharmacy.Utils.DataTableModel;
+import com.pharmacy.Utils.StringFormatting;
 import com.pharmacy.Views.Dialogs.AddProductDialog;
 
 import javax.swing.JOptionPane;
@@ -12,6 +13,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class ProductPage extends javax.swing.JPanel {
 
@@ -44,18 +46,21 @@ public class ProductPage extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         codeText = new javax.swing.JTextField();
         nameText = new javax.swing.JTextField();
         quantityText = new javax.swing.JTextField();
         costText = new javax.swing.JTextField();
         sellText = new javax.swing.JTextField();
-        brandText = new javax.swing.JTextField();
         addButton = new javax.swing.JButton();
         editButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
+        expirationDate = new com.toedter.calendar.JDateChooser();
+        jLabel10 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        descriptionText = new javax.swing.JTextArea();
+        jLabel11 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         productTable = new javax.swing.JTable();
         refreshButton = new javax.swing.JButton();
@@ -65,9 +70,9 @@ public class ProductPage extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Impact", 1, 24)); // NOI18N
         jLabel1.setText("PRODUCTS");
 
-        entryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Enter Product Details"));
+        entryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Product Details"));
 
-        suppCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Select a supplier..."}));
+        suppCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Product Supplier"}));
         suppCombo.setToolTipText("Select a supplier");
         suppCombo.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
@@ -99,7 +104,15 @@ public class ProductPage extends javax.swing.JPanel {
 
         jLabel7.setText("Selling Price:");
 
-        jLabel8.setText("Brand:");
+        codeText.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+
+        nameText.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+
+        quantityText.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+
+        costText.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+
+        sellText.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         addButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         addButton.setText("+  Add New Product");
@@ -120,7 +133,6 @@ public class ProductPage extends javax.swing.JPanel {
         });
 
         deleteButton.setBackground(new java.awt.Color(255, 51, 51));
-        deleteButton.setForeground(new java.awt.Color(51, 51, 51));
         deleteButton.setText("Delete");
         deleteButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
@@ -128,6 +140,20 @@ public class ProductPage extends javax.swing.JPanel {
                 deleteButtonActionPerformed(evt);
             }
         });
+
+        expirationDate.setDateFormatString("MMM dd, yyyy");
+
+        jLabel10.setText("Expiration:");
+
+        descriptionText.setColumns(20);
+        descriptionText.setLineWrap(true);
+        descriptionText.setRows(5);
+        descriptionText.setToolTipText("Brief description of the product (300 characters)");
+        descriptionText.setWrapStyleWord(true);
+        descriptionText.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jScrollPane2.setViewportView(descriptionText);
+
+        jLabel11.setText("Description:");
 
         javax.swing.GroupLayout entryPanelLayout = new javax.swing.GroupLayout(entryPanel);
         entryPanel.setLayout(entryPanelLayout);
@@ -155,24 +181,26 @@ public class ProductPage extends javax.swing.JPanel {
                             .addComponent(jLabel6)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(costText))
-                        .addGroup(entryPanelLayout.createSequentialGroup()
-                            .addComponent(jLabel7)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(sellText))
                         .addComponent(addButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(addSuppButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(entryPanelLayout.createSequentialGroup()
-                            .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGap(108, 108, 108)
+                            .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(entryPanelLayout.createSequentialGroup()
+                            .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(deleteButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(brandText)
-                                .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(expirationDate, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                                .addComponent(sellText))))
                     .addContainerGap())
         );
 
-        entryPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[]{jLabel2, jLabel3, jLabel5, jLabel6, jLabel7, jLabel8});
+        entryPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[]{jLabel2, jLabel3, jLabel5, jLabel6, jLabel7});
 
         entryPanelLayout.setVerticalGroup(
             entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -203,10 +231,17 @@ public class ProductPage extends javax.swing.JPanel {
                     .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel7)
                         .addComponent(sellText, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(entryPanelLayout.createSequentialGroup()
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(expirationDate, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(entryPanelLayout.createSequentialGroup()
+                            .addGap(14, 14, 14)
+                            .addComponent(jLabel10)))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel8)
-                        .addComponent(brandText, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -215,7 +250,7 @@ public class ProductPage extends javax.swing.JPanel {
                     .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGap(12, 12, 12))
         );
 
         productTable.setAutoCreateRowSorter(true);
@@ -238,7 +273,9 @@ public class ProductPage extends javax.swing.JPanel {
                 return canEdit[columnIndex];
             }
         });
+        productTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         productTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        productTable.setRowHeight(30);
         productTable.setShowGrid(true);
         productTable.getTableHeader().setReorderingAllowed(false);
         productTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -287,10 +324,10 @@ public class ProductPage extends javax.swing.JPanel {
                             .addComponent(searchText)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(refreshButton)
-                            .addGap(191, 191, 191))
+                            .addGap(215, 215, 215))
                         .addComponent(jSeparator1)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(entryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGap(0, 0, 0))
@@ -305,11 +342,12 @@ public class ProductPage extends javax.swing.JPanel {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(entryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addComponent(entryPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1))
+                    .addContainerGap())
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[]{refreshButton, searchText});
@@ -322,20 +360,23 @@ public class ProductPage extends javax.swing.JPanel {
         else {
             productModel = new ProductModel();
             if (nameText.getText().equals("") || costText.getText().equals("")
-                || sellText.getText().equals("") || brandText.getText().equals("") || quantityText.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "Please enter all the required details.");
+                || sellText.getText().equals("") || quantityText.getText().equals("")) {
+                JOptionPane.showMessageDialog(this, "Please enter all the required details.");
             } else {
                 productModel.setProductCode(codeText.getText());
                 productModel.setProductName(nameText.getText());
                 productModel.setQuantity(Integer.parseInt(quantityText.getText()));
                 productModel.setCostPrice(Double.parseDouble(costText.getText()));
                 productModel.setSellPrice(Double.parseDouble(sellText.getText()));
-                productModel.setBrand(brandText.getText());
-                productModel.setQuantity(Integer.parseInt(quantityText.getText()));
+                productModel.setExpirationDate(expirationDate.getDate());
+                productModel.setDescription(descriptionText.getText());
+                productModel.setSuppliedBy(Objects.requireNonNull(suppCombo.getSelectedItem()).toString());
 
-                new ProductController().updateProduct(productModel);
+                EventQueue.invokeLater(() -> {
+                    new ProductController().updateProduct(productModel);
+                    loadDataSet();
+                });
             }
-            loadDataSet();
         }
     }//GEN-LAST:event_editButtonActionPerformed
 
@@ -371,14 +412,14 @@ public class ProductPage extends javax.swing.JPanel {
             data[i] = productTable.getValueAt(row, i);
         }
 
-        codeText.setText(data[0].toString());
-        nameText.setText(data[1].toString());
-        costText.setText(data[2].toString());
-        sellText.setText(data[3].toString());
-        brandText.setText(data[4].toString());
-
-        // productName = data[1].toString();
-
+        codeText.setText(data[1].toString());
+        nameText.setText(data[2].toString());
+        descriptionText.setText(data[3].toString());
+        costText.setText(data[4].toString());
+        sellText.setText(data[5].toString());
+        quantityText.setText(data[6].toString());
+        suppCombo.setSelectedItem(data[7].toString());
+        expirationDate.setDate(new StringFormatting().stringToDate(data[8].toString()));
     }//GEN-LAST:event_productTableMouseClicked
 
     private void addSuppButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSuppButtonActionPerformed
@@ -406,7 +447,6 @@ public class ProductPage extends javax.swing.JPanel {
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_suppComboPopupMenuWillBecomeVisible
 
-    // Method to update combo box containing supplier names
     public void loadComboBox() {
         try {
             SupplierController supplierController = new SupplierController();
@@ -422,11 +462,6 @@ public class ProductPage extends javax.swing.JPanel {
             try {
                 ProductController productController = new ProductController();
                 productTable.setModel(new DataTableModel().buildTableModel(productController.getProducts()));
-
-                // hide PID column (data still accessible)
-                productTable.getColumnModel().getColumn(0).setPreferredWidth(0);
-                productTable.getColumnModel().getColumn(0).setMinWidth(0);
-                productTable.getColumnModel().getColumn(0).setMaxWidth(0);
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -439,11 +474,6 @@ public class ProductPage extends javax.swing.JPanel {
             try {
                 ProductController productController = new ProductController();
                 productTable.setModel(new DataTableModel().buildTableModel(productController.getProductSearch(text)));
-
-                // hide PID column (data still accessible)
-                productTable.getColumnModel().getColumn(0).setPreferredWidth(0);
-                productTable.getColumnModel().getColumn(0).setMinWidth(0);
-                productTable.getColumnModel().getColumn(0).setMaxWidth(0);
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -453,21 +483,24 @@ public class ProductPage extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton addSuppButton;
-    private javax.swing.JTextField brandText;
     private javax.swing.JTextField codeText;
     private javax.swing.JTextField costText;
     private javax.swing.JButton deleteButton;
+    private javax.swing.JTextArea descriptionText;
     private javax.swing.JButton editButton;
     private javax.swing.JPanel entryPanel;
+    private com.toedter.calendar.JDateChooser expirationDate;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;

@@ -1,11 +1,17 @@
 package com.pharmacy.Models;
 
+import java.util.Date;
+
 public class ProductModel {
 
     private int productId, quantity, userId;
     private double costPrice, sellPrice;
     private Double totalCost, totalRevenue;
-    private String productCode, productName, date, supplierCode, customerCode, customerName, brand;
+    private String productCode, productName, customerCode, customerName, description;
+
+    private String supplierCode, suppliedBy;
+
+    private Date date, expirationDate;
 
     public int getProductId() {
         return productId;
@@ -14,6 +20,7 @@ public class ProductModel {
     public void setProductId(int productId) {
         this.productId = productId;
     }
+
 
     public int getQuantity() {
         return quantity;
@@ -79,11 +86,11 @@ public class ProductModel {
         this.productName = productName;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -111,11 +118,27 @@ public class ProductModel {
         this.customerName = customerName;
     }
 
-    public String getBrand() {
-        return brand;
+    public Date getExpirationDate() {
+        return expirationDate;
     }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public String getSuppliedBy() {
+        return suppliedBy;
+    }
+
+    public void setSuppliedBy(String suppliedBy) {
+        this.suppliedBy = suppliedBy;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

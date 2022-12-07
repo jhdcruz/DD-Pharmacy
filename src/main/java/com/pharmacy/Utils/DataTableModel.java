@@ -6,6 +6,9 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Vector;
 
 public class DataTableModel {
@@ -38,7 +41,28 @@ public class DataTableModel {
 
             for (int col = 1; col <= columnCount; col++) {
                 dataRow.add(resultSet.getObject(col));
-            }
+
+                // post-process data
+                switch (columnNames.get(col - 1)) {
+                    case "Date", "In Time", "Out Time", "Last Updated" -> {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a - MMM dd, yyyy", Locale.getDefault());
+                        LocalDateTime dateTime = LocalDateTime.parse(dataRow.get(col - 1).toString());
+
+                        dataRow.set(col - 1, dateTime.format(formatter));
+                    }
+
+                    case "Expiration Date" -> {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy", Locale.getDefault());
+                        LocalDateTime dateTime = LocalDateTime.parse(dataRow.get(col - 1).toString());
+                        dataRow.set(col - 1, dateTime.format(formatter));
+                    }
+
+                    case "Cost Price", "Sell Price", "Total Cost", "Revenue" -> {
+                        double price = Double.parseDouble(dataRow.get(col - 1).toString());
+                        dataRow.set(col - 1, String.format("%.2f", price));
+                    }
+                }
+            } // for
 
             data.add(dataRow);
         }

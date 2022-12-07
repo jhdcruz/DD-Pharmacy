@@ -19,6 +19,8 @@ public class SupplierController {
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
 
+    String supplierCode;
+
     public SupplierController() {
         try {
             connection = new DatabaseInstance().getConnection();
@@ -40,7 +42,7 @@ public class SupplierController {
                 + supplierModel.getSupplierName()
                 + "' AND location='"
                 + supplierModel.getLocation()
-                + "' AND mobile='"
+                + "' AND contact='"
                 + supplierModel.getPhone()
                 + "'";
             resultSet = statement.executeQuery(duplicateQuery);
@@ -49,7 +51,7 @@ public class SupplierController {
                 JOptionPane.showMessageDialog(null, "This supplier already exists.");
             } else {
                 // else, add new supplier
-                String insertQuery = "INSERT INTO suppliers VALUES(null,?,?,?,?)";
+                String insertQuery = "INSERT INTO suppliers VALUES(null,?,?,?,?,DEFAULT)";
                 preparedStatement = connection.prepareStatement(insertQuery);
                 preparedStatement.setString(1, supplierModel.getSupplierCode());
                 preparedStatement.setString(2, supplierModel.getSupplierName());
@@ -70,7 +72,7 @@ public class SupplierController {
      */
     public void updateSupplier(SupplierModel supplierModel) {
         try {
-            String query = "UPDATE suppliers SET full_name=?,location=?,mobile=? WHERE supplier_code=?";
+            String query = "UPDATE suppliers SET full_name=?,location=?,contact=? WHERE supplier_code=?";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, supplierModel.getSupplierName());
             preparedStatement.setString(2, supplierModel.getLocation());
@@ -104,13 +106,29 @@ public class SupplierController {
      */
     public ResultSet getSuppliers() {
         try {
-            String query = "SELECT supplier_code, full_name, location, mobile FROM suppliers";
+            String query = "SELECT supplier_code, full_name, location, contact, last_updated FROM suppliers";
             resultSet = statement.executeQuery(query);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return resultSet;
+    }
+
+    public String getSupplierCode(String supplierName) {
+
+        try {
+            String query = "SELECT supplier_code FROM suppliers WHERE full_name='" + supplierName + "'";
+            resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                supplierCode = resultSet.getString("supplier_code");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return supplierCode;
     }
 
     /**
@@ -121,9 +139,9 @@ public class SupplierController {
      */
     public ResultSet searchSuppliers(String searchText) {
         try {
-            String query = "SELECT supplier_code, full_name, location, mobile FROM suppliers " +
+            String query = "SELECT supplier_code, full_name, location, contact FROM suppliers " +
                 "WHERE supplier_code LIKE '%" + searchText + "%' OR location LIKE '%" + searchText + "%' " +
-                "OR full_name LIKE '%" + searchText + "%' OR mobile LIKE '%" + searchText + "%'";
+                "OR full_name LIKE '%" + searchText + "%' OR contact LIKE '%" + searchText + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();

@@ -88,6 +88,8 @@ public class SalesPage extends javax.swing.JPanel {
             }
         });
 
+        jDateChooser1.setDateFormatString("MMM d, yyyy");
+
         sellButton.setFont(sellButton.getFont().deriveFont(sellButton.getFont().getStyle() | java.awt.Font.BOLD));
         sellButton.setText("Proceed");
         sellButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -154,20 +156,19 @@ public class SalesPage extends javax.swing.JPanel {
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(sellPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(sellPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(sellPanelLayout.createSequentialGroup()
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(0, 0, 0)
-                                    .addComponent(custCodeText, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(sellPanelLayout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(prodCodeText, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(sellPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(sellPanelLayout.createSequentialGroup()
-                                .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
+                                .addComponent(custCodeText, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(sellPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(prodCodeText, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(sellPanelLayout.createSequentialGroup()
+                            .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addContainerGap())
         );
 
@@ -231,6 +232,7 @@ public class SalesPage extends javax.swing.JPanel {
                 return canEdit[columnIndex];
             }
         });
+        salesTable.setRowHeight(30);
         salesTable.setShowGrid(true);
         salesTable.getTableHeader().setReorderingAllowed(false);
         salesTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -343,14 +345,18 @@ public class SalesPage extends javax.swing.JPanel {
                 if (resultSet.next()) {
                     ProductModel productModel = new ProductModel();
                     productModel.setCustomerCode(custCodeText.getText());
-                    productModel.setDate(jDateChooser1.getDate().toString());
+                    productModel.setDate(jDateChooser1.getDate());
                     productModel.setProductCode(prodCodeText.getText());
-                    Double sellPrice = Double.parseDouble(priceText.getText());
-                    Double totalRevenue = sellPrice * Integer.parseInt(quantityText.getText());
+                    double sellPrice = Double.parseDouble(priceText.getText());
+                    double totalRevenue = sellPrice * Integer.parseInt(quantityText.getText());
                     productModel.setTotalRevenue(totalRevenue);
                     productModel.setQuantity(Integer.parseInt(quantityText.getText()));
-                    new ProductController().sellProduct(productModel, username);
-                    loadDataSet();
+
+                    EventQueue.invokeLater(() -> {
+                        new ProductController().sellProduct(productModel, username);
+                        loadDataSet();
+                    });
+
                 } else {
                     JOptionPane.showMessageDialog(this, "This customer does not exist.\n"
                         + "Add new customer or use a valid customer code.");

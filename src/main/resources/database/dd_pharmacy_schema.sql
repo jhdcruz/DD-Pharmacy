@@ -1,6 +1,6 @@
+DROP DATABASE IF EXISTS `dd_pharmacy`;
 CREATE DATABASE IF NOT EXISTS `dd_pharmacy`
-    /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci */
-    /*!80016 DEFAULT ENCRYPTION='N' */;
+    /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci */;
 
 USE `dd_pharmacy`;
 
@@ -24,17 +24,20 @@ DROP TABLE IF EXISTS `products`;
 /*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `products`
 (
-    `pid`          int         NOT NULL AUTO_INCREMENT,
-    `product_code` varchar(45) NOT NULL,
-    `product_name` varchar(45) NOT NULL,
-    `cost_price`   double      NOT NULL,
-    `sell_price`   double      NOT NULL,
-    `quantity`     int         NOT NULL,
-    `brand`        varchar(45) NOT NULL,
+    `pid`             INT AUTO_INCREMENT,
+    `product_code`    VARCHAR(45)  NOT NULL,
+    `product_name`    VARCHAR(45)  NOT NULL,
+    `description`     VARCHAR(300) NOT NULL,
+    `cost_price`      DOUBLE       NOT NULL,
+    `sell_price`      DOUBLE       NOT NULL,
+    `quantity`        INT          NOT NULL,
+    `supplied_by`     VARCHAR(45)  NOT NULL,
+    `expiration_date` DATETIME     NOT NULL,
+    `last_updated`    DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`pid`),
     UNIQUE KEY `product_code_UNIQUE` (`product_code`)
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 130
+  AUTO_INCREMENT = 9000
   DEFAULT CHARSET = utf8
   COLLATE = utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -47,14 +50,15 @@ DROP TABLE IF EXISTS `customers`;
 /*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `customers`
 (
-    `cid`           int         NOT NULL AUTO_INCREMENT,
-    `customer_code` varchar(45) NOT NULL,
-    `full_name`     varchar(45) NOT NULL,
-    `location`      varchar(45) NOT NULL,
-    `phone`         varchar(45) NOT NULL,
+    `cid`           INT         NOT NULL AUTO_INCREMENT,
+    `customer_code` VARCHAR(45) NOT NULL UNIQUE,
+    `full_name`     VARCHAR(45) NOT NULL,
+    `location`      VARCHAR(45) NOT NULL,
+    `phone`         VARCHAR(45) NOT NULL,
+    `last_updated`  DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`cid`)
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 307
+  AUTO_INCREMENT = 1000
   DEFAULT CHARSET = utf8
   COLLATE = utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -67,15 +71,15 @@ DROP TABLE IF EXISTS `purchaseinfo`;
 /*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `purchaseinfo`
 (
-    `purchase_id`   int         NOT NULL AUTO_INCREMENT,
-    `supplier_code` varchar(45) NOT NULL,
-    `product_code`  varchar(45) NOT NULL,
-    `date`          varchar(45) NOT NULL,
-    `quantity`      int         NOT NULL,
-    `total_cost`    double      NOT NULL,
+    `purchase_id`   INT         NOT NULL AUTO_INCREMENT,
+    `supplier_code` VARCHAR(45) NOT NULL,
+    `product_code`  VARCHAR(45) NOT NULL,
+    `date`          DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `quantity`      INT         NOT NULL,
+    `total_cost`    DOUBLE      NOT NULL,
     PRIMARY KEY (`purchase_id`)
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 1012
+  AUTO_INCREMENT = 4000
   DEFAULT CHARSET = utf8
   COLLATE = utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -88,16 +92,16 @@ DROP TABLE IF EXISTS `salesinfo`;
 /*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `salesinfo`
 (
-    `sales_id`      int         NOT NULL AUTO_INCREMENT,
-    `date`          varchar(45) NOT NULL,
-    `product_code`  varchar(45) NOT NULL,
-    `customer_code` varchar(45) NOT NULL,
-    `quantity`      int         NOT NULL,
-    `revenue`       double      NOT NULL,
-    `sold_by`       varchar(45) NOT NULL,
+    `sales_id`      INT         NOT NULL AUTO_INCREMENT,
+    `product_code`  VARCHAR(45) NOT NULL,
+    `customer_code` VARCHAR(45) NOT NULL,
+    `quantity`      INT         NOT NULL,
+    `revenue`       DOUBLE      NOT NULL,
+    `sold_by`       VARCHAR(45) NOT NULL,
+    `date`          DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`sales_id`)
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 2013
+  AUTO_INCREMENT = 3000
   DEFAULT CHARSET = utf8
   COLLATE = utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -110,14 +114,15 @@ DROP TABLE IF EXISTS `suppliers`;
 /*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `suppliers`
 (
-    `sid`           int         NOT NULL AUTO_INCREMENT,
-    `supplier_code` varchar(45) NOT NULL,
-    `full_name`     varchar(45) NOT NULL,
-    `location`      varchar(45) NOT NULL,
-    `mobile`        varchar(10) NOT NULL,
+    `sid`           INT         NOT NULL AUTO_INCREMENT,
+    `supplier_code` VARCHAR(45) NOT NULL UNIQUE,
+    `full_name`     VARCHAR(45) NOT NULL,
+    `location`      VARCHAR(45) NOT NULL,
+    `contact`       VARCHAR(13) NOT NULL,
+    `last_updated`  DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`sid`)
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 409
+  AUTO_INCREMENT = 7000
   DEFAULT CHARSET = utf8
   COLLATE = utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -130,9 +135,25 @@ DROP TABLE IF EXISTS `userlogs`;
 /*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `userlogs`
 (
-    `username` varchar(45) NOT NULL,
-    `in_time`  varchar(45) NOT NULL,
-    `out_time` varchar(45) NOT NULL
+    `username` VARCHAR(45) NOT NULL,
+    `in_time`  DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `out_time` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COLLATE = utf8_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `actionlogs`
+--
+DROP TABLE IF EXISTS `actionlogs`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!50503 SET character_set_client = utf8 */;
+CREATE TABLE `actionlogs`
+(
+    `username`    VARCHAR(45)  NOT NULL,
+    `description` VARCHAR(300) NOT NULL,
+    `date`        DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8
   COLLATE = utf8_general_ci;
@@ -146,28 +167,29 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `users`
 (
-    `id`        int          NOT NULL AUTO_INCREMENT,
-    `name`      varchar(45)  NOT NULL,
-    `phone`     varchar(12)  NOT NULL,
-    `username`  varchar(20)  NOT NULL,
-    `password`  varchar(200) NOT NULL,
-    `user_type` varchar(45)  NOT NULL,
+    `id`        INT          NOT NULL AUTO_INCREMENT UNIQUE,
+    `username`  VARCHAR(20)  NOT NULL UNIQUE,
+    `password`  VARCHAR(200) NOT NULL,
+    `name`      VARCHAR(45)  NOT NULL,
+    `phone`     VARCHAR(12)  NOT NULL,
+    `user_type` VARCHAR(45)  NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 31
+  AUTO_INCREMENT = 5000
   DEFAULT CHARSET = utf8
   COLLATE = utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Default admin account
--- >> This should be removed after a new admin account is created
+-- Default accounts
+-- >> This should be removed after a new accounts are created.
 --
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users`
     DISABLE KEYS */;
 INSERT INTO `users`
-VALUES (0, 'Admin', '00000000000', 'admin', 'admin', 'Administrator');
+VALUES (5000, 'admin', 'admin', 'Admin', '000000000000', 'Administrator'),
+       (5001, 'emp', 'emp', 'Default Employee', '000000000000', 'Employee');
 /*!40000 ALTER TABLE `users`
     ENABLE KEYS */;
 UNLOCK TABLES;

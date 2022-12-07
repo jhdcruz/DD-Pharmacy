@@ -213,6 +213,9 @@
         <Component class="javax.swing.JTextField" name="quantityText">
         </Component>
         <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser1">
+          <Properties>
+            <Property name="dateFormatString" type="java.lang.String" value="MMM d, yyyy"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="sellButton">
           <Properties>
@@ -307,6 +310,7 @@
                 <Column editable="false" title="Title 4" type="java.lang.Object"/>
               </Table>
             </Property>
+            <Property name="rowHeight" type="int" value="30"/>
             <Property name="showGrid" type="boolean" value="true"/>
             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
               <TableHeader reorderingAllowed="false" resizingAllowed="true"/>

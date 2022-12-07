@@ -3,6 +3,7 @@ package com.pharmacy.Views;
 import com.pharmacy.Controllers.UserController;
 import com.pharmacy.Models.UserModel;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -54,6 +55,9 @@ public class Dashboard extends javax.swing.JFrame {
                 super.windowClosing(e);
             }
         });
+
+        // maximize window
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         setVisible(true);
         setMinimumSize(new Dimension(1220, 660));

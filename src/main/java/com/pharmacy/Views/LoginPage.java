@@ -17,6 +17,7 @@ public class LoginPage extends javax.swing.JFrame {
         userModel = new UserModel();
 
         this.getRootPane().setDefaultButton(loginButton);
+        setResizable(false);
 
         setLocationRelativeTo(null);
         setVisible(true);
@@ -41,7 +42,7 @@ public class LoginPage extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("D&D Pharmacy System| Login");
+        setTitle("D&D Pharmacy System | Login");
         setAlwaysOnTop(true);
         setBackground(new java.awt.Color(102, 102, 102));
         setBounds(new java.awt.Rectangle(500, 100, 0, 0));
@@ -126,7 +127,7 @@ public class LoginPage extends javax.swing.JFrame {
                 .addGroup(layout.createSequentialGroup()
                     .addGap(50, 50, 50)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap(50, Short.MAX_VALUE))
+                    .addGap(48, 48, 48))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
