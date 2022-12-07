@@ -363,6 +363,9 @@ public class ProductPage extends javax.swing.JPanel {
                 || sellText.getText().equals("") || quantityText.getText().equals("")) {
                 JOptionPane.showMessageDialog(this, "Please enter all the required details.");
             } else {
+                int pid = (int) productTable.getValueAt(productTable.getSelectedRow(), 0);
+
+                productModel.setProductId(pid);
                 productModel.setProductCode(codeText.getText());
                 productModel.setProductName(nameText.getText());
                 productModel.setQuantity(Integer.parseInt(quantityText.getText()));
@@ -395,8 +398,8 @@ public class ProductPage extends javax.swing.JPanel {
                 JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
                 new ProductController().deleteProduct(
-                    productTable.getValueAt(
-                        productTable.getSelectedRow(), 1).toString());
+                    (Integer) productTable.getValueAt(
+                        productTable.getSelectedRow(), 0));
                 loadDataSet();
             }
         }
@@ -414,14 +417,14 @@ public class ProductPage extends javax.swing.JPanel {
             data[i] = productTable.getValueAt(row, i);
         }
 
-        codeText.setText(data[0].toString());
-        nameText.setText(data[1].toString());
-        descriptionText.setText(data[2].toString());
-        quantityText.setText(data[3].toString());
-        costText.setText(data[4].toString());
-        sellText.setText(data[5].toString());
-        suppCombo.setSelectedItem(data[6].toString());
-        expirationDate.setDate(new StringFormatting().stringToDate(data[7].toString()));
+        codeText.setText(data[1].toString());
+        nameText.setText(data[2].toString());
+        descriptionText.setText(data[3].toString());
+        quantityText.setText(data[4].toString());
+        costText.setText(data[5].toString());
+        sellText.setText(data[6].toString());
+        suppCombo.setSelectedItem(data[7]);
+        expirationDate.setDate(new StringFormatting().stringToDate(data[8].toString()));
     }//GEN-LAST:event_productTableMouseClicked
 
     private void addSuppButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSuppButtonActionPerformed
@@ -458,16 +461,21 @@ public class ProductPage extends javax.swing.JPanel {
         }
     }
 
-    private void resizeColumnWidths() {
-        productTable.getColumnModel().getColumn(0).setPreferredWidth(110);
-        productTable.getColumnModel().getColumn(1).setPreferredWidth(120);
-        productTable.getColumnModel().getColumn(2).setPreferredWidth(150);
-        productTable.getColumnModel().getColumn(3).setPreferredWidth(80);
-        productTable.getColumnModel().getColumn(4).setPreferredWidth(80);
-        productTable.getColumnModel().getColumn(5).setPreferredWidth(80);
-        productTable.getColumnModel().getColumn(6).setPreferredWidth(100);
-        productTable.getColumnModel().getColumn(7).setPreferredWidth(120);
-        productTable.getColumnModel().getColumn(8).setPreferredWidth(170);
+    private void processColumns() {
+        // hide pid
+        productTable.getColumnModel().getColumn(0).setMinWidth(0);
+        productTable.getColumnModel().getColumn(0).setMaxWidth(0);
+
+        // resize column widths
+        productTable.getColumnModel().getColumn(1).setPreferredWidth(111);
+        productTable.getColumnModel().getColumn(2).setPreferredWidth(121);
+        productTable.getColumnModel().getColumn(3).setPreferredWidth(151);
+        productTable.getColumnModel().getColumn(4).setPreferredWidth(81);
+        productTable.getColumnModel().getColumn(5).setPreferredWidth(81);
+        productTable.getColumnModel().getColumn(6).setPreferredWidth(81);
+        productTable.getColumnModel().getColumn(7).setPreferredWidth(101);
+        productTable.getColumnModel().getColumn(8).setPreferredWidth(121);
+        productTable.getColumnModel().getColumn(9).setPreferredWidth(171);
     }
 
     // Method to load data into table
@@ -476,7 +484,8 @@ public class ProductPage extends javax.swing.JPanel {
             try {
                 ProductController productController = new ProductController();
                 productTable.setModel(new DataTableModel().buildTableModel(productController.getProducts()));
-                resizeColumnWidths();
+                processColumns();
+
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -489,6 +498,8 @@ public class ProductPage extends javax.swing.JPanel {
             try {
                 ProductController productController = new ProductController();
                 productTable.setModel(new DataTableModel().buildTableModel(productController.getProductSearch(text)));
+
+                processColumns();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }

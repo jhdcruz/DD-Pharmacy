@@ -266,15 +266,16 @@ public class CustomerPage extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Please enter all the required details.");
             } else {
                 CustomerModel customerModel = new CustomerModel();
-                String oldCustomerCode = custTable.getValueAt(custTable.getSelectedRow(), 0).toString();
+                int customerId = (int) custTable.getValueAt(custTable.getSelectedRow(), 0);
 
+                customerModel.setId(customerId);
                 customerModel.setCode(codeText.getText());
                 customerModel.setName(nameText.getText());
                 customerModel.setLocation(locationText.getText());
                 customerModel.setPhone(phoneText.getText());
 
                 EventQueue.invokeLater(() -> {
-                    new CustomerController().updateCustomer(customerModel, oldCustomerCode);
+                    new CustomerController().updateCustomer(customerModel);
                     loadDataSet();
                 });
             }

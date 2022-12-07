@@ -149,15 +149,19 @@ public class ProductController {
         java.sql.Date date = new java.sql.Date(productModel.getExpirationDate().getTime());
 
         try {
-            String productQuery = "UPDATE products SET product_name=?,cost_price=?,sell_price=?,quantity=?,expiration_date=?,supplied_by=?, description=? WHERE product_code=?";
+            String productQuery = "UPDATE products SET product_code=?,product_name=?,cost_price=?,sell_price=?,quantity=?,expiration_date=?,supplied_by=?, description=? WHERE pid=?";
             preparedStatement = connection.prepareStatement(productQuery);
-            preparedStatement.setString(1, productModel.getProductName());
-            preparedStatement.setDouble(2, productModel.getCostPrice());
-            preparedStatement.setDouble(3, productModel.getSellPrice());
-            preparedStatement.setInt(4, productModel.getQuantity());
-            preparedStatement.setDate(5, date);
-            preparedStatement.setString(6, productModel.getSuppliedBy());
-            preparedStatement.setString(7, productModel.getDescription());
+
+            preparedStatement.setString(1, productModel.getProductCode());
+            preparedStatement.setString(2, productModel.getProductName());
+            preparedStatement.setDouble(3, productModel.getCostPrice());
+            preparedStatement.setDouble(4, productModel.getSellPrice());
+            preparedStatement.setInt(5, productModel.getQuantity());
+            preparedStatement.setDate(6, date);
+            preparedStatement.setString(7, productModel.getSuppliedBy());
+            preparedStatement.setString(8, productModel.getDescription());
+
+            preparedStatement.setInt(9, productModel.getProductId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException throwable) {
@@ -214,13 +218,13 @@ public class ProductController {
     /**
      * Delete product from the database.
      *
-     * @param code product code to be deleted
+     * @param pid product id to be deleted
      */
-    public void deleteProduct(String code) {
+    public void deleteProduct(int pid) {
         try {
-            String query = "DELETE FROM products WHERE product_code=?";
+            String query = "DELETE FROM products WHERE pid=?";
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, code);
+            preparedStatement.setInt(1, pid);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -293,8 +297,8 @@ public class ProductController {
     public ResultSet getProducts() {
         try {
             String query = """
-                SELECT product_code, product_name, description, quantity, cost_price, sell_price, supplied_by, expiration_date, last_updated FROM products;
-                """;
+                    SELECT pid, product_code, product_name, description, quantity, cost_price, sell_price, supplied_by, expiration_date, last_updated FROM products;
+                    """;
 
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
@@ -322,11 +326,14 @@ public class ProductController {
     public ResultSet getSalesInfo() {
         try {
             String query = """
-                SELECT sales_id, products.product_name AS products_code, customers.full_name AS customer_code, salesinfo.quantity, revenue, date, sold_by
-                FROM salesinfo
-                INNER JOIN products ON salesinfo.product_code=products.product_code
-                INNER JOIN customers ON salesinfo.customer_code = customers.customer_code;
-                """;
+                    SELECT sales_id, products.product_name AS products_code,
+                    customers.full_name AS customer_code, salesinfo.quantity, revenue,
+                    date, users.name AS sold_by
+                    FROM salesinfo
+                    INNER JOIN products ON salesinfo.product_code = products.product_code
+                    INNER JOIN customers ON salesinfo.customer_code = customers.customer_code
+                    INNER JOIN users ON salesinfo.sold_by = users.name;
+                    """;
 
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
@@ -339,8 +346,8 @@ public class ProductController {
     // Search method for products
     public ResultSet getProductSearch(String text) {
         try {
-            String query = "SELECT product_code, product_name, description, quantity, cost_price, sell_price, supplied_by, expiration_date, last_updated FROM products "
-                + "WHERE product_code LIKE '%" + text + "%' OR product_name LIKE '%" + text + "%' OR supplied_by LIKE '%" + text + "%'";
+            String query = "SELECT pid, product_code, product_name, description, quantity, cost_price, sell_price, supplied_by, expiration_date, last_updated FROM products "
+                    + "WHERE product_code LIKE '%" + text + "%' OR product_name LIKE '%" + text + "%' OR supplied_by LIKE '%" + text + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -366,15 +373,14 @@ public class ProductController {
     public ResultSet getSalesSearch(String text) {
         try {
             String query = """
-                SELECT sales_id,salesinfo.product_code,product_name,
-                salesinfo.quantity,revenue,customers.full_name AS Sold_by
-                FROM salesinfo INNER JOIN products
-                ON salesinfo.product_code=products.product_code
-                INNER JOIN users
-                ON salesinfo.sold_by=users.username
-                INNER JOIN customers
-                ON customers.customer_code=salesinfo.customer_code
-                WHERE salesinfo.product_code LIKE '%""" + text + "%'"
+                    SELECT sales_id, products.product_name AS products_code,
+                    customers.full_name AS customer_code, salesinfo.quantity, revenue,
+                    date, users.name AS sold_by
+                    FROM salesinfo
+                    INNER JOIN products ON salesinfo.product_code = products.product_code
+                    INNER JOIN customers ON salesinfo.customer_code = customers.customer_code
+                    INNER JOIN users ON salesinfo.sold_by = users.name
+                    WHERE salesinfo.product_code LIKE '%""" + text + "%'"
                 + "OR product_name LIKE '%" + text + "%' "
                 + "OR users.name LIKE '%" + text + "%'"
                 + "OR customers.full_name LIKE '%" + text + "%'"

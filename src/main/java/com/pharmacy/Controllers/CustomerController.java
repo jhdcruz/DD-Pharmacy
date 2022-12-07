@@ -64,18 +64,18 @@ public class CustomerController {
      *
      * @param customerModel Customer to be edited/updated (derived from CustomerModel)
      */
-    public void updateCustomer(CustomerModel customerModel, String oldCustomerCode) {
+    public void updateCustomer(CustomerModel customerModel) {
         try {
             String query = "UPDATE customers SET customer_code=?, full_name=?,location=?,phone=?" +
-                "WHERE customer_code=?";
+                "WHERE cid=?";
             preparedStatement = connection.prepareStatement(query);
 
-            preparedStatement.setString(1, oldCustomerCode);
-            preparedStatement.setString(1, customerModel.getName());
-            preparedStatement.setString(2, customerModel.getLocation());
-            preparedStatement.setString(3, customerModel.getPhone());
-            preparedStatement.setString(4, customerModel.getCode());
+            preparedStatement.setString(1, customerModel.getCode());
+            preparedStatement.setString(2, customerModel.getName());
+            preparedStatement.setString(3, customerModel.getLocation());
+            preparedStatement.setString(4, customerModel.getPhone());
 
+            preparedStatement.setInt(5, customerModel.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

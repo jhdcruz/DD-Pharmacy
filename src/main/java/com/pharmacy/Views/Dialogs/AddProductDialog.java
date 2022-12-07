@@ -292,10 +292,28 @@ public class AddProductDialog extends javax.swing.JDialog {
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_suppComboPopupMenuWillBecomeVisible
 
+    private void processColumns() {
+        // hide pid
+        productTable.getColumnModel().getColumn(0).setMinWidth(0);
+        productTable.getColumnModel().getColumn(0).setMaxWidth(0);
+
+        // resize column widths
+        productTable.getColumnModel().getColumn(1).setPreferredWidth(111);
+        productTable.getColumnModel().getColumn(2).setPreferredWidth(121);
+        productTable.getColumnModel().getColumn(3).setPreferredWidth(151);
+        productTable.getColumnModel().getColumn(4).setPreferredWidth(81);
+        productTable.getColumnModel().getColumn(5).setPreferredWidth(81);
+        productTable.getColumnModel().getColumn(6).setPreferredWidth(81);
+        productTable.getColumnModel().getColumn(7).setPreferredWidth(101);
+        productTable.getColumnModel().getColumn(8).setPreferredWidth(121);
+        productTable.getColumnModel().getColumn(9).setPreferredWidth(171);
+    }
+
     public void loadDataSet() {
         try {
             ProductController productController = new ProductController();
             productTable.setModel(new DataTableModel().buildTableModel(productController.getProducts()));
+            processColumns();
         } catch (SQLException e) {
             e.printStackTrace();
         }
