@@ -60,6 +60,7 @@ public class SalesPage extends javax.swing.JPanel {
         salesTable = new javax.swing.JTable();
         searchText = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
+        refreshButton = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Impact", 1, 24)); // NOI18N
         jLabel1.setText("SALES");
@@ -257,6 +258,9 @@ public class SalesPage extends javax.swing.JPanel {
 
         jLabel7.setText("Search:");
 
+        refreshButton.setFont(new java.awt.Font("Liberation Sans", 0, 14)); // NOI18N
+        refreshButton.setText("REFRESH");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -270,7 +274,9 @@ public class SalesPage extends javax.swing.JPanel {
                             .addComponent(jLabel7)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(searchText)
-                            .addGap(291, 291, 291))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(refreshButton)
+                            .addGap(190, 190, 190))
                         .addComponent(jSeparator1)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 661, Short.MAX_VALUE)
@@ -285,7 +291,8 @@ public class SalesPage extends javax.swing.JPanel {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel7)
-                        .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -482,6 +489,7 @@ public class SalesPage extends javax.swing.JPanel {
     private javax.swing.JTextField prodCodeText;
     private javax.swing.JLabel prodNameLabel;
     private javax.swing.JTextField quantityText;
+    private javax.swing.JButton refreshButton;
     private javax.swing.JTable salesTable;
     private javax.swing.JTextField searchText;
     private javax.swing.JButton sellButton;

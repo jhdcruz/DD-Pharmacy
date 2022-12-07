@@ -241,7 +241,7 @@ public class UsersPage extends javax.swing.JPanel {
         });
 
         refreshButton.setFont(new java.awt.Font("Liberation Sans", 0, 14)); // NOI18N
-        refreshButton.setText("Refresh");
+        refreshButton.setText("REFRESH");
         refreshButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 refreshButtonActionPerformed(evt);
@@ -307,8 +307,9 @@ public class UsersPage extends javax.swing.JPanel {
             if (nameText.getText().equals("") || phoneText.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "Please fill all the required fields.");
             } else {
-                String oldUsername = userTable.getValueAt(userTable.getSelectedRow(), 3).toString();
+                int id = (int) userTable.getValueAt(userTable.getSelectedRow(), 0);
 
+                userModel.setId(id);
                 userModel.setUsername(usernameText.getText());
                 userModel.setName(nameText.getText());
                 userModel.setPhone(phoneText.getText());
@@ -317,7 +318,7 @@ public class UsersPage extends javax.swing.JPanel {
                 userModel.setType(userType);
 
                 EventQueue.invokeLater(() -> {
-                    new UserController().updateUser(userModel, oldUsername);
+                    new UserController().updateUser(userModel);
                     loadDataSet();
                 });
             }
