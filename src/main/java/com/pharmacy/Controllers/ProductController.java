@@ -293,8 +293,8 @@ public class ProductController {
     public ResultSet getProducts() {
         try {
             String query = """
-                SELECT * FROM products;
-                """;
+                    SELECT product_code, product_name, description, quantity, cost_price, sell_price, supplied_by, expiration_date, last_updated FROM products;
+                    """;
 
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
