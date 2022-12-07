@@ -69,16 +69,16 @@ public class UserController {
      *
      * @param userModel populated UserModel
      */
-    public void updateUser(UserModel userModel, String oldUsername) {
+    public void updateUser(UserModel userModel) {
 
         try {
-            String query = "UPDATE users SET username=?,name=?,phone=?,user_type=? WHERE username=?";
+            String query = "UPDATE users SET username=?,name=?,phone=?,user_type=? WHERE id=?";
             prepStatement = conn.prepareStatement(query);
             prepStatement.setString(1, userModel.getUsername());
             prepStatement.setString(2, userModel.getName());
             prepStatement.setString(3, userModel.getPhone());
             prepStatement.setString(4, userModel.getType());
-            prepStatement.setString(5, oldUsername);
+            prepStatement.setInt(5, userModel.getId());
 
             prepStatement.executeUpdate();
         } catch (SQLException throwables) {
@@ -123,16 +123,15 @@ public class UserController {
         return resultSet;
     }
 
-    public void getUserFullName(UserModel userModel, String username) {
+    public ResultSet findUser(String username) {
         try {
-            String query = "SELECT * FROM users WHERE username='" + username + "' LIMIT 1";
+            String query = "SELECT id, username, name, phone FROM users WHERE username='" + username + "'";
             resultSet = statement.executeQuery(query);
-            String fullName = null;
-            if (resultSet.next()) fullName = resultSet.getString(2);
-            userModel.setName(fullName);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
+
+        return resultSet;
     }
 
     public ResultSet getUserLogs() {

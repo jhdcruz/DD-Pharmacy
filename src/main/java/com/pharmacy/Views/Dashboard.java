@@ -26,6 +26,8 @@ public class Dashboard extends javax.swing.JFrame {
         this.userModel = userModel;
         setLocationRelativeTo(null);
 
+        homeButton.setText(username);
+
         // show navigation panel
         navPanel.setVisible(true);
 
