@@ -293,8 +293,8 @@ public class ProductController {
     public ResultSet getProducts() {
         try {
             String query = """
-                    SELECT product_code, product_name, description, quantity, cost_price, sell_price, supplied_by, expiration_date, last_updated FROM products;
-                    """;
+                SELECT product_code, product_name, description, quantity, cost_price, sell_price, supplied_by, expiration_date, last_updated FROM products;
+                """;
 
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
@@ -339,7 +339,7 @@ public class ProductController {
     // Search method for products
     public ResultSet getProductSearch(String text) {
         try {
-            String query = "SELECT * FROM products "
+            String query = "SELECT product_code, product_name, description, quantity, cost_price, sell_price, supplied_by, expiration_date, last_updated FROM products "
                 + "WHERE product_code LIKE '%" + text + "%' OR product_name LIKE '%" + text + "%' OR supplied_by LIKE '%" + text + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {

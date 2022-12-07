@@ -175,6 +175,7 @@ public class CustomerPage extends javax.swing.JPanel {
                 return canEdit[columnIndex];
             }
         });
+        custTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         custTable.setShowGrid(true);
         custTable.getTableHeader().setReorderingAllowed(false);
         custTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -318,11 +319,20 @@ public class CustomerPage extends javax.swing.JPanel {
         loadDataSet();
     }//GEN-LAST:event_refreshButtonActionPerformed
 
+    private void resizeColumnWidths() {
+        custTable.getColumnModel().getColumn(0).setPreferredWidth(130);
+        custTable.getColumnModel().getColumn(1).setPreferredWidth(180);
+        custTable.getColumnModel().getColumn(2).setPreferredWidth(250);
+        custTable.getColumnModel().getColumn(3).setPreferredWidth(130);
+        custTable.getColumnModel().getColumn(4).setPreferredWidth(170);
+    }
+
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
                 CustomerController customerController = new CustomerController();
                 custTable.setModel(new DataTableModel().buildTableModel(customerController.getCustomers()));
+                resizeColumnWidths();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -334,6 +344,7 @@ public class CustomerPage extends javax.swing.JPanel {
             try {
                 CustomerController customerController = new CustomerController();
                 custTable.setModel(new DataTableModel().buildTableModel(customerController.getCustomerSearch(text)));
+                resizeColumnWidths();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

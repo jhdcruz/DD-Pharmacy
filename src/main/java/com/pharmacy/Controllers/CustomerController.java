@@ -121,7 +121,7 @@ public class CustomerController {
      */
     public ResultSet getCustomerSearch(String searchQuery) {
         try {
-            String query = "SELECT customer_code,full_name,location,phone FROM customers " + "WHERE customer_code LIKE '%" + searchQuery + "%' OR full_name LIKE '%" + searchQuery + "%' OR " + "location LIKE '%" + searchQuery + "%' OR phone LIKE '%" + searchQuery + "%'";
+            String query = "SELECT customer_code,full_name,location,phone,last_updated FROM customers " + "WHERE customer_code LIKE '%" + searchQuery + "%' OR full_name LIKE '%" + searchQuery + "%' OR " + "location LIKE '%" + searchQuery + "%' OR phone LIKE '%" + searchQuery + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();

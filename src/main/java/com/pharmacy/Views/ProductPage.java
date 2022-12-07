@@ -273,7 +273,7 @@ public class ProductPage extends javax.swing.JPanel {
                 return canEdit[columnIndex];
             }
         });
-        productTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        productTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         productTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         productTable.setRowHeight(30);
         productTable.setShowGrid(true);
@@ -408,18 +408,20 @@ public class ProductPage extends javax.swing.JPanel {
         int col = productTable.getColumnCount();
 
         Object[] data = new Object[col];
+
+        // get cell values
         for (int i = 0; i < col; i++) {
             data[i] = productTable.getValueAt(row, i);
         }
 
-        codeText.setText(data[1].toString());
-        nameText.setText(data[2].toString());
-        descriptionText.setText(data[3].toString());
+        codeText.setText(data[0].toString());
+        nameText.setText(data[1].toString());
+        descriptionText.setText(data[2].toString());
+        quantityText.setText(data[3].toString());
         costText.setText(data[4].toString());
         sellText.setText(data[5].toString());
-        quantityText.setText(data[6].toString());
-        suppCombo.setSelectedItem(data[7].toString());
-        expirationDate.setDate(new StringFormatting().stringToDate(data[8].toString()));
+        suppCombo.setSelectedItem(data[6].toString());
+        expirationDate.setDate(new StringFormatting().stringToDate(data[7].toString()));
     }//GEN-LAST:event_productTableMouseClicked
 
     private void addSuppButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSuppButtonActionPerformed
@@ -456,12 +458,25 @@ public class ProductPage extends javax.swing.JPanel {
         }
     }
 
+    private void resizeColumnWidths() {
+        productTable.getColumnModel().getColumn(0).setPreferredWidth(110);
+        productTable.getColumnModel().getColumn(1).setPreferredWidth(120);
+        productTable.getColumnModel().getColumn(2).setPreferredWidth(150);
+        productTable.getColumnModel().getColumn(3).setPreferredWidth(80);
+        productTable.getColumnModel().getColumn(4).setPreferredWidth(80);
+        productTable.getColumnModel().getColumn(5).setPreferredWidth(80);
+        productTable.getColumnModel().getColumn(6).setPreferredWidth(100);
+        productTable.getColumnModel().getColumn(7).setPreferredWidth(120);
+        productTable.getColumnModel().getColumn(8).setPreferredWidth(170);
+    }
+
     // Method to load data into table
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
                 ProductController productController = new ProductController();
                 productTable.setModel(new DataTableModel().buildTableModel(productController.getProducts()));
+                resizeColumnWidths();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }

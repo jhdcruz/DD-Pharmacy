@@ -232,6 +232,7 @@ public class SalesPage extends javax.swing.JPanel {
                 return canEdit[columnIndex];
             }
         });
+        salesTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         salesTable.setRowHeight(30);
         salesTable.setShowGrid(true);
         salesTable.getTableHeader().setReorderingAllowed(false);
@@ -343,12 +344,13 @@ public class SalesPage extends javax.swing.JPanel {
             try {
                 ResultSet resultSet = new CustomerController().getCustomer(custCodeText.getText());
                 if (resultSet.next()) {
+                    double sellPrice = Double.parseDouble(priceText.getText());
+                    double totalRevenue = sellPrice * Integer.parseInt(quantityText.getText());
+
                     ProductModel productModel = new ProductModel();
                     productModel.setCustomerCode(custCodeText.getText());
                     productModel.setDate(jDateChooser1.getDate());
                     productModel.setProductCode(prodCodeText.getText());
-                    double sellPrice = Double.parseDouble(priceText.getText());
-                    double totalRevenue = sellPrice * Integer.parseInt(quantityText.getText());
                     productModel.setTotalRevenue(totalRevenue);
                     productModel.setQuantity(Integer.parseInt(quantityText.getText()));
 
@@ -356,7 +358,6 @@ public class SalesPage extends javax.swing.JPanel {
                         new ProductController().sellProduct(productModel, username);
                         loadDataSet();
                     });
-
                 } else {
                     JOptionPane.showMessageDialog(this, "This customer does not exist.\n"
                         + "Add new customer or use a valid customer code.");
@@ -425,12 +426,23 @@ public class SalesPage extends javax.swing.JPanel {
         loadSearchData(searchText.getText());
     }//GEN-LAST:event_searchTextKeyReleased
 
+    private void resizeColumnWidths() {
+        salesTable.getColumnModel().getColumn(0).setPreferredWidth(90);
+        salesTable.getColumnModel().getColumn(1).setPreferredWidth(120);
+        salesTable.getColumnModel().getColumn(2).setPreferredWidth(120);
+        salesTable.getColumnModel().getColumn(3).setPreferredWidth(120);
+        salesTable.getColumnModel().getColumn(4).setPreferredWidth(100);
+        salesTable.getColumnModel().getColumn(5).setPreferredWidth(170);
+        salesTable.getColumnModel().getColumn(6).setPreferredWidth(150);
+    }
+
     // Method to load data into table
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
                 ProductController productController = new ProductController();
                 salesTable.setModel(new DataTableModel().buildTableModel(productController.getSalesInfo()));
+                resizeColumnWidths();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -443,6 +455,7 @@ public class SalesPage extends javax.swing.JPanel {
             try {
                 ProductController productController = new ProductController();
                 salesTable.setModel(new DataTableModel().buildTableModel(productController.getSalesSearch(text)));
+                resizeColumnWidths();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
