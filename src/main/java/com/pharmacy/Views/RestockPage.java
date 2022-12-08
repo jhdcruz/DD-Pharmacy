@@ -13,7 +13,7 @@ import java.awt.EventQueue;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PurchasePage extends javax.swing.JPanel {
+public class RestockPage extends javax.swing.JPanel {
 
     ProductModel productModel;
     Dashboard dashboard;
@@ -21,7 +21,7 @@ public class PurchasePage extends javax.swing.JPanel {
     int quantity;
     String prodCode = null;
 
-    public PurchasePage(Dashboard dashboard) {
+    public RestockPage(Dashboard dashboard) {
         this.dashboard = dashboard;
 
         initComponents();
@@ -63,9 +63,9 @@ public class PurchasePage extends javax.swing.JPanel {
         jLabel10 = new javax.swing.JLabel();
 
         jLabel1.setFont(new java.awt.Font("Impact", 1, 24)); // NOI18N
-        jLabel1.setText("PURCHASE");
+        jLabel1.setText("RESTOCK");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Purchase Product"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Restock Product"));
 
         jLabel2.setText("Supplier:");
 
@@ -342,7 +342,7 @@ public class PurchasePage extends javax.swing.JPanel {
                     productModel.setTotalCost(totalCost);
 
                     EventQueue.invokeLater(() -> {
-                        new ProductController().addPurchaseInfo(productModel);
+                        new ProductController().addRestockInfo(productModel);
                         loadDataSet();
                     });
                 } else {
@@ -368,8 +368,8 @@ public class PurchasePage extends javax.swing.JPanel {
                 JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
                 EventQueue.invokeLater(() -> {
-                    new ProductController().deletePurchaseInfo((int) purchaseTable.getValueAt(purchaseTable.getSelectedRow(), 0));
-                    new ProductController().updatePurchaseStock(prodCode, quantity);
+                    new ProductController().deleteRestockInfo((int) purchaseTable.getValueAt(purchaseTable.getSelectedRow(), 0));
+                    new ProductController().reduceProductStock(prodCode, quantity);
                     loadDataSet();
                 });
             }
@@ -446,7 +446,7 @@ public class PurchasePage extends javax.swing.JPanel {
         EventQueue.invokeLater(() -> {
             try {
                 ProductController productController = new ProductController();
-                purchaseTable.setModel(new DataTableModel().buildTableModel(productController.getPurchaseInfo()));
+                purchaseTable.setModel(new DataTableModel().buildTableModel(productController.getRestockInfo()));
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -458,7 +458,7 @@ public class PurchasePage extends javax.swing.JPanel {
         EventQueue.invokeLater(() -> {
             try {
                 ProductController productController = new ProductController();
-                purchaseTable.setModel(new DataTableModel().buildTableModel(productController.getPurchaseSearch(text)));
+                purchaseTable.setModel(new DataTableModel().buildTableModel(productController.getRestockSearch(text)));
             } catch (SQLException e) {
                 e.printStackTrace();
             }

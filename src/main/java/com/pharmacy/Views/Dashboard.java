@@ -43,7 +43,7 @@ public class Dashboard extends javax.swing.JFrame {
         displayPanel.add("Products", new ProductPage(this));
         displayPanel.add("Suppliers", new SupplierPage());
         displayPanel.add("Sales", new SalesPage(username, this));
-        displayPanel.add("Purchase", new PurchasePage(this));
+        displayPanel.add("Restock", new RestockPage(this));
         displayPanel.add("Logs", new UserLogsPage());
 
         this.addWindowListener(new WindowAdapter() {
@@ -97,8 +97,8 @@ public class Dashboard extends javax.swing.JFrame {
         layout.show(displayPanel, "Sales");
     }
 
-    public void addPurchasePage() {
-        layout.show(displayPanel, "Purchase");
+    public void addRestockPage() {
+        layout.show(displayPanel, "Restock");
     }
 
     public void addLogsPage() {
@@ -190,7 +190,7 @@ public class Dashboard extends javax.swing.JFrame {
         });
 
         purchaseButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
-        purchaseButton.setText("Purchase");
+        purchaseButton.setText("Restock");
         purchaseButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         purchaseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -354,7 +354,7 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_homeButtonActionPerformed
 
     private void purchaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchaseButtonActionPerformed
-        addPurchasePage();
+        addRestockPage();
     }//GEN-LAST:event_purchaseButtonActionPerformed
 
     private void logsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logsButtonActionPerformed
