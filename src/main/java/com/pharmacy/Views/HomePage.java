@@ -4,6 +4,7 @@ import com.pharmacy.Controllers.UserController;
 import com.pharmacy.Models.UserModel;
 
 import javax.swing.JOptionPane;
+import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
@@ -202,16 +203,30 @@ public class HomePage extends javax.swing.JPanel {
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void changePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePasswordActionPerformed
-        // get current username from selected row
-        // change password prompt
-        String password = JOptionPane.showInputDialog(this, "Enter new password for " + username + ":", "Change Password", JOptionPane.PLAIN_MESSAGE);
+        String verify = JOptionPane.showInputDialog(this, "Enter current password for " + username + ":", "Change Password", JOptionPane.PLAIN_MESSAGE);
 
-        if (password != null) {
-            EventQueue.invokeLater(() -> {
-                new UserController().updatePass(username, password);
-                JOptionPane.showMessageDialog(this, "Password changed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-            });
-        }
+        EventQueue.invokeLater(() -> {
+            // wait cursor
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+            if (verify != null) {
+                String password = String.valueOf(new UserController().getPassword(username, verify));
+
+                if (password.equals(verify)) {
+                    String newPassword = JOptionPane.showInputDialog(this, "Enter new password for " + username + ":", "Change Password", JOptionPane.PLAIN_MESSAGE);
+
+                    if (newPassword != null) {
+                        new UserController().updatePass(username, password);
+                        JOptionPane.showMessageDialog(this, "Password changed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Incorrect password.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            // revert cursor
+            setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        });
     }//GEN-LAST:event_changePasswordActionPerformed
 
     private void getUser() {
