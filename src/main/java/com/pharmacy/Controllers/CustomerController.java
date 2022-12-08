@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class CustomerController {
+
     Connection connection = null;
     PreparedStatement preparedStatement = null;
     Statement statement = null;
@@ -40,19 +41,15 @@ public class CustomerController {
                 JOptionPane.showMessageDialog(null, "Customer already exists.");
             } else {
                 // else, save customer to database
-                try {
-                    String insertQuery = "INSERT INTO customers VALUES(null,?,?,?,?,null)";
-                    preparedStatement = connection.prepareStatement(insertQuery);
+                String insertQuery = "INSERT INTO customers VALUES(null,?,?,?,?,null)";
+                preparedStatement = connection.prepareStatement(insertQuery);
 
-                    preparedStatement.setString(1, customerModel.getCode());
-                    preparedStatement.setString(2, customerModel.getName());
-                    preparedStatement.setString(3, customerModel.getLocation());
-                    preparedStatement.setString(4, customerModel.getPhone());
+                preparedStatement.setString(1, customerModel.getCode());
+                preparedStatement.setString(2, customerModel.getName());
+                preparedStatement.setString(3, customerModel.getLocation());
+                preparedStatement.setString(4, customerModel.getPhone());
 
-                    preparedStatement.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,12 +59,13 @@ public class CustomerController {
     /**
      * Edit/update customer data.
      *
-     * @param customerModel Customer to be edited/updated (derived from CustomerModel)
+     * @param customerModel Customer to be edited/updated (derived from
+     *                      CustomerModel)
      */
     public void updateCustomer(CustomerModel customerModel) {
         try {
-            String query = "UPDATE customers SET customer_code=?, full_name=?,location=?,phone=?" +
-                "WHERE cid=?";
+            String query = "UPDATE customers SET customer_code=?, full_name=?,location=?,phone=?"
+                + "WHERE cid=?";
             preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setString(1, customerModel.getCode());
@@ -148,8 +146,8 @@ public class CustomerController {
     }
 
     /**
-     * Get product info based on provided product code.
-     * This method is tailored for sales/pos usage.
+     * Get product info based on provided product code. This method is tailored
+     * for sales/pos usage.
      *
      * @param prodCode product code
      * @return result set of product details

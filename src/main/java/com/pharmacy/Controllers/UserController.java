@@ -1,4 +1,3 @@
-
 package com.pharmacy.Controllers;
 
 import com.pharmacy.Database.DatabaseInstance;
@@ -17,6 +16,7 @@ import java.sql.Statement;
 import java.util.Vector;
 
 public class UserController {
+
     Connection conn = null;
     PreparedStatement prepStatement = null;
     Statement statement = null;
@@ -46,8 +46,8 @@ public class UserController {
             if (resultSet.next()) {
                 JOptionPane.showMessageDialog(null, "User already exists");
             } else {
-                String insertQuery = "INSERT INTO users (name,phone,username,password,user_type) " +
-                    "VALUES(?,?,?,?,?)";
+                String insertQuery = "INSERT INTO users (name,phone,username,password,user_type) "
+                    + "VALUES(?,?,?,?,?)";
                 prepStatement = conn.prepareStatement(insertQuery);
                 prepStatement.setString(1, userModel.getName());
                 prepStatement.setString(2, userModel.getPhone());
@@ -65,7 +65,8 @@ public class UserController {
     /**
      * Update existing user (password excluded!)
      * <p>
-     * See {@link #updatePass(String username, String password)} for updating password
+     * See {@link #updatePass(String username, String password)} for updating
+     * password
      *
      * @param userModel populated UserModel
      */
@@ -136,8 +137,8 @@ public class UserController {
 
     public ResultSet getUserLogs() {
         try {
-            String query = "SELECT users.name,userlogs.username,in_time,out_time FROM userlogs" +
-                " INNER JOIN users on userlogs.username=users.username ORDER BY in_time DESC";
+            String query = "SELECT users.name,userlogs.username,in_time,out_time FROM userlogs"
+                + " INNER JOIN users on userlogs.username=users.username ORDER BY in_time DESC";
             resultSet = statement.executeQuery(query);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -190,8 +191,8 @@ public class UserController {
     /**
      * Display database results and headers in a table.
      * <p>
-     * this table model also removes the password column
-     * compared to the DataTableModel class which displays all columns
+     * this table model also removes the password column compared to the
+     * DataTableModel class which displays all columns
      *
      * @param resultSet database result
      * @return table model that contains data and the data columns

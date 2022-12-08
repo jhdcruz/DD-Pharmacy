@@ -139,9 +139,9 @@ public class SupplierController {
      */
     public ResultSet searchSuppliers(String searchText) {
         try {
-            String query = "SELECT supplier_code, full_name, location, contact FROM suppliers " +
-                "WHERE supplier_code LIKE '%" + searchText + "%' OR location LIKE '%" + searchText + "%' " +
-                "OR full_name LIKE '%" + searchText + "%' OR contact LIKE '%" + searchText + "%'";
+            String query = "SELECT supplier_code, full_name, location, contact FROM suppliers "
+                + "WHERE supplier_code LIKE '%" + searchText + "%' OR location LIKE '%" + searchText + "%' "
+                + "OR full_name LIKE '%" + searchText + "%' OR contact LIKE '%" + searchText + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();

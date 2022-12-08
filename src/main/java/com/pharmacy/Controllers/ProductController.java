@@ -381,10 +381,10 @@ public class ProductController {
                     INNER JOIN customers ON salesinfo.customer_code = customers.customer_code
                     INNER JOIN users ON salesinfo.sold_by = users.name
                     WHERE salesinfo.product_code LIKE '%""" + text + "%'"
-                + "OR product_name LIKE '%" + text + "%' "
-                + "OR users.name LIKE '%" + text + "%'"
-                + "OR customers.full_name LIKE '%" + text + "%'"
-                + "ORDER BY sales_id;";
+                    + "OR product_name LIKE '%" + text + "%' "
+                    + "OR users.name LIKE '%" + text + "%'"
+                    + "OR customers.full_name LIKE '%" + text + "%'"
+                    + "ORDER BY sales_id;";
 
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
