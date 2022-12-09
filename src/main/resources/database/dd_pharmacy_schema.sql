@@ -144,22 +144,6 @@ CREATE TABLE `userlogs`
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `actionlogs`
---
-DROP TABLE IF EXISTS `actionlogs`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8 */;
-CREATE TABLE `actionlogs`
-(
-    `username`    VARCHAR(45)  NOT NULL,
-    `description` VARCHAR(300) NOT NULL,
-    `date`        DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8
-  COLLATE = utf8_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `users`
 --
 DROP TABLE IF EXISTS `users`;
