@@ -150,10 +150,10 @@ public class ProductController {
 
         try {
             String productQuery = """
-                    UPDATE products
-                    SET product_code=?,product_name=?,description=?,cost_price=?,
-                        sell_price=?,quantity=?,expiration_date=?,supplied_by=?
-                    WHERE pid=?;""";
+                UPDATE products
+                SET product_code=?,product_name=?,description=?,cost_price=?,
+                    sell_price=?,quantity=?,expiration_date=?,supplied_by=?
+                WHERE pid=?;""";
             preparedStatement = connection.prepareStatement(productQuery);
 
             preparedStatement.setString(1, productModel.getProductCode());
@@ -316,9 +316,13 @@ public class ProductController {
     // Purchase table data set retrieval
     public ResultSet getRestockInfo() {
         try {
-            String query = "SELECT purchase_id, purchaseinfo.product_code,product_name,purchaseinfo.quantity,total_cost "
-                + "FROM purchaseinfo INNER JOIN products "
-                + "ON products.product_code=purchaseinfo.product_code ORDER BY purchase_id;";
+            String query = """
+                SELECT purchase_id, purchaseinfo.product_code,product_name,purchaseinfo.quantity,total_cost,date
+                FROM purchaseinfo
+                INNER JOIN products
+                ON products.product_code=purchaseinfo.product_code
+                ORDER BY date DESC;
+                """;
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -337,7 +341,8 @@ public class ProductController {
                 FROM salesinfo
                 INNER JOIN products ON salesinfo.product_code = products.product_code
                 INNER JOIN customers ON salesinfo.customer_code = customers.customer_code
-                INNER JOIN users ON salesinfo.sold_by = users.name;
+                INNER JOIN users ON salesinfo.sold_by = users.name
+                ORDER BY date DESC;
                 """;
 
             resultSet = statement.executeQuery(query);
