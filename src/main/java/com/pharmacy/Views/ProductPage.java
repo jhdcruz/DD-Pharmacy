@@ -79,10 +79,8 @@ public class ProductPage extends javax.swing.JPanel {
         suppCombo.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
-
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
             }
-
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
                 suppComboPopupMenuWillBecomeVisible(evt);
             }
@@ -126,6 +124,7 @@ public class ProductPage extends javax.swing.JPanel {
         });
 
         deleteButton.setBackground(new java.awt.Color(255, 51, 51));
+        deleteButton.setForeground(new java.awt.Color(51, 51, 51));
         deleteButton.setText("Delete");
         deleteButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
@@ -262,7 +261,7 @@ public class ProductPage extends javax.swing.JPanel {
         });
         productTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         productTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        productTable.setRowHeight(30);
+        productTable.setRowHeight(35);
         productTable.setShowGrid(true);
         productTable.getTableHeader().setReorderingAllowed(false);
         productTable.addMouseListener(new java.awt.event.MouseAdapter() {

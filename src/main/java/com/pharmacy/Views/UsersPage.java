@@ -186,7 +186,7 @@ public class UsersPage extends javax.swing.JPanel {
         });
         userTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         userTable.setName("Users"); // NOI18N
-        userTable.setRowHeight(30);
+        userTable.setRowHeight(35);
         userTable.setShowGrid(true);
         userTable.getTableHeader().setReorderingAllowed(false);
         userTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -286,8 +286,7 @@ public class UsersPage extends javax.swing.JPanel {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(entryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(0, 0, 0)))
+                            .addComponent(entryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addContainerGap())
         );
 
@@ -405,16 +404,20 @@ public class UsersPage extends javax.swing.JPanel {
 
     }//GEN-LAST:event_changePasswordActionPerformed
 
+    private void processColumns() {
+        // hide PID column (data still accessible)
+        userTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+        userTable.getColumnModel().getColumn(0).setMinWidth(0);
+        userTable.getColumnModel().getColumn(0).setMaxWidth(0);
+    }
+
     public void loadSearchData(String text) {
         EventQueue.invokeLater(() -> {
             try {
                 UserController userController = new UserController();
                 userTable.setModel(userController.buildUsersTable(userController.searchUsers(text)));
 
-                // hide PID column (data still accessible)
-                userTable.getColumnModel().getColumn(0).setPreferredWidth(0);
-                userTable.getColumnModel().getColumn(0).setMinWidth(0);
-                userTable.getColumnModel().getColumn(0).setMaxWidth(0);
+                processColumns();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -427,10 +430,7 @@ public class UsersPage extends javax.swing.JPanel {
                 UserController userController = new UserController();
                 userTable.setModel(userController.buildUsersTable(userController.getUsers()));
 
-                // hide PID column (data still accessible)
-                userTable.getColumnModel().getColumn(0).setPreferredWidth(0);
-                userTable.getColumnModel().getColumn(0).setMinWidth(0);
-                userTable.getColumnModel().getColumn(0).setMaxWidth(0);
+                processColumns();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }

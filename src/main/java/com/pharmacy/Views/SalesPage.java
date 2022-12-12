@@ -159,24 +159,20 @@ public class SalesPage extends javax.swing.JPanel {
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(sellPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(sellPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(custCodeText, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(sellPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(prodCodeText, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sellPanelLayout.createSequentialGroup()
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(0, 0, 0)
+                            .addComponent(custCodeText))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sellPanelLayout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addGap(25, 25, 25)
+                            .addComponent(prodCodeText))
                         .addGroup(sellPanelLayout.createSequentialGroup()
-                            .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)))
                     .addContainerGap())
         );
-
-        sellPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[]{custCodeText, prodCodeText});
-
         sellPanelLayout.setVerticalGroup(
             sellPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(sellPanelLayout.createSequentialGroup()
@@ -235,7 +231,6 @@ public class SalesPage extends javax.swing.JPanel {
                 return canEdit[columnIndex];
             }
         });
-        salesTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         salesTable.setRowHeight(30);
         salesTable.setShowGrid(true);
         salesTable.getTableHeader().setReorderingAllowed(false);
@@ -437,11 +432,11 @@ public class SalesPage extends javax.swing.JPanel {
     }//GEN-LAST:event_searchTextKeyReleased
 
     private void resizeColumnWidths() {
-        salesTable.getColumnModel().getColumn(0).setPreferredWidth(90);
+        salesTable.getColumnModel().getColumn(0).setPreferredWidth(60);
         salesTable.getColumnModel().getColumn(1).setPreferredWidth(120);
-        salesTable.getColumnModel().getColumn(2).setPreferredWidth(120);
-        salesTable.getColumnModel().getColumn(3).setPreferredWidth(120);
-        salesTable.getColumnModel().getColumn(4).setPreferredWidth(100);
+        salesTable.getColumnModel().getColumn(2).setPreferredWidth(220);
+        salesTable.getColumnModel().getColumn(3).setPreferredWidth(50);
+        salesTable.getColumnModel().getColumn(4).setPreferredWidth(80);
         salesTable.getColumnModel().getColumn(5).setPreferredWidth(170);
         salesTable.getColumnModel().getColumn(6).setPreferredWidth(150);
     }

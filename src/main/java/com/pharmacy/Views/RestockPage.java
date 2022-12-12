@@ -232,7 +232,7 @@ public class RestockPage extends javax.swing.JPanel {
                 return canEdit[columnIndex];
             }
         });
-        purchaseTable.setRowHeight(30);
+        purchaseTable.setRowHeight(35);
         purchaseTable.setShowGrid(true);
         purchaseTable.getTableHeader().setReorderingAllowed(false);
         purchaseTable.addMouseListener(new java.awt.event.MouseAdapter() {
