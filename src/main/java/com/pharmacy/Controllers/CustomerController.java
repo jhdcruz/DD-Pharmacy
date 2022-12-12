@@ -102,7 +102,7 @@ public class CustomerController {
      */
     public ResultSet getCustomers() {
         try {
-            String query = "SELECT customer_code, full_name, location, phone, last_updated FROM customers";
+            String query = "SELECT cid, customer_code, full_name, location, phone, last_updated FROM customers";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();

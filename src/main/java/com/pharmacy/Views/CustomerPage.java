@@ -159,7 +159,8 @@ public class CustomerPage extends javax.swing.JPanel {
                 return canEdit[columnIndex];
             }
         });
-        custTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        custTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        custTable.setRowHeight(35);
         custTable.setShowGrid(true);
         custTable.getTableHeader().setReorderingAllowed(false);
         custTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -248,8 +249,7 @@ public class CustomerPage extends javax.swing.JPanel {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(entryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(0, 0, 0)))
+                            .addComponent(entryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addContainerGap())
         );
 
@@ -309,10 +309,11 @@ public class CustomerPage extends javax.swing.JPanel {
         for (int i = 0; i < col; i++) {
             data[i] = custTable.getValueAt(row, i);
         }
-        codeText.setText((String) data[0]);
-        nameText.setText((String) data[1]);
-        locationText.setText((String) data[2]);
-        phoneText.setText((String) data[3]);
+
+        codeText.setText(data[1].toString());
+        nameText.setText(data[2].toString());
+        locationText.setText(data[3].toString());
+        phoneText.setText(data[4].toString());
     }//GEN-LAST:event_custTableMouseClicked
 
     private void searchTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextKeyReleased
@@ -323,7 +324,11 @@ public class CustomerPage extends javax.swing.JPanel {
         loadDataSet();
     }//GEN-LAST:event_refreshButtonActionPerformed
 
-    private void resizeColumnWidths() {
+    private void processColumns() {
+        // hide pid
+        custTable.getColumnModel().getColumn(0).setMinWidth(0);
+        custTable.getColumnModel().getColumn(0).setMaxWidth(0);
+
         custTable.getColumnModel().getColumn(0).setPreferredWidth(130);
         custTable.getColumnModel().getColumn(1).setPreferredWidth(180);
         custTable.getColumnModel().getColumn(2).setPreferredWidth(250);
@@ -336,7 +341,7 @@ public class CustomerPage extends javax.swing.JPanel {
             try {
                 CustomerController customerController = new CustomerController();
                 custTable.setModel(new DataTableModel().buildTableModel(customerController.getCustomers()));
-                resizeColumnWidths();
+                processColumns();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -348,7 +353,7 @@ public class CustomerPage extends javax.swing.JPanel {
             try {
                 CustomerController customerController = new CustomerController();
                 custTable.setModel(new DataTableModel().buildTableModel(customerController.getCustomerSearch(text)));
-                resizeColumnWidths();
+                processColumns();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
