@@ -3,17 +3,13 @@ package com.pharmacy.Controllers;
 import com.pharmacy.Database.DatabaseInstance;
 import com.pharmacy.Models.UserModel;
 import com.pharmacy.Views.UsersPage;
-import org.apache.commons.text.WordUtils;
 
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Vector;
 
 public class UserController {
 
@@ -46,13 +42,15 @@ public class UserController {
             if (resultSet.next()) {
                 JOptionPane.showMessageDialog(null, "User already exists");
             } else {
+                String encryptedPass = new EncryptionController().encrypt(userModel.getPassword());
+
                 String insertQuery = "INSERT INTO users (name,phone,username,password,user_type) "
                     + "VALUES(?,?,?,?,?)";
                 prepStatement = conn.prepareStatement(insertQuery);
                 prepStatement.setString(1, userModel.getName());
                 prepStatement.setString(2, userModel.getPhone());
                 prepStatement.setString(3, userModel.getUsername());
-                prepStatement.setString(4, userModel.getPassword());
+                prepStatement.setString(4, encryptedPass);
                 prepStatement.setString(5, userModel.getType());
 
                 prepStatement.executeUpdate();
@@ -65,7 +63,7 @@ public class UserController {
     /**
      * Update existing user (password excluded!)
      * <p>
-     * See {@link #updatePass(String username, String password)} for updating
+     * See {@link #updatePass(int id, String password)} for updating
      * password
      *
      * @param userModel populated UserModel
@@ -88,11 +86,11 @@ public class UserController {
     }
 
     // Method to delete existing user
-    public void deleteUser(String username) {
+    public void deleteUser(String id) {
         try {
-            String query = "DELETE FROM users WHERE username=?";
+            String query = "DELETE FROM users WHERE id=?";
             prepStatement = conn.prepareStatement(query);
-            prepStatement.setString(1, username);
+            prepStatement.setString(1, id);
 
             prepStatement.executeUpdate();
         } catch (SQLException sqlException) {
@@ -104,7 +102,7 @@ public class UserController {
     // Method to retrieve data set to display in table
     public ResultSet getUsers() {
         try {
-            String query = "SELECT * FROM users";
+            String query = "SELECT id, name, username, phone, user_type FROM users";
             resultSet = statement.executeQuery(query);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -126,7 +124,7 @@ public class UserController {
 
     public ResultSet findUser(String username) {
         try {
-            String query = "SELECT id, username, name, phone FROM users WHERE username='" + username + "'";
+            String query = "SELECT id, username, name, phone, user_type FROM users WHERE username='" + username + "'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -161,75 +159,36 @@ public class UserController {
         }
     }
 
-    public ResultSet getPassword(String username, String password) {
+    public boolean matchPasswords(String username, String password) {
         try {
             String query = "SELECT password FROM users WHERE username='"
                 + username
-                + "' AND password='"
-                + password
                 + "'";
             resultSet = statement.executeQuery(query);
+
+            if (resultSet.next()) {
+                String decryptedPass = new EncryptionController().decrypt(resultSet.getString("password"));
+
+                return decryptedPass.equals(password);
+            }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
 
-        return resultSet;
+        return false;
     }
 
-    public void updatePass(String username, String password) {
+    public void updatePass(int id, String password) {
         try {
-            String query = "UPDATE users SET password=? WHERE username='" + username + "'";
+            String encryptedPass = new EncryptionController().encrypt(password);
+
+            String query = "UPDATE users SET password=? WHERE id='" + id + "'";
             prepStatement = conn.prepareStatement(query);
-            prepStatement.setString(1, password);
+            prepStatement.setString(1, encryptedPass);
 
             prepStatement.executeUpdate();
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
-    }
-
-    /**
-     * Display database results and headers in a table.
-     * <p>
-     * this table model also removes the password column compared to the
-     * DataTableModel class which displays all columns
-     *
-     * @param resultSet database result
-     * @return table model that contains data and the data columns
-     * @throws SQLException SQL exception thrown when database error occurs
-     */
-    public DefaultTableModel buildUsersTable(ResultSet resultSet) throws SQLException {
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        Vector<String> columnNames = new Vector<>();
-        int columnCount = metaData.getColumnCount();
-
-        // add column names to the table column headers
-        for (int col = 1; col <= columnCount; col++) {
-            // replace underscores with spaces
-            String columnName = metaData.getColumnName(col).replaceAll("_", " ");
-            // capitalize the first letter of each word
-            columnName = WordUtils.capitalizeFully(columnName);
-
-            columnNames.add(columnName);
-        }
-
-        // !! Do not display passwords column !!
-        columnNames.remove("Password");
-
-        Vector<Vector<Object>> data = new Vector<>();
-        while (resultSet.next()) {
-            Vector<Object> dataRow = new Vector<>();
-
-            for (int col = 1; col <= columnCount; col++) {
-                dataRow.add(resultSet.getObject(col));
-            }
-
-            data.add(dataRow);
-
-            // !! Remove password cell data !!
-            dataRow.remove(2);
-        }
-
-        return new DefaultTableModel(data, columnNames);
     }
 }

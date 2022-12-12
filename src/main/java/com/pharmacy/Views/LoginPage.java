@@ -21,6 +21,14 @@ public class LoginPage extends javax.swing.JFrame {
 
         setLocationRelativeTo(null);
         setVisible(true);
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                // for some reason, closing the window doesn't terminate the app completely
+                System.exit(0);
+            }
+        });
     }
 
     /**

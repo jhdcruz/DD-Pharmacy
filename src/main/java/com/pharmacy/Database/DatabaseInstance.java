@@ -1,5 +1,6 @@
 package com.pharmacy.Database;
 
+import com.pharmacy.Controllers.EncryptionController;
 import com.pharmacy.Utils.FileResourceUtils;
 
 import javax.swing.JOptionPane;
@@ -70,16 +71,18 @@ public class DatabaseInstance {
      * @return user role / user type
      */
     public String authUser(String username, String password) {
-        String query = "SELECT * FROM users WHERE username='"
-            + username
-            + "' AND password='"
-            + password
-            + "'";
-
         try {
+            String query = "SELECT username, password, user_type FROM users WHERE username='"
+                + username
+                + "'";
             resultSet = statement.executeQuery(query);
+
             if (resultSet.next()) {
-                return resultSet.getString("user_type");
+                String decryptedPass = new EncryptionController().decrypt(resultSet.getString("password"));
+
+                if (resultSet.getString("username").equals(username) && decryptedPass.equals(password)) {
+                    return resultSet.getString("user_type");
+                }
             }
         } catch (SQLException ex) {
             ex.printStackTrace();

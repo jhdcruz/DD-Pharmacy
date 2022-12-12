@@ -178,9 +178,9 @@ public class AddUserDialog extends JDialog {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         UserModel userModel = new UserModel();
 
-        if (nameText.getText().equals("") || phoneText.getText().equals(""))
-            JOptionPane.showMessageDialog(null, "Please fill all the required fields.");
-        else {
+        if (nameText.getText().equals("") || phoneText.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Please fill all the required fields.");
+        } else {
             userModel.setName(nameText.getText());
             userModel.setPhone(phoneText.getText());
             userModel.setUsername(usernameText.getText());
@@ -196,11 +196,20 @@ public class AddUserDialog extends JDialog {
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
+    private void processColumns() {
+        // hide PID column (data still accessible)
+        userTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+        userTable.getColumnModel().getColumn(0).setMinWidth(0);
+        userTable.getColumnModel().getColumn(0).setMaxWidth(0);
+    }
+
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
                 UserController userController = new UserController();
                 userTable.setModel(new DataTableModel().buildTableModel(userController.getUsers()));
+
+                processColumns();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }

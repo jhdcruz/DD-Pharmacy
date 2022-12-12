@@ -18,7 +18,6 @@ public class HomePage extends javax.swing.JPanel {
     UserModel userModel;
 
     String username;
-    int id;
 
     /**
      * Creates new form HomePage
@@ -185,19 +184,20 @@ public class HomePage extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-        UserModel userModel = new UserModel();
+        UserModel updatedUserModel = new UserModel();
 
         // check if a row is selected
         if (phoneText.getText().equals("") || usernameText.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Please fill all the required fields.", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
-            userModel.setId(id);
-            userModel.setUsername(usernameText.getText());
-            userModel.setPhone(phoneText.getText());
-            userModel.setUsername(usernameText.getText());
+            updatedUserModel.setId(userModel.getId());
+            updatedUserModel.setName(userModel.getName());
+            updatedUserModel.setType(userModel.getType());
+            updatedUserModel.setPhone(phoneText.getText());
+            updatedUserModel.setUsername(usernameText.getText());
 
             EventQueue.invokeLater(() -> {
-                new UserController().updateUser(userModel);
+                new UserController().updateUser(updatedUserModel);
             });
         }
     }//GEN-LAST:event_updateButtonActionPerformed
@@ -205,18 +205,21 @@ public class HomePage extends javax.swing.JPanel {
     private void changePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePasswordActionPerformed
         String verify = JOptionPane.showInputDialog(this, "Enter current password for " + username + ":", "Change Password", JOptionPane.PLAIN_MESSAGE);
 
+        // Check if the current password matches the one in the database
         EventQueue.invokeLater(() -> {
             // wait cursor
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
             if (verify != null) {
-                String password = String.valueOf(new UserController().getPassword(username, verify));
+                // password contains the decrypted password
+                boolean match = new UserController().matchPasswords(username, verify);
 
-                if (password.equals(verify)) {
+                // if matches, change password to the new one
+                if (match) {
                     String newPassword = JOptionPane.showInputDialog(this, "Enter new password for " + username + ":", "Change Password", JOptionPane.PLAIN_MESSAGE);
 
                     if (newPassword != null) {
-                        new UserController().updatePass(username, password);
+                        new UserController().updatePass(userModel.getId(), newPassword);
                         JOptionPane.showMessageDialog(this, "Password changed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                     }
                 } else {
@@ -239,6 +242,7 @@ public class HomePage extends javax.swing.JPanel {
                 userModel.setUsername(resultSet.getString("username"));
                 userModel.setName(resultSet.getString("name"));
                 userModel.setPhone(resultSet.getString("phone"));
+                userModel.setType(resultSet.getString("user_type"));
 
                 // set to text fields
                 usernameText.setText(userModel.getUsername());
@@ -260,7 +264,7 @@ public class HomePage extends javax.swing.JPanel {
     }
 
     /**
-     * Gree the user based on the time of the day
+     * Greet the user based on the time of the day
      *
      * @param name name of the current user
      */

@@ -2,6 +2,7 @@ package com.pharmacy.Views;
 
 import com.pharmacy.Controllers.UserController;
 import com.pharmacy.Models.UserModel;
+import com.pharmacy.Utils.DataTableModel;
 import com.pharmacy.Views.Dialogs.AddUserDialog;
 
 import javax.swing.JOptionPane;
@@ -303,8 +304,8 @@ public class UsersPage extends javax.swing.JPanel {
         // check if a row is selected
         if (userTable.getSelectionModel().getSelectedItemsCount() == 1) {
             // then, update the user
-            if (nameText.getText().equals("") || phoneText.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "Please fill all the required fields.");
+            if (usernameText.getText().equals("") || nameText.getText().equals("") || phoneText.getText().equals("")) {
+                JOptionPane.showMessageDialog(this, "Please fill all the required fields.");
             } else {
                 int id = (int) userTable.getValueAt(userTable.getSelectedRow(), 0);
 
@@ -312,7 +313,6 @@ public class UsersPage extends javax.swing.JPanel {
                 userModel.setUsername(usernameText.getText());
                 userModel.setName(nameText.getText());
                 userModel.setPhone(phoneText.getText());
-                userModel.setUsername(usernameText.getText());
                 userType = (String) userTypeCombo.getSelectedItem();
                 userModel.setType(userType);
 
@@ -343,7 +343,7 @@ public class UsersPage extends javax.swing.JPanel {
 
             if (opt == JOptionPane.YES_OPTION) {
                 EventQueue.invokeLater(() -> {
-                    new UserController().deleteUser(String.valueOf(userTable.getValueAt(userTable.getSelectedRow(), 3)));
+                    new UserController().deleteUser(String.valueOf(userTable.getValueAt(userTable.getSelectedRow(), 0)));
                     loadDataSet();
                 });
             }
@@ -362,8 +362,8 @@ public class UsersPage extends javax.swing.JPanel {
         }
 
         nameText.setText(val[1].toString());
-        phoneText.setText(val[2].toString());
-        usernameText.setText(val[3].toString());
+        usernameText.setText(val[2].toString());
+        phoneText.setText(val[3].toString());
         userTypeCombo.setSelectedItem(val[4].toString());
     }//GEN-LAST:event_userTableMouseClicked
 
@@ -385,14 +385,14 @@ public class UsersPage extends javax.swing.JPanel {
         int row = userTable.getSelectedRow();
 
         if (userTable.getSelectionModel().getSelectedItemsCount() == 1) {
-            String username = userTable.getValueAt(row, 3).toString();
+            int id = Integer.parseInt(userTable.getValueAt(row, 0).toString());
 
             // change password prompt
-            String password = JOptionPane.showInputDialog(this, "Enter new password for " + username + ":", "Change Password", JOptionPane.PLAIN_MESSAGE);
+            String password = JOptionPane.showInputDialog(this, "Enter new password for " + id + ":", "Change Password", JOptionPane.PLAIN_MESSAGE);
 
             if (password != null) {
                 EventQueue.invokeLater(() -> {
-                    new UserController().updatePass(username, password);
+                    new UserController().updatePass(id, password);
                     JOptionPane.showMessageDialog(this, "Password changed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 });
             }
@@ -415,7 +415,7 @@ public class UsersPage extends javax.swing.JPanel {
         EventQueue.invokeLater(() -> {
             try {
                 UserController userController = new UserController();
-                userTable.setModel(userController.buildUsersTable(userController.searchUsers(text)));
+                userTable.setModel(new DataTableModel().buildTableModel(userController.searchUsers(text)));
 
                 processColumns();
             } catch (SQLException e) {
@@ -428,7 +428,7 @@ public class UsersPage extends javax.swing.JPanel {
         EventQueue.invokeLater(() -> {
             try {
                 UserController userController = new UserController();
-                userTable.setModel(userController.buildUsersTable(userController.getUsers()));
+                userTable.setModel(new DataTableModel().buildTableModel(userController.getUsers()));
 
                 processColumns();
             } catch (SQLException ex) {
