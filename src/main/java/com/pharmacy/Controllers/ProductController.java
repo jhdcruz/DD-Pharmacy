@@ -149,17 +149,21 @@ public class ProductController {
         java.sql.Date date = new java.sql.Date(productModel.getExpirationDate().getTime());
 
         try {
-            String productQuery = "UPDATE products SET product_code=?,product_name=?,cost_price=?,sell_price=?,quantity=?,expiration_date=?,supplied_by=?, description=? WHERE pid=?";
+            String productQuery = """
+                    UPDATE products
+                    SET product_code=?,product_name=?,description=?,cost_price=?,
+                        sell_price=?,quantity=?,expiration_date=?,supplied_by=?
+                    WHERE pid=?;""";
             preparedStatement = connection.prepareStatement(productQuery);
 
             preparedStatement.setString(1, productModel.getProductCode());
             preparedStatement.setString(2, productModel.getProductName());
-            preparedStatement.setDouble(3, productModel.getCostPrice());
-            preparedStatement.setDouble(4, productModel.getSellPrice());
-            preparedStatement.setInt(5, productModel.getQuantity());
-            preparedStatement.setDate(6, date);
-            preparedStatement.setString(7, productModel.getSuppliedBy());
-            preparedStatement.setString(8, productModel.getDescription());
+            preparedStatement.setString(3, productModel.getDescription());
+            preparedStatement.setDouble(4, productModel.getCostPrice());
+            preparedStatement.setDouble(5, productModel.getSellPrice());
+            preparedStatement.setInt(6, productModel.getQuantity());
+            preparedStatement.setDate(7, date);
+            preparedStatement.setString(8, productModel.getSuppliedBy());
 
             preparedStatement.setInt(9, productModel.getProductId());
 
