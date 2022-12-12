@@ -70,14 +70,15 @@ public class SupplierController {
      *
      * @param supplierModel populated supplier model
      */
-    public void updateSupplier(SupplierModel supplierModel) {
+    public void updateSupplier(SupplierModel supplierModel, String oldCode) {
         try {
-            String query = "UPDATE suppliers SET full_name=?,location=?,contact=? WHERE supplier_code=?";
+            String query = "UPDATE suppliers SET supplier_code=?, full_name=?,location=?,contact=? WHERE supplier_code=?";
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, supplierModel.getSupplierName());
-            preparedStatement.setString(2, supplierModel.getLocation());
-            preparedStatement.setString(3, supplierModel.getPhone());
-            preparedStatement.setString(4, supplierModel.getSupplierCode());
+            preparedStatement.setString(1, supplierModel.getSupplierCode());
+            preparedStatement.setString(2, supplierModel.getSupplierName());
+            preparedStatement.setString(3, supplierModel.getLocation());
+            preparedStatement.setString(4, supplierModel.getPhone());
+            preparedStatement.setString(5, oldCode);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
