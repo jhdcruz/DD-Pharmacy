@@ -41,7 +41,7 @@ public class CustomerController {
                 JOptionPane.showMessageDialog(null, "Customer already exists.");
             } else {
                 // else, save customer to database
-                String insertQuery = "INSERT INTO customers VALUES(null,?,?,?,?,null)";
+                String insertQuery = "INSERT INTO customers VALUES(null,?,?,?,?,DEFAULT)";
                 preparedStatement = connection.prepareStatement(insertQuery);
 
                 preparedStatement.setString(1, customerModel.getCode());
