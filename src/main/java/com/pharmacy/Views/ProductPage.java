@@ -79,8 +79,10 @@ public class ProductPage extends javax.swing.JPanel {
         suppCombo.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
+
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
             }
+
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
                 suppComboPopupMenuWillBecomeVisible(evt);
             }
@@ -489,8 +491,9 @@ public class ProductPage extends javax.swing.JPanel {
             try {
                 ProductController productController = new ProductController();
                 productTable.setModel(new DataTableModel().buildTableModel(productController.getProducts()));
-                processColumns();
 
+                processColumns();
+                loadComboBox();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
