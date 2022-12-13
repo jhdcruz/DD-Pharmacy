@@ -27,7 +27,7 @@ public class TimesheetPage extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
-        logTable = new javax.swing.JTable();
+        timesheetTable = new javax.swing.JTable();
         refreshButton = new javax.swing.JButton();
         searchText = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -35,8 +35,8 @@ public class TimesheetPage extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Impact", 1, 24)); // NOI18N
         jLabel1.setText("TIMESHEET");
 
-        logTable.setAutoCreateRowSorter(true);
-        logTable.setModel(new javax.swing.table.DefaultTableModel(
+        timesheetTable.setAutoCreateRowSorter(true);
+        timesheetTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object[][]{
                 {null, null, null, null},
                 {null, null, null, null},
@@ -55,20 +55,20 @@ public class TimesheetPage extends javax.swing.JPanel {
                 return canEdit[columnIndex];
             }
         });
-        logTable.setFillsViewportHeight(true);
-        logTable.setRowHeight(30);
-        logTable.setShowGrid(false);
-        logTable.setShowHorizontalLines(true);
-        logTable.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(logTable);
-        logTable.setAutoCreateRowSorter(true);
+        timesheetTable.setFillsViewportHeight(true);
+        timesheetTable.setRowHeight(30);
+        timesheetTable.setShowGrid(false);
+        timesheetTable.setShowHorizontalLines(true);
+        timesheetTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(timesheetTable);
+        timesheetTable.setAutoCreateRowSorter(true);
 
         DefaultTableCellRenderer centerCellRenderer = new DefaultTableCellRenderer();
         centerCellRenderer.setHorizontalAlignment(SwingConstants.LEFT);
-        logTable.setDefaultRenderer(Object.class, centerCellRenderer);
-        logTable.getTableHeader().setDefaultRenderer(centerCellRenderer);
+        timesheetTable.setDefaultRenderer(Object.class, centerCellRenderer);
+        timesheetTable.getTableHeader().setDefaultRenderer(centerCellRenderer);
 
-        logTable.setDefaultEditor(Object.class, null);
+        timesheetTable.setDefaultEditor(Object.class, null);
 
         refreshButton.setFont(new java.awt.Font("Liberation Sans", 0, 14)); // NOI18N
         refreshButton.setText("REFRESH");
@@ -139,7 +139,7 @@ public class TimesheetPage extends javax.swing.JPanel {
         EventQueue.invokeLater(() -> {
             try {
                 UserController userController = new UserController();
-                logTable.setModel(new DataTableModel().buildTableModel(userController.getUserLogs()));
+                timesheetTable.setModel(new DataTableModel().buildTableModel(userController.getTimesheet()));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -151,8 +151,8 @@ public class TimesheetPage extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable logTable;
     private javax.swing.JButton refreshButton;
     private javax.swing.JTextField searchText;
+    private javax.swing.JTable timesheetTable;
     // End of variables declaration//GEN-END:variables
 }

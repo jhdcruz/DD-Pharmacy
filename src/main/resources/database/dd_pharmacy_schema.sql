@@ -51,12 +51,14 @@ DROP TABLE IF EXISTS `customers`;
 /*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `customers`
 (
-    `cid`           INT          NOT NULL AUTO_INCREMENT,
-    `customer_code` VARCHAR(20)  NOT NULL UNIQUE,
-    `full_name`     VARCHAR(200) NOT NULL,
-    `location`      VARCHAR(500) NOT NULL,
-    `phone`         VARCHAR(13)  NOT NULL,
-    `last_updated`  DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `cid`           INT           NOT NULL AUTO_INCREMENT,
+    `customer_code` VARCHAR(20)   NOT NULL UNIQUE,
+    `last_name`     VARCHAR(200)  NOT NULL,
+    `first_name`    VARCHAR(200)  NOT NULL,
+    `middle_name`   VARCHAR(200)           DEFAULT 'N/A',
+    `conditions`    VARCHAR(1000) NOT NULL DEFAULT 'N/A',
+    `phone`         VARCHAR(13)   NOT NULL,
+    `last_updated`  DATETIME               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`cid`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1000
@@ -68,10 +70,10 @@ CREATE TABLE `customers`
 --
 -- Table structure for table `purchaseinfo`
 --
-DROP TABLE IF EXISTS `purchaseinfo`;
+DROP TABLE IF EXISTS `restock`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8 */;
-CREATE TABLE `purchaseinfo`
+CREATE TABLE `restock`
 (
     `purchase_id`   INT         NOT NULL AUTO_INCREMENT,
     `supplier_code` VARCHAR(20) NOT NULL,
@@ -82,28 +84,6 @@ CREATE TABLE `purchaseinfo`
     PRIMARY KEY (`purchase_id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 4000
-  DEFAULT CHARSET = utf8
-  COLLATE = utf8_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `salesinfo`
---
-DROP TABLE IF EXISTS `salesinfo`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8 */;
-CREATE TABLE `salesinfo`
-(
-    `sales_id`      INT          NOT NULL AUTO_INCREMENT,
-    `medicine_code` VARCHAR(20)  NOT NULL,
-    `customer_code` VARCHAR(20)  NOT NULL,
-    `quantity`      INT          NOT NULL,
-    `revenue`       DOUBLE       NOT NULL,
-    `sold_by`       VARCHAR(100) NOT NULL,
-    `date`          DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`sales_id`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 3000
   DEFAULT CHARSET = utf8
   COLLATE = utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -132,14 +112,32 @@ CREATE TABLE `suppliers`
 --
 -- Table structure for table `userlogs`
 --
-DROP TABLE IF EXISTS `userlogs`;
+DROP TABLE IF EXISTS `timesheet`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8 */;
-CREATE TABLE `userlogs`
+CREATE TABLE `timesheet`
 (
-    `username` VARCHAR(45) NOT NULL,
-    `in_time`  DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `out_time` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    `username` VARCHAR(45)  NOT NULL,
+    `name`     VARCHAR(100) NOT NULL,
+    `in_time`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `out_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COLLATE = utf8_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `logs`
+--
+DROP TABLE IF EXISTS `logs`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!50503 SET character_set_client = utf8 */;
+CREATE TABLE `logs`
+(
+    `username` VARCHAR(45)  NOT NULL,
+    `name`     VARCHAR(100) NOT NULL,
+    `event`    VARCHAR(300) NOT NULL,
+    `date`     DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8
   COLLATE = utf8_general_ci;
@@ -252,12 +250,12 @@ LOCK TABLES `customers` WRITE;
 /*!39999 ALTER TABLE `customers`
     DISABLE KEYS */;
 INSERT INTO `customers`
-VALUES (1000, 'DDPAL100', 'Joshua Hero Dela Cruz', 'Mandaluyong, Manila,', '09175584567', DEFAULT),
-       (1001, 'DDPAV502', 'Rhyz Santos', 'Quezon City, Manila,', '09935890825', DEFAULT),
-       (1002, 'DDPAX903', 'Avon Herrera', 'Cabuyao, Manila,', '09329578937', DEFAULT),
-       (1003, 'DDPCC204', 'Dean Herbert', 'Taguig, Manila,', '09152975832', DEFAULT),
-       (1004, 'DDPLD042', 'Kim Barrantes', 'Sta. Rosa, Manila,', '09995278231', DEFAULT),
-       (1005, 'DDPKK113', 'Daniel Almirante.', 'Paranaque, Manila,', '09157589379', DEFAULT);
+VALUES (1000, 'DDPAL100', 'Dela Cruz', 'Joshua Hero', 'Herrera', DEFAULT, '09175584567', DEFAULT),
+       (1001, 'DDPAV502', 'Santos', 'Rhyz', DEFAULT, 'Asthma', '09935890825', DEFAULT),
+       (1002, 'DDPAX903', 'Herrera', 'Avon', DEFAULT, DEFAULT, '09329578937', DEFAULT),
+       (1003, 'DDPCC204', 'Herbert', 'Dean', 'Tano', DEFAULT, '09152975832', DEFAULT),
+       (1004, 'DDPLD042', 'Barrantes', 'Kim', 'Logronio', 'Lung Cancer, Asthma', '09995278231', DEFAULT),
+       (1005, 'DDPKK113', 'Almirante', 'Daniel', DEFAULT, DEFAULT, '09157589379', DEFAULT);
 /*!39999 ALTER TABLE `customers`
     ENABLE KEYS */;
 UNLOCK TABLES;

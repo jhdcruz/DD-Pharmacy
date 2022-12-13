@@ -1,6 +1,6 @@
 package com.pharmacy.Views;
 
-import com.pharmacy.Controllers.UserController;
+import com.pharmacy.Controllers.LogsController;
 import com.pharmacy.Utils.DataTableModel;
 
 import javax.swing.SwingConstants;
@@ -138,8 +138,8 @@ public class LogsPage extends javax.swing.JPanel {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                UserController userController = new UserController();
-                logTable.setModel(new DataTableModel().buildTableModel(userController.getUserLogs()));
+                LogsController logsController = new LogsController();
+                logTable.setModel(new DataTableModel().buildTableModel(logsController.getLogs()));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

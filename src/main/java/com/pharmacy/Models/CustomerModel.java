@@ -3,8 +3,8 @@ package com.pharmacy.Models;
 public class CustomerModel {
 
     private int id;
-    private String code, name, location, phone;
-    private double debit, credit, balance;
+    private String code, phone, conditions;
+    private String firstName, lastName, middleName;
 
     public int getId() {
         return id;
@@ -22,20 +22,32 @@ public class CustomerModel {
         this.code = code;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
     public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
+        return firstName + " " + middleName + " " + lastName;
     }
 
     public String getPhone() {
@@ -46,28 +58,11 @@ public class CustomerModel {
         this.phone = phone;
     }
 
-    public double getDebit() {
-        return debit;
+    public String getConditions() {
+        return conditions;
     }
 
-    public void setDebit(double debit) {
-        this.debit = debit;
+    public void setConditions(String conditions) {
+        this.conditions = conditions;
     }
-
-    public double getCredit() {
-        return credit;
-    }
-
-    public void setCredit(double credit) {
-        this.credit = credit;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
 }

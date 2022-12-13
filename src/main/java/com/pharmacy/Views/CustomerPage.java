@@ -38,11 +38,17 @@ public class CustomerPage extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         phoneText = new javax.swing.JTextField();
-        locationText = new javax.swing.JTextField();
         codeText = new javax.swing.JTextField();
-        nameText = new javax.swing.JTextField();
+        lastNameText = new javax.swing.JTextField();
         updateButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        conditionsText = new javax.swing.JTextArea();
+        firstNameText = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        middleNameText = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         custTable = new javax.swing.JTable();
         searchText = new javax.swing.JTextField();
@@ -59,13 +65,13 @@ public class CustomerPage extends javax.swing.JPanel {
 
         jLabel2.setText("Customer Code:");
 
-        jLabel3.setText("Full Name:");
+        jLabel3.setText("Last Name:");
 
-        jLabel4.setText("Location:");
+        jLabel4.setText("Conditions:");
 
         jLabel5.setText("Contact:");
 
-        updateButton.setFont(new java.awt.Font("Liberation Sans", 0, 15)); // NOI18N
+        updateButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         updateButton.setText("Update");
         updateButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         updateButton.addActionListener(new java.awt.event.ActionListener() {
@@ -84,29 +90,53 @@ public class CustomerPage extends javax.swing.JPanel {
             }
         });
 
+        conditionsText.setColumns(20);
+        conditionsText.setLineWrap(true);
+        conditionsText.setRows(5);
+        conditionsText.setToolTipText("Customer location details");
+        conditionsText.setWrapStyleWord(true);
+        jScrollPane2.setViewportView(conditionsText);
+
+        jLabel6.setText("First Name:");
+
+        jLabel7.setText("Middle Name:");
+
         javax.swing.GroupLayout entryPanelLayout = new javax.swing.GroupLayout(entryPanel);
         entryPanel.setLayout(entryPanelLayout);
         entryPanelLayout.setHorizontalGroup(
             entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(entryPanelLayout.createSequentialGroup()
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, entryPanelLayout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(updateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jSeparator3)
                         .addGroup(entryPanelLayout.createSequentialGroup()
-                            .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(codeText, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
-                                .addComponent(nameText, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
-                                .addComponent(locationText, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
-                                .addComponent(phoneText, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE))
-                            .addGap(0, 0, Short.MAX_VALUE)))
+                            .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(entryPanelLayout.createSequentialGroup()
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGap(57, 57, 57))
+                                .addGroup(entryPanelLayout.createSequentialGroup()
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGap(29, 29, 29))
+                                .addGroup(entryPanelLayout.createSequentialGroup()
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+                                    .addGap(29, 29, 29))
+                                .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel4))
+                            .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(updateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(firstNameText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(entryPanelLayout.createSequentialGroup()
+                                    .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(middleNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(phoneText, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(codeText, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lastNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(0, 0, Short.MAX_VALUE)))))
                     .addContainerGap())
         );
         entryPanelLayout.setVerticalGroup(
@@ -119,15 +149,28 @@ public class CustomerPage extends javax.swing.JPanel {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(nameText, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lastNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(locationText, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(firstNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(middleNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(phoneText, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(entryPanelLayout.createSequentialGroup()
+                            .addGap(24, 24, 24)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(entryPanelLayout.createSequentialGroup()
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -135,9 +178,9 @@ public class CustomerPage extends javax.swing.JPanel {
                     .addContainerGap())
         );
 
-        entryPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[]{jLabel2, jLabel3, jLabel4, jLabel5});
+        entryPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, jLabel2, jLabel3, jLabel4, jLabel5);
 
-        entryPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[]{deleteButton, updateButton});
+        entryPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, deleteButton, updateButton);
 
         custTable.setAutoCreateRowSorter(true);
         custTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -151,7 +194,7 @@ public class CustomerPage extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ) {
-            boolean[] canEdit = new boolean[]{
+            final boolean[] canEdit = new boolean[]{
                 false, false, false, false
             };
 
@@ -243,7 +286,7 @@ public class CustomerPage extends javax.swing.JPanel {
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -264,8 +307,9 @@ public class CustomerPage extends javax.swing.JPanel {
         if (custTable.getSelectedRow() < 0)
             JOptionPane.showMessageDialog(this, "Select a customer from the table.");
         else {
-            if (codeText.getText().equals("") || nameText.getText().equals("")
-                || locationText.getText().equals("") || phoneText.getText().equals("")) {
+            if (codeText.getText().equals("") || lastNameText.getText().equals("")
+                || firstNameText.getText().equals("") || middleNameText.getText().equals("")
+                || conditionsText.getText().equals("") || phoneText.getText().equals("")) {
                 JOptionPane.showMessageDialog(this, "Please enter all the required details.");
             } else {
                 CustomerModel customerModel = new CustomerModel();
@@ -273,8 +317,10 @@ public class CustomerPage extends javax.swing.JPanel {
 
                 customerModel.setId(customerId);
                 customerModel.setCode(codeText.getText());
-                customerModel.setName(nameText.getText());
-                customerModel.setLocation(locationText.getText());
+                customerModel.setLastName(lastNameText.getText());
+                customerModel.setFirstName(firstNameText.getText());
+                customerModel.setMiddleName(middleNameText.getText());
+                customerModel.setConditions(conditionsText.getText());
                 customerModel.setPhone(phoneText.getText());
 
                 EventQueue.invokeLater(() -> {
@@ -311,9 +357,11 @@ public class CustomerPage extends javax.swing.JPanel {
         }
 
         codeText.setText(data[1].toString());
-        nameText.setText(data[2].toString());
-        locationText.setText(data[3].toString());
-        phoneText.setText(data[4].toString());
+        lastNameText.setText(data[2].toString());
+        firstNameText.setText(data[3].toString());
+        middleNameText.setText(data[4].toString());
+        conditionsText.setText(data[5].toString());
+        phoneText.setText(data[6].toString());
     }//GEN-LAST:event_custTableMouseClicked
 
     private void searchTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextKeyReleased
@@ -363,20 +411,26 @@ public class CustomerPage extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JTextField codeText;
+    private javax.swing.JTextArea conditionsText;
     private javax.swing.JTable custTable;
     private javax.swing.JButton deleteButton;
     private javax.swing.JPanel entryPanel;
+    private javax.swing.JTextField firstNameText;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTextField locationText;
-    private javax.swing.JTextField nameText;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JTextField lastNameText;
+    private javax.swing.JTextField middleNameText;
     private javax.swing.JTextField phoneText;
     private javax.swing.JButton refreshButton;
     private javax.swing.JTextField searchText;

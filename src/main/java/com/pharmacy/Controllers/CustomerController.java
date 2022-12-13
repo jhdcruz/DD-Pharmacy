@@ -144,21 +144,4 @@ public class CustomerController {
 
         return resultSet;
     }
-
-    /**
-     * Get medicine info based on provided medicine code. This method is tailored
-     * for sales/pos usage.
-     *
-     * @param medCode medicine code
-     * @return result set of medicine details
-     */
-    public ResultSet getProdName(String medCode) {
-        try {
-            String query = "SELECT product_name, quantity, sell_price FROM products WHERE product_code='" + medCode + "'";
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return resultSet;
-    }
 }
