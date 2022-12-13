@@ -2,7 +2,7 @@ package com.pharmacy.controllers;
 
 import com.pharmacy.models.UserModel;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class TestCustomerController {
 
