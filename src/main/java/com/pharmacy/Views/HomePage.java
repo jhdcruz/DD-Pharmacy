@@ -17,7 +17,6 @@ public class HomePage extends javax.swing.JPanel {
     ResultSet resultSet = null;
 
     UserController userController;
-    ;
     UserModel userModel;
 
     String username;

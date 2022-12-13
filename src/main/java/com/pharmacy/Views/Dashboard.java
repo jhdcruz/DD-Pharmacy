@@ -63,7 +63,7 @@ public class Dashboard extends javax.swing.JFrame {
         });
 
         // maximize window
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setExtendedState(MAXIMIZED_BOTH);
 
         setVisible(true);
         setMinimumSize(new Dimension(1220, 660));
