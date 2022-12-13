@@ -2,11 +2,17 @@ package com.pharmacy.utils;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
 
@@ -64,7 +70,8 @@ public class EncryptionUtils {
             byteBuffer.put(cipherText);
 
             return byteBuffer.array();
-        } catch (Exception e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
+                 InvalidAlgorithmParameterException | InvalidKeyException e) {
             throw new RuntimeException(e);
         }
     }
@@ -87,7 +94,8 @@ public class EncryptionUtils {
             byte[] plainText = cipher.doFinal(encrypted, GCM_IV_LENGTH, encrypted.length - GCM_IV_LENGTH);
 
             return new String(plainText, StandardCharsets.UTF_8);
-        } catch (Exception e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
+                 InvalidAlgorithmParameterException | InvalidKeyException e) {
             throw new RuntimeException(e);
         }
     }
