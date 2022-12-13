@@ -1,13 +1,18 @@
-# DD Pharmacy Inventory and POS System
+# D&D Pharmacy Inventory Management System
+
+In Compliance to CIT 201: System Analysis and Design.
 
 ## Features
 
-- Products
+- Medicine Inventory
 - Customers
 - Suppliers
-- Users
-- Transactions
-- Logs
+- Users<sup>*</sup>
+- Restock
+- Basic User Timesheet
+- System/Application Event Logs
+
+> _* Password encryption/decryption is supported/implemented_
 
 ## Structure
 
@@ -27,7 +32,6 @@ The software code are divided into multiple packages for modularity:
 
 - **`Utils`**: Shared utility classes used by the other packages.
 
-
 ## Development
 
 The main method is located in `com.pharmacy.Main`.
@@ -35,8 +39,9 @@ The main method is located in `com.pharmacy.Main`.
 ### Compiling
 
 #### Requires:
- - Maven
- - JDK 17
+
+- Maven
+- JDK 17
 
 Install dependencies:
 
@@ -57,33 +62,34 @@ mvn clean compile assembly:single
 ### Setting up the database
 
 **Requires**:
- - MySQL 8 Database
+
+- MySQL/MariaDB 8 Database
 
 Create a new user:
-- Username: dd_pharmacy
-- Password: ddpharmacy
+
+- Username: `dd_pharmacy`
+- Password: `ddpharmacy`
 
 > The above are the default that will be used by the software.
-> 
+>
 > You can manually change it in `src/main/resources/database/datasource.properties`,
 > and recompile the software.
 
 Prepare the database with the software's schema located in:
 `src/main/resources/database/dd_pharmacy_schema.sql`
 
-```
 Default admin account:
-user: admin
-pass: admin
+user: `admin`
+pass: `admin`
+
+Default employee account:
+user: `emp`
+pass: `emp`
 
 Create your own personal admin account, then delete the default account
 for security purposes.
-```
 
 After, you can now use the software.
-
-> NOTE: Make sure the database are running in the background when
-> your using the software.
 
 ### Running the app (.jar)
 
@@ -92,14 +98,17 @@ After, you can now use the software.
 - Running through the terminal:
 
   > ```
-  > java -jar ./target/DD-Pharmacy-1.0.0.jar
+  > java -jar ./target/DD-Pharmacy-vX.X.X.jar
   > ```
 
 - Through an IDE's `Run Project` tool.
+
+> NOTE: Make sure the database are running in the background when
+> your using the software.
 
 ## Acknowledgements
 
 This software was based and heavily modified of the ff.
 
 - [Inventory Management System by Asjad Iqbal](https://github.com/AsjadIqbal/InventoryManagementSystem/tree/fa42a6b59265870256b4d1d0cc13e526ddb9679e)
-  _(Unlicensed, at the time of forking)_
+  _(Unlicensed, at the time of cloning)_
