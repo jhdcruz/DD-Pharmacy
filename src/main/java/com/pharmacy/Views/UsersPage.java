@@ -60,7 +60,8 @@ public class UsersPage extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Impact", 1, 24)); // NOI18N
         jLabel1.setText("USERS");
 
-        entryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Enter User Details"));
+        entryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("User Details"));
+        entryPanel.setEnabled(false);
 
         jLabel2.setText("Full Name:");
 

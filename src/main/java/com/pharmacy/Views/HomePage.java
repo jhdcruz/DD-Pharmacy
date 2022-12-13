@@ -64,6 +64,7 @@ public class HomePage extends javax.swing.JPanel {
 
         entryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Your Details"));
         entryPanel.setToolTipText("");
+        entryPanel.setEnabled(false);
 
         jLabel4.setText("Contact:");
 

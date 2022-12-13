@@ -105,6 +105,7 @@
             <TitledBorder title="Enter Supplier Details"/>
           </Border>
         </Property>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
 
       <Layout>
@@ -116,22 +117,22 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel2" linkSize="2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="codeText" max="32767" attributes="0"/>
+                          <Component id="codeText" min="-2" pref="183" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel5" linkSize="2" min="-2" pref="89" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="phoneText" max="32767" attributes="0"/>
+                          <Component id="phoneText" min="-2" pref="183" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel4" linkSize="2" min="-2" pref="89" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="locationText" max="32767" attributes="0"/>
+                          <Component id="locationText" min="-2" pref="183" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel3" linkSize="2" min="-2" pref="89" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="nameText" max="32767" attributes="0"/>
+                          <Component id="nameText" min="-2" pref="183" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="deleteButton" min="-2" pref="121" max="-2" attributes="0"/>

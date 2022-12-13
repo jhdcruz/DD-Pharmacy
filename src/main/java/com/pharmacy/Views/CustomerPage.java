@@ -64,7 +64,7 @@ public class CustomerPage extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Impact", 1, 24)); // NOI18N
         jLabel1.setText("CUSTOMERS");
 
-        entryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        entryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Customer Details"));
         entryPanel.setEnabled(false);
 
         jLabel2.setText("Customer Code:");
@@ -146,7 +146,7 @@ public class CustomerPage extends javax.swing.JPanel {
         entryPanelLayout.setVerticalGroup(
             entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(entryPanelLayout.createSequentialGroup()
-                    .addGap(12, 12, 12)
+                    .addContainerGap()
                     .addGroup(entryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(codeText, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -182,9 +182,9 @@ public class CustomerPage extends javax.swing.JPanel {
                     .addContainerGap())
         );
 
-        entryPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, jLabel2, jLabel3, jLabel4, jLabel5);
+        entryPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[]{jLabel2, jLabel3, jLabel4, jLabel5});
 
-        entryPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, deleteButton, updateButton);
+        entryPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[]{deleteButton, updateButton});
 
         custTable.setAutoCreateRowSorter(true);
         custTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -198,7 +198,7 @@ public class CustomerPage extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ) {
-            final boolean[] canEdit = new boolean[]{
+            boolean[] canEdit = new boolean[]{
                 false, false, false, false
             };
 
@@ -206,7 +206,6 @@ public class CustomerPage extends javax.swing.JPanel {
                 return canEdit[columnIndex];
             }
         });
-        custTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         custTable.setRowHeight(35);
         custTable.setShowGrid(true);
         custTable.getTableHeader().setReorderingAllowed(false);
@@ -376,23 +375,10 @@ public class CustomerPage extends javax.swing.JPanel {
         loadDataSet();
     }//GEN-LAST:event_refreshButtonActionPerformed
 
-    private void processColumns() {
-        // hide pid
-        custTable.getColumnModel().getColumn(0).setMinWidth(0);
-        custTable.getColumnModel().getColumn(0).setMaxWidth(0);
-
-        custTable.getColumnModel().getColumn(0).setPreferredWidth(130);
-        custTable.getColumnModel().getColumn(1).setPreferredWidth(180);
-        custTable.getColumnModel().getColumn(2).setPreferredWidth(250);
-        custTable.getColumnModel().getColumn(3).setPreferredWidth(130);
-        custTable.getColumnModel().getColumn(4).setPreferredWidth(170);
-    }
-
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
                 custTable.setModel(new DataTableModel().buildTableModel(customerController.getCustomers()));
-                processColumns();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -403,7 +389,6 @@ public class CustomerPage extends javax.swing.JPanel {
         EventQueue.invokeLater(() -> {
             try {
                 custTable.setModel(new DataTableModel().buildTableModel(customerController.getCustomerSearch(text)));
-                processColumns();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
