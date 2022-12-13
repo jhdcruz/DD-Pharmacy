@@ -134,10 +134,14 @@ public class UserController {
         return resultSet;
     }
 
-    public ResultSet getUserLogs() {
+    public ResultSet getTimesheet() {
         try {
-            String query = "SELECT users.name,userlogs.username,in_time,out_time FROM userlogs"
-                + " INNER JOIN users on userlogs.username=users.username ORDER BY in_time DESC";
+            String query = """
+                SELECT users.name as name, users.username AS username, in_time, out_time
+                FROM timesheet
+                INNER JOIN users ON timesheet.username=users.username
+                ORDER BY in_time DESC;
+                """;
             resultSet = statement.executeQuery(query);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -146,13 +150,17 @@ public class UserController {
         return resultSet;
     }
 
-    public void addUserLogin(UserModel userModel) {
+    public void addTimesheetEntry(UserModel userModel) {
         try {
-            String query = "INSERT INTO userlogs (username, in_time, out_time) values(?,?,?)";
+            String query = """
+                INSERT INTO timesheet (username, name, in_time, out_time) values(?,?,?,?);
+                """;
+
             prepStatement = conn.prepareStatement(query);
             prepStatement.setString(1, userModel.getUsername());
-            prepStatement.setString(2, userModel.getInTime());
-            prepStatement.setString(3, userModel.getOutTime());
+            prepStatement.setString(2, userModel.getUsername());
+            prepStatement.setString(3, userModel.getInTime());
+            prepStatement.setString(4, userModel.getOutTime());
 
             prepStatement.executeUpdate();
         } catch (SQLException e) {

@@ -404,7 +404,7 @@ public class RestockPage extends javax.swing.JPanel {
 
     private void codeTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codeTextKeyReleased
         try {
-            ResultSet resultSet = new MedicineController().getProdFromCode(codeText.getText());
+            ResultSet resultSet = new MedicineController().getMedFromCode(codeText.getText());
             if (resultSet.next()) {
                 nameText.setText(resultSet.getString("product_name"));
                 costText.setText(String.valueOf(resultSet.getDouble("cost_price")));

@@ -44,7 +44,7 @@ public class Dashboard extends javax.swing.JFrame {
         displayPanel.add("Suppliers", new SupplierPage());
         displayPanel.add("Restock", new RestockPage(this));
         displayPanel.add("Timesheet", new TimesheetPage());
-        displayPanel.add("Logs", new TimesheetPage());
+        displayPanel.add("Logs", new LogsPage());
 
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -53,7 +53,7 @@ public class Dashboard extends javax.swing.JFrame {
                 userModel.setOutTime(String.valueOf(outTime));
                 userModel.setUsername(username);
 
-                new UserController().addUserLogin(userModel);
+                new UserController().addTimesheetEntry(userModel);
                 super.windowClosing(e);
             }
         });
@@ -323,7 +323,7 @@ public class Dashboard extends javax.swing.JFrame {
             userModel.setOutTime(String.valueOf(outTime));
             userModel.setUsername(username);
 
-            new UserController().addUserLogin(userModel);
+            new UserController().addTimesheetEntry(userModel);
             dispose();
 
             new LoginPage();

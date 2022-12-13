@@ -29,23 +29,6 @@ public class MedicineController {
         }
     }
 
-    public Double getMedicineSellPrice(String medicineCode) {
-        Double sellPrice = null;
-
-        try {
-            String query = "SELECT sell_price FROM medicines WHERE medicine_code='" + medicineCode + "'";
-            resultSet = statement.executeQuery(query);
-
-            if (resultSet.next()) {
-                sellPrice = resultSet.getDouble("sell_price");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return sellPrice;
-    }
-
     public boolean checkStock(String medicineCode) {
         try {
             String query = "SELECT quantity FROM medicines WHERE medicine_code='" + medicineCode + "'";
@@ -197,28 +180,6 @@ public class MedicineController {
         }
     }
 
-    /**
-     * Handling of stocks in Sales page (+)
-     *
-     * @param code     medicine code
-     * @param quantity quantity of medicine
-     */
-    public void updateSoldStock(String code, int quantity) {
-        try {
-            String query = "SELECT * FROM medicines WHERE medicine_code='" + code + "'";
-            resultSet = statement.executeQuery(query);
-
-            if (resultSet.next()) {
-                String query2 = "UPDATE medicines SET quantity=quantity+? WHERE medicine_code=?";
-                preparedStatement = connection.prepareStatement(query2);
-                preparedStatement.setInt(1, quantity);
-                preparedStatement.setString(2, code);
-                preparedStatement.executeUpdate();
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
 
     /**
      * Delete medicine from the database.
@@ -249,54 +210,6 @@ public class MedicineController {
         }
     }
 
-    public void deleteSalesInfo(int id) {
-        try {
-            String query = "DELETE FROM salesinfo WHERE sales_id=?";
-
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, id);
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Sales transaction handling
-    public void sellProduct(MedicineModel medicineModel, String username) {
-        java.sql.Date date = new java.sql.Date(medicineModel.getDate().getTime());
-        int quantity = 0;
-
-        try {
-            String query = "SELECT * FROM medicines WHERE medicine_code='" + medicineModel.getMedicineCode() + "'";
-            resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                quantity = resultSet.getInt("quantity");
-            }
-
-            if (medicineModel.getQuantity() > quantity) {
-                JOptionPane.showMessageDialog(null, "Insufficient stock for this medicine.");
-            } else if (medicineModel.getQuantity() <= 0) {
-                JOptionPane.showMessageDialog(null, "Please enter a valid quantity");
-            } else {
-                String stockQuery = "UPDATE medicines SET quantity=quantity-'"
-                    + medicineModel.getQuantity()
-                    + "' WHERE medicine_code='"
-                    + medicineModel.getMedicineCode()
-                    + "'";
-
-                String salesQuery = "INSERT INTO salesinfo(date,medicine_code,customer_code,quantity,revenue,sold_by)"
-                    + "VALUES('" + date + "','" + medicineModel.getMedicineCode() + "','" + medicineModel.getCustomerCode()
-                    + "','" + medicineModel.getQuantity() + "','" + medicineModel.getTotalRevenue() + "','" + username + "')";
-
-                statement.executeUpdate(stockQuery);
-                statement.executeUpdate(salesQuery);
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
 
     // Products data set retrieval for display
     public ResultSet getMedicines() {
@@ -331,28 +244,6 @@ public class MedicineController {
         return resultSet;
     }
 
-    // Sales table data set retrieval
-    public ResultSet getSalesInfo() {
-        try {
-            String query = """
-                SELECT sales_id, medicines.medicine_name AS medicines_code,
-                customers.full_name AS customer_code, salesinfo.quantity, revenue,
-                date, users.name AS sold_by
-                FROM salesinfo
-                INNER JOIN medicines ON salesinfo.medicine_code = medicines.medicine_code
-                INNER JOIN customers ON salesinfo.customer_code = customers.customer_code
-                INNER JOIN users ON salesinfo.sold_by = users.name
-                ORDER BY date DESC;
-                """;
-
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return resultSet;
-    }
-
     // Search method for medicines
     public ResultSet getMedicineSearch(String text) {
         try {
@@ -366,35 +257,10 @@ public class MedicineController {
         return resultSet;
     }
 
-    public ResultSet getProdFromCode(String text) {
+    public ResultSet getMedFromCode(String text) {
         try {
             String query = "SELECT * FROM medicines "
                 + "WHERE medicine_code='" + text + "' LIMIT 1";
-
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return resultSet;
-    }
-
-    // Search method for sales
-    public ResultSet getSalesSearch(String text) {
-        try {
-            String query = """
-                SELECT sales_id, medicines.medicine_name AS medicines_code,
-                customers.full_name AS customer_code, salesinfo.quantity, revenue,
-                date, users.name AS sold_by
-                FROM salesinfo
-                INNER JOIN medicines ON salesinfo.medicine_code = medicines.medicine_code
-                INNER JOIN customers ON salesinfo.customer_code = customers.customer_code
-                INNER JOIN users ON salesinfo.sold_by = users.name
-                WHERE salesinfo.medicine_code LIKE '%""" + text + "%'"
-                + "OR medicine_name LIKE '%" + text + "%' "
-                + "OR users.name LIKE '%" + text + "%'"
-                + "OR customers.full_name LIKE '%" + text + "%'"
-                + "ORDER BY sales_id;";
 
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
