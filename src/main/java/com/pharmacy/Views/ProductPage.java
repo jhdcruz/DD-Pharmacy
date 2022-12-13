@@ -142,6 +142,7 @@ public class ProductPage extends javax.swing.JPanel {
         descriptionText.setRows(5);
         descriptionText.setToolTipText("Brief description of the product (300 characters)");
         descriptionText.setWrapStyleWord(true);
+        descriptionText.setAutoscrolls(false);
         descriptionText.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jScrollPane2.setViewportView(descriptionText);
 
