@@ -44,8 +44,8 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <Component id="navPanel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="displayPanel" pref="759" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                  <Component id="displayPanel" min="-2" pref="754" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -80,24 +80,26 @@
                           <Component id="medButton" alignment="2" min="-2" pref="115" max="-2" attributes="0"/>
                           <Component id="custButton" alignment="2" min="-2" pref="115" max="-2" attributes="0"/>
                           <Component id="suppButton" alignment="2" min="-2" pref="115" max="-2" attributes="0"/>
-                          <Component id="salesButton" alignment="2" min="-2" pref="115" max="-2" attributes="0"/>
                           <Component id="purchaseButton" alignment="2" min="-2" pref="115" max="-2" attributes="0"/>
                           <Component id="usersButton" alignment="2" min="-2" pref="115" max="-2" attributes="0"/>
-                          <Component id="logsButton" alignment="2" min="-2" pref="115" max="-2" attributes="0"/>
-                          <Component id="homeButton" alignment="2" max="32767" attributes="0"/>
+                          <Component id="timesheetButton" alignment="2" min="-2" pref="115" max="-2" attributes="0"/>
+                          <Component id="homeButton" alignment="2" pref="120" max="32767" attributes="0"/>
                           <Component id="logoutButton" alignment="2" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="8" pref="8" max="-2" attributes="0"/>
-                      <Component id="jSeparator1" min="-2" pref="110" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="jSeparator2" min="-2" pref="110" max="-2" attributes="0"/>
                       <EmptySpace min="8" pref="8" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="8" pref="8" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jSeparator1" min="-2" pref="110" max="-2" attributes="0"/>
+                          <Component id="logButton" alignment="0" min="-2" pref="115" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -109,20 +111,20 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="medButton" min="-2" pref="55" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="custButton" min="-2" pref="55" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="suppButton" min="-2" pref="55" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="salesButton" min="-2" pref="55" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="purchaseButton" min="-2" pref="55" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="usersButton" min="-2" pref="55" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="logsButton" min="-2" pref="55" max="-2" attributes="0"/>
-                      <EmptySpace pref="57" max="32767" attributes="0"/>
+                      <Component id="medButton" min="-2" pref="60" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="custButton" min="-2" pref="60" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="suppButton" min="-2" pref="60" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="purchaseButton" min="-2" pref="60" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="usersButton" min="-2" pref="60" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="timesheetButton" min="-2" pref="60" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="logButton" min="-2" pref="60" max="-2" attributes="0"/>
+                      <EmptySpace pref="94" max="32767" attributes="0"/>
                       <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="logoutButton" min="-2" pref="40" max="-2" attributes="0"/>
@@ -188,20 +190,6 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="suppButtonActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="salesButton">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Liberation Sans" size="15" style="1"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Sales"/>
-                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                  <Color id="Hand Cursor"/>
-                </Property>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="salesButtonActionPerformed"/>
-              </Events>
-            </Component>
             <Component class="javax.swing.JButton" name="usersButton">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -230,18 +218,18 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="purchaseButtonActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="logsButton">
+            <Component class="javax.swing.JButton" name="timesheetButton">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Liberation Sans" size="15" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Logs"/>
+                <Property name="text" type="java.lang.String" value="Timesheet"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="logsButtonActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="timesheetButtonActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="logoutButton">
@@ -272,6 +260,20 @@
                   <Dimension value="[50, 5]"/>
                 </Property>
               </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="logButton">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Liberation Sans" size="15" style="1"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Logs"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="logButtonActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

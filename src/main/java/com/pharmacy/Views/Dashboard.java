@@ -42,9 +42,9 @@ public class Dashboard extends javax.swing.JFrame {
         displayPanel.add("Customers", new CustomerPage());
         displayPanel.add("Medicine", new MedicinePage(this));
         displayPanel.add("Suppliers", new SupplierPage());
-        displayPanel.add("Sales", new SalesPage(username, this));
         displayPanel.add("Restock", new RestockPage(this));
-        displayPanel.add("Logs", new UserLogsPage());
+        displayPanel.add("Timesheet", new TimesheetPage());
+        displayPanel.add("Logs", new TimesheetPage());
 
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -69,7 +69,8 @@ public class Dashboard extends javax.swing.JFrame {
     // Allows only the ADMINISTRATOR type user to view and manipulate 'Users' and 'User Logs'
     public void notForEmployee() {
         navPanel.remove(usersButton);
-        navPanel.remove(logsButton);
+        navPanel.remove(timesheetButton);
+        navPanel.remove(logButton);
     }
 
     // Methods to display different sections in the mainframe
@@ -93,12 +94,12 @@ public class Dashboard extends javax.swing.JFrame {
         layout.show(displayPanel, "Suppliers");
     }
 
-    public void addSalesPage() {
-        layout.show(displayPanel, "Sales");
-    }
-
     public void addRestockPage() {
         layout.show(displayPanel, "Restock");
+    }
+
+    public void addTimesheetPage() {
+        layout.show(displayPanel, "Timesheet");
     }
 
     public void addLogsPage() {
@@ -120,13 +121,13 @@ public class Dashboard extends javax.swing.JFrame {
         medButton = new javax.swing.JButton();
         custButton = new javax.swing.JButton();
         suppButton = new javax.swing.JButton();
-        salesButton = new javax.swing.JButton();
         usersButton = new javax.swing.JButton();
         purchaseButton = new javax.swing.JButton();
-        logsButton = new javax.swing.JButton();
+        timesheetButton = new javax.swing.JButton();
         logoutButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
+        logButton = new javax.swing.JButton();
         displayPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -171,15 +172,6 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
-        salesButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
-        salesButton.setText("Sales");
-        salesButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        salesButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                salesButtonActionPerformed(evt);
-            }
-        });
-
         usersButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         usersButton.setText("Users");
         usersButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -198,12 +190,12 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
-        logsButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
-        logsButton.setText("Logs");
-        logsButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        logsButton.addActionListener(new java.awt.event.ActionListener() {
+        timesheetButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        timesheetButton.setText("Timesheet");
+        timesheetButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        timesheetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                logsButtonActionPerformed(evt);
+                timesheetButtonActionPerformed(evt);
             }
         });
 
@@ -220,6 +212,15 @@ public class Dashboard extends javax.swing.JFrame {
 
         jSeparator2.setPreferredSize(new java.awt.Dimension(50, 5));
 
+        logButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        logButton.setText("Logs");
+        logButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        logButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout navPanelLayout = new javax.swing.GroupLayout(navPanel);
         navPanel.setLayout(navPanelLayout);
         navPanelLayout.setHorizontalGroup(
@@ -230,21 +231,22 @@ public class Dashboard extends javax.swing.JFrame {
                         .addComponent(medButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(custButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(suppButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(salesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(purchaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(usersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(logsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(homeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(timesheetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(homeButton, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
                         .addComponent(logoutButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGroup(navPanelLayout.createSequentialGroup()
-                    .addGap(8, 8, 8)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addContainerGap())
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, navPanelLayout.createSequentialGroup()
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(8, 8, 8))
+                .addGroup(navPanelLayout.createSequentialGroup()
+                    .addGap(8, 8, 8)
+                    .addGroup(navPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(logButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addContainerGap())
         );
         navPanelLayout.setVerticalGroup(
             navPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -254,20 +256,20 @@ public class Dashboard extends javax.swing.JFrame {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, 0)
-                    .addComponent(medButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(custButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(suppButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(salesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(purchaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(usersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(logsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                    .addComponent(medButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(custButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(suppButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(purchaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(usersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(timesheetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(logButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
                     .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -282,8 +284,8 @@ public class Dashboard extends javax.swing.JFrame {
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(mainPanelLayout.createSequentialGroup()
                     .addComponent(navPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(displayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 759, Short.MAX_VALUE))
+                    .addGap(0, 0, 0)
+                    .addComponent(displayPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 754, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -332,10 +334,6 @@ public class Dashboard extends javax.swing.JFrame {
         addUsersPage();
     }//GEN-LAST:event_usersButtonActionPerformed
 
-    private void salesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesButtonActionPerformed
-        addSalesPage();
-    }//GEN-LAST:event_salesButtonActionPerformed
-
     private void suppButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_suppButtonActionPerformed
         addSuppPage();
     }//GEN-LAST:event_suppButtonActionPerformed
@@ -357,9 +355,14 @@ public class Dashboard extends javax.swing.JFrame {
         addRestockPage();
     }//GEN-LAST:event_purchaseButtonActionPerformed
 
-    private void logsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logsButtonActionPerformed
+    private void timesheetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timesheetButtonActionPerformed
+        addTimesheetPage();
+    }//GEN-LAST:event_timesheetButtonActionPerformed
+
+    private void logButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logButtonActionPerformed
+        // TODO add your handling code here:
         addLogsPage();
-    }//GEN-LAST:event_logsButtonActionPerformed
+    }//GEN-LAST:event_logButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton custButton;
@@ -367,14 +370,14 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JButton homeButton;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JButton logButton;
     private javax.swing.JButton logoutButton;
-    private javax.swing.JButton logsButton;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JButton medButton;
     private javax.swing.JPanel navPanel;
     private javax.swing.JButton purchaseButton;
-    private javax.swing.JButton salesButton;
     private javax.swing.JButton suppButton;
+    private javax.swing.JButton timesheetButton;
     private javax.swing.JButton usersButton;
     // End of variables declaration//GEN-END:variables
 }
