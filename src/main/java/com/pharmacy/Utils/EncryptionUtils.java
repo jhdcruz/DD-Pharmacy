@@ -1,4 +1,4 @@
-package com.pharmacy.Controllers;
+package com.pharmacy.Utils;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -8,12 +8,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
 
-public class EncryptionController {
+public class EncryptionUtils {
     private static SecretKeySpec secretKey;
     private static final String secret = "SEVJAEIJT2%@#%jklasjdvrv@#%";
     private static final String ALGORITHM = "AES";
 
-    public void prepareSecreteKey(String myKey) {
+    public void prepareSecretKey(String myKey) {
         MessageDigest sha;
         try {
             byte[] key = myKey.getBytes(StandardCharsets.UTF_8);
@@ -28,7 +28,7 @@ public class EncryptionController {
 
     public String encrypt(String strToEncrypt) {
         try {
-            prepareSecreteKey(secret);
+            prepareSecretKey(secret);
             Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 
@@ -41,7 +41,7 @@ public class EncryptionController {
 
     public String decrypt(String strToDecrypt) {
         try {
-            prepareSecreteKey(secret);
+            prepareSecretKey(secret);
             Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
 

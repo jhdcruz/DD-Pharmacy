@@ -2,6 +2,7 @@ package com.pharmacy.Controllers;
 
 import com.pharmacy.Database.DatabaseInstance;
 import com.pharmacy.Models.UserModel;
+import com.pharmacy.Utils.EncryptionUtils;
 import com.pharmacy.Views.UsersPage;
 
 import javax.swing.JOptionPane;
@@ -42,7 +43,7 @@ public class UserController {
             if (resultSet.next()) {
                 JOptionPane.showMessageDialog(null, "User already exists");
             } else {
-                String encryptedPass = new EncryptionController().encrypt(userModel.getPassword());
+                String encryptedPass = new EncryptionUtils().encrypt(userModel.getPassword());
 
                 String insertQuery = "INSERT INTO users (name,phone,username,password,user_type) "
                     + "VALUES(?,?,?,?,?)";
@@ -167,7 +168,7 @@ public class UserController {
             resultSet = statement.executeQuery(query);
 
             if (resultSet.next()) {
-                String decryptedPass = new EncryptionController().decrypt(resultSet.getString("password"));
+                String decryptedPass = new EncryptionUtils().decrypt(resultSet.getString("password"));
 
                 return decryptedPass.equals(password);
             }
@@ -180,7 +181,7 @@ public class UserController {
 
     public void updatePass(int id, String password) {
         try {
-            String encryptedPass = new EncryptionController().encrypt(password);
+            String encryptedPass = new EncryptionUtils().encrypt(password);
 
             String query = "UPDATE users SET password=? WHERE id='" + id + "'";
             prepStatement = conn.prepareStatement(query);
