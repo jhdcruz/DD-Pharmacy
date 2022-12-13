@@ -28,7 +28,7 @@ public class DataTableModel {
         // add column names to the table column headers
         for (int col = 1; col <= columnCount; col++) {
             // replace underscores with spaces
-            String columnName = metaData.getColumnName(col).replaceAll("_", " ");
+            String columnName = metaData.getColumnName(col).replace("_", " ");
             // capitalize the first letter of each word
             columnName = WordUtils.capitalizeFully(columnName);
 
