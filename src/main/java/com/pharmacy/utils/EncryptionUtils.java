@@ -19,8 +19,8 @@ import java.security.spec.AlgorithmParameterSpec;
  */
 public class EncryptionUtils {
     private final SecureRandom secureRandom = new SecureRandom();
-    private final static int GCM_IV_LENGTH = 12;
-    private final static String ALGORITHM = "AES/GCM/NoPadding";
+    private static final int GCM_IV_LENGTH = 12;
+    private static final String ALGORITHM = "AES/GCM/NoPadding";
 
 
     /**
