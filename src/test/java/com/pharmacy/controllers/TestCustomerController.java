@@ -1,7 +1,6 @@
 package com.pharmacy.controllers;
 
 import com.pharmacy.models.UserModel;
-import org.junit.Test;
 
 import static org.junit.Assert.fail;
 
@@ -13,8 +12,7 @@ public class TestCustomerController {
      * Very useful if you get locked out due to encryption,
      * since manually adding a user to the database won't work
      */
-    @Test
-    public void addUser() {
+    public void addUserFallback() {
         UserModel userModel = new UserModel();
         userModel.setName("Admin");
         userModel.setPhone("000000000000");
