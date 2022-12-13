@@ -49,16 +49,18 @@ public class UserController {
             if (resultSet.next()) {
                 JOptionPane.showMessageDialog(null, "User already exists");
             } else {
-                String encryptedPass = new EncryptionUtils().encrypt(userModel.getPassword());
+                EncryptionUtils encryptionUtils = new EncryptionUtils();
+                byte[] secretKey = encryptionUtils.generateKeyBytes();
 
-                String insertQuery = "INSERT INTO users (name,phone,username,password,user_type) "
-                    + "VALUES(?,?,?,?,?)";
+                String insertQuery = "INSERT INTO users (name,phone,username,password,user_type,secret_key) "
+                    + "VALUES(?,?,?,?,?,?)";
                 prepStatement = conn.prepareStatement(insertQuery);
                 prepStatement.setString(1, userModel.getName());
                 prepStatement.setString(2, userModel.getPhone());
                 prepStatement.setString(3, userModel.getUsername());
-                prepStatement.setString(4, encryptedPass);
+                prepStatement.setBytes(4, encryptionUtils.encrypt(userModel.getPassword(), secretKey));
                 prepStatement.setString(5, userModel.getType());
+                prepStatement.setBytes(6, secretKey);
 
                 prepStatement.executeUpdate();
                 logsController.addLogEntry(logId, "Added new user: " + userModel.getName());
@@ -194,13 +196,16 @@ public class UserController {
 
     public boolean matchPasswords(String username, String password) {
         try {
-            String query = "SELECT password FROM users WHERE username='"
+            String query = "SELECT password,secret_key FROM users WHERE username='"
                 + username
                 + "'";
             resultSet = statement.executeQuery(query);
 
             if (resultSet.next()) {
-                String decryptedPass = new EncryptionUtils().decrypt(resultSet.getString("password"));
+                byte[] secretKey = resultSet.getBytes("secret_key");
+                byte[] encryptedPassword = resultSet.getBytes("password");
+
+                String decryptedPass = new EncryptionUtils().decrypt(encryptedPassword, secretKey);
 
                 return decryptedPass.equals(password);
             }
@@ -213,11 +218,15 @@ public class UserController {
 
     public void updatePass(int id, String username, String password) {
         try {
-            String encryptedPass = new EncryptionUtils().encrypt(password);
+            EncryptionUtils encryptionUtils = new EncryptionUtils();
+            byte[] secretKey = encryptionUtils.generateKeyBytes();
 
-            String query = "UPDATE users SET password=? WHERE id='" + id + "'";
+            byte[] encryptedPass = encryptionUtils.encrypt(password, secretKey);
+
+            String query = "UPDATE users SET password=?, secret_key=? WHERE id='" + id + "'";
             prepStatement = conn.prepareStatement(query);
-            prepStatement.setString(1, encryptedPass);
+            prepStatement.setBytes(1, encryptedPass);
+            prepStatement.setBytes(2, secretKey);
 
             prepStatement.executeUpdate();
             logsController.addLogEntry(logId, "Password updated for user: " + username);

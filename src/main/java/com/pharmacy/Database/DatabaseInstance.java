@@ -72,13 +72,17 @@ public class DatabaseInstance {
      */
     public String authUser(String username, String password) {
         try {
-            String query = "SELECT username, password, user_type FROM users WHERE username='"
+            String query = "SELECT username, password, user_type,secret_key FROM users WHERE username='"
                 + username
                 + "'";
             resultSet = statement.executeQuery(query);
 
             if (resultSet.next()) {
-                String decryptedPass = new EncryptionUtils().decrypt(resultSet.getString("password"));
+                EncryptionUtils encryptionUtils = new EncryptionUtils();
+
+                byte[] secretKey = resultSet.getBytes("secret_key");
+                byte[] passwordHash = resultSet.getBytes("password");
+                String decryptedPass = encryptionUtils.decrypt(passwordHash, secretKey);
 
                 if (resultSet.getString("username").equals(username) && decryptedPass.equals(password)) {
                     return resultSet.getString("user_type");

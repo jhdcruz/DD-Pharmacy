@@ -150,12 +150,13 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `users`
 (
-    `id`        INT          NOT NULL AUTO_INCREMENT UNIQUE,
-    `username`  VARCHAR(45)  NOT NULL UNIQUE,
-    `password`  VARCHAR(200) NOT NULL,
-    `name`      VARCHAR(200) NOT NULL,
-    `phone`     VARCHAR(12)  NOT NULL,
-    `user_type` VARCHAR(45)  NOT NULL,
+    `id`         INT            NOT NULL AUTO_INCREMENT UNIQUE,
+    `username`   VARCHAR(45)    NOT NULL UNIQUE,
+    `password`   VARBINARY(100) NOT NULL,
+    `name`       VARCHAR(200)   NOT NULL,
+    `phone`      VARCHAR(12)    NOT NULL,
+    `user_type`  VARCHAR(45)    NOT NULL,
+    `secret_key` VARBINARY(100) NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 5000
@@ -166,7 +167,6 @@ CREATE TABLE `users`
 -- ---------------------------------------------
 --             SAMPLE DATA DUMP               --
 -- ---------------------------------------------
-
 --
 -- Sample medicines
 --
@@ -219,8 +219,9 @@ LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users`
     DISABLE KEYS */;
 INSERT INTO `users`
-VALUES (5000, 'admin', 'j1oIE+doq0agqiA5bcEVQA==', 'Admin', '000000000000', 'Administrator'),
-       (5001, 'emp', '0CX6pNMYztHTLBPnAZmKOg==', 'Default Employee', '000000000000', 'Employee');
+VALUES (5000, 'admin', 0x76C8907651328EF476FF7A681161084093AE377BA0C97912F5C254F391D967F665, 'Admin', '000000000000',
+        'Administrator', 0x6C05BF5747BEDE7C6DEBD22AAF06B85F);
+
 /*!40000 ALTER TABLE `users`
     ENABLE KEYS */;
 UNLOCK TABLES;

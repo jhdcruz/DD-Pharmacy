@@ -1,54 +1,94 @@
 package com.pharmacy.Utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.crypto.Cipher;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Base64;
+import java.security.SecureRandom;
+import java.security.spec.AlgorithmParameterSpec;
 
+
+/**
+ * Encryption and Decryption with AES + GCM
+ * <p>
+ * See <a href="https://gist.github.com/patrickfav/7e28d4eb4bf500f7ee8012c4a0cf7bbf">Reference</a>
+ * by <i>Patrick Favre-Bulle</i>
+ */
 public class EncryptionUtils {
-    private static SecretKeySpec secretKey;
-    private static final String secret = "SEVJAEIJT2%@#%jklasjdvrv@#%";
-    private static final String ALGORITHM = "AES";
+    private final SecureRandom secureRandom = new SecureRandom();
+    private final static int GCM_IV_LENGTH = 12;
+    private final static String ALGORITHM = "AES/GCM/NoPadding";
 
-    public void prepareSecretKey(String myKey) {
-        MessageDigest sha;
+
+    /**
+     * This generates a random byte array of 16 bytes
+     * <p>
+     * Specifically used for generating a random key for AES encryption
+     * <p>
+     * See {@link #encrypt(String, byte[])},
+     * <p>
+     * See {@link #decrypt(byte[], byte[])}.
+     *
+     * @return random 16 byte array
+     */
+    public byte[] generateKeyBytes() {
+        byte[] key = new byte[16];
+        secureRandom.nextBytes(key);
+
+        return key;
+    }
+
+    /**
+     * Encrypt a string.
+     *
+     * @param plaintext to encrypt (UTF-8)
+     * @return encrypted message
+     */
+    public byte[] encrypt(String plaintext, byte[] secretKey) {
         try {
-            byte[] key = myKey.getBytes(StandardCharsets.UTF_8);
-            sha = MessageDigest.getInstance("SHA-512");
-            key = sha.digest(key);
-            key = Arrays.copyOf(key, 16);
-            secretKey = new SecretKeySpec(key, ALGORITHM);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            // NEVER REUSE THIS IV WITH SAME KEY
+            byte[] iv = new byte[GCM_IV_LENGTH];
+            secureRandom.nextBytes(iv);
+
+            final Cipher cipher = Cipher.getInstance(ALGORITHM);
+            GCMParameterSpec parameterSpec = new GCMParameterSpec(128, iv); //128 bit auth tag length
+            cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(secretKey, "AES"), parameterSpec);
+
+            byte[] cipherText = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
+
+            ByteBuffer byteBuffer = ByteBuffer.allocate(iv.length + cipherText.length);
+            byteBuffer.put(iv);
+            byteBuffer.put(cipherText);
+
+            return byteBuffer.array();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public String encrypt(String strToEncrypt) {
+    /**
+     * Decrypts encrypted message (see {@link #encrypt(String, byte[])}).
+     *
+     * @param encrypted iv with ciphertext
+     * @return original plaintext
+     */
+    public @NotNull String decrypt(byte[] encrypted, byte[] secretKey) {
         try {
-            prepareSecretKey(secret);
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            final Cipher cipher = Cipher.getInstance(ALGORITHM);
 
-            return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes(StandardCharsets.UTF_8)));
+            // use first 12 bytes for iv
+            AlgorithmParameterSpec gcmIv = new GCMParameterSpec(128, encrypted, 0, GCM_IV_LENGTH);
+            cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(secretKey, "AES"), gcmIv);
+
+            // Use everything from 12 bytes on as ciphertext
+            byte[] plainText = cipher.doFinal(encrypted, GCM_IV_LENGTH, encrypted.length - GCM_IV_LENGTH);
+
+            return new String(plainText, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            System.out.println("Error while encrypting: " + e);
+            throw new RuntimeException(e);
         }
-        return null;
-    }
-
-    public String decrypt(String strToDecrypt) {
-        try {
-            prepareSecretKey(secret);
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.DECRYPT_MODE, secretKey);
-
-            return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
-        } catch (Exception e) {
-            System.out.println("Error while decrypting: " + e);
-        }
-        return null;
     }
 }
