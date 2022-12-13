@@ -9,8 +9,5 @@
         <module name="DD-Pharmacy" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="DD-Pharmacy" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>

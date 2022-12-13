@@ -4,7 +4,7 @@
     <module name="DD-Pharmacy" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="com.pharmacy.*" />
+        <option name="PATTERN" value="com.pharmacy.controllers.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
