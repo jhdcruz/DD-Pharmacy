@@ -1,7 +1,6 @@
 package com.pharmacy.controllers;
 
-import com.pharmacy.Controllers.UserController;
-import com.pharmacy.Models.UserModel;
+import com.pharmacy.models.UserModel;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;

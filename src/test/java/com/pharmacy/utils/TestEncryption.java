@@ -1,6 +1,5 @@
 package com.pharmacy.utils;
 
-import com.pharmacy.Utils.EncryptionUtils;
 import org.junit.Test;
 
 import java.util.Arrays;

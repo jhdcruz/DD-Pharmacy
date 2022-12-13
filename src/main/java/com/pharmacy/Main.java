@@ -1,7 +1,7 @@
 package com.pharmacy;
 
 import com.formdev.flatlaf.FlatLightLaf;
-import com.pharmacy.Views.LoginPage;
+import com.pharmacy.views.LoginPage;
 
 import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.EventQueue;
