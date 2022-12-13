@@ -151,7 +151,7 @@ public class LogsPage extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable logTable;
+    public javax.swing.JTable logTable;
     private javax.swing.JButton refreshButton;
     private javax.swing.JTextField searchText;
     // End of variables declaration//GEN-END:variables

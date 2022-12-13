@@ -16,10 +16,14 @@ import java.sql.SQLException;
 
 public class AddUserDialog extends JDialog {
 
+    UserController userController;
     private final JTable userTable;
+    private final int logId;
 
-    public AddUserDialog(JTable usersTable) {
+    public AddUserDialog(JTable usersTable, int logId) {
         this.userTable = usersTable;
+        this.logId = logId;
+
         initComponents();
 
         setMinimumSize(new Dimension(360, 380));
@@ -35,6 +39,7 @@ public class AddUserDialog extends JDialog {
         entryPanel.registerKeyboardAction(actionEvent -> addButton.doClick(), KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         getRootPane().setDefaultButton(addButton);
+        userController = new UserController(logId);
     }
 
     /**
@@ -188,7 +193,7 @@ public class AddUserDialog extends JDialog {
             userModel.setType((String) userTypeCombo.getSelectedItem());
 
             EventQueue.invokeLater(() -> {
-                new UserController().addUser(userModel);
+                userController.addUser(userModel);
                 loadDataSet();
             });
 
@@ -206,7 +211,6 @@ public class AddUserDialog extends JDialog {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                UserController userController = new UserController();
                 userTable.setModel(new DataTableModel().buildTableModel(userController.getUsers()));
 
                 processColumns();

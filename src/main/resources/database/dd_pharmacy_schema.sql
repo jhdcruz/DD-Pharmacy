@@ -110,7 +110,7 @@ CREATE TABLE `suppliers`
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `userlogs`
+-- Table structure for table `timesheet`
 --
 DROP TABLE IF EXISTS `timesheet`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
@@ -134,10 +134,9 @@ DROP TABLE IF EXISTS `logs`;
 /*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `logs`
 (
-    `username` VARCHAR(45)  NOT NULL,
-    `name`     VARCHAR(100) NOT NULL,
-    `event`    VARCHAR(300) NOT NULL,
-    `date`     DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    `user_id` int          NOT NULL,
+    `event`   VARCHAR(500) NOT NULL,
+    `date`    DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8
   COLLATE = utf8_general_ci;

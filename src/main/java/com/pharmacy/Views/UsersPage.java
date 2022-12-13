@@ -13,8 +13,15 @@ import java.sql.SQLException;
 
 public class UsersPage extends javax.swing.JPanel {
 
-    public UsersPage() {
+    UserController userController;
+    int id;
+
+    public UsersPage(int id) {
+        this.id = id;
+
         initComponents();
+
+        userController = new UserController(id);
         loadDataSet();
     }
 
@@ -317,7 +324,7 @@ public class UsersPage extends javax.swing.JPanel {
                 userModel.setType(userType);
 
                 EventQueue.invokeLater(() -> {
-                    new UserController().updateUser(userModel);
+                    userController.updateUser(userModel);
                     loadDataSet();
                 });
             }
@@ -343,7 +350,7 @@ public class UsersPage extends javax.swing.JPanel {
 
             if (opt == JOptionPane.YES_OPTION) {
                 EventQueue.invokeLater(() -> {
-                    new UserController().deleteUser(String.valueOf(userTable.getValueAt(userTable.getSelectedRow(), 0)));
+                    userController.deleteUser((Integer) userTable.getValueAt(userTable.getSelectedRow(), 0), username);
                     loadDataSet();
                 });
             }
@@ -373,7 +380,7 @@ public class UsersPage extends javax.swing.JPanel {
     }//GEN-LAST:event_searchTextKeyReleased
 
     private void addUserButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserButtonActionPerformed
-        new AddUserDialog(userTable);
+        new AddUserDialog(userTable, id);
     }//GEN-LAST:event_addUserButtonActionPerformed
 
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
@@ -385,14 +392,15 @@ public class UsersPage extends javax.swing.JPanel {
         int row = userTable.getSelectedRow();
 
         if (userTable.getSelectionModel().getSelectedItemsCount() == 1) {
-            int id = Integer.parseInt(userTable.getValueAt(row, 0).toString());
+            int selectedId = Integer.parseInt(userTable.getValueAt(row, 0).toString());
+            String selectedUsername = userTable.getValueAt(row, 2).toString();
 
             // change password prompt
-            String password = JOptionPane.showInputDialog(this, "Enter new password for " + id + ":", "Change Password", JOptionPane.PLAIN_MESSAGE);
+            String password = JOptionPane.showInputDialog(this, "Enter new password for " + selectedId + ":", "Change Password", JOptionPane.PLAIN_MESSAGE);
 
             if (password != null) {
                 EventQueue.invokeLater(() -> {
-                    new UserController().updatePass(id, password);
+                    userController.updatePass(selectedId, selectedUsername, password);
                     JOptionPane.showMessageDialog(this, "Password changed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 });
             }
@@ -414,7 +422,6 @@ public class UsersPage extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         EventQueue.invokeLater(() -> {
             try {
-                UserController userController = new UserController();
                 userTable.setModel(new DataTableModel().buildTableModel(userController.searchUsers(text)));
 
                 processColumns();
@@ -427,7 +434,6 @@ public class UsersPage extends javax.swing.JPanel {
     public final void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                UserController userController = new UserController();
                 userTable.setModel(new DataTableModel().buildTableModel(userController.getUsers()));
 
                 processColumns();

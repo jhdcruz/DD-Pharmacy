@@ -1,7 +1,6 @@
 package com.pharmacy.Controllers;
 
 import com.pharmacy.Database.DatabaseInstance;
-import com.pharmacy.Models.UserModel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,9 +31,9 @@ public class LogsController {
     public ResultSet getLogs() {
         try {
             String query = """
-                SELECT users.username AS username,users.name AS name,event,date
+                SELECT users.username AS user_id,event,date
                 FROM logs
-                INNER JOIN users ON logs.username=users.username
+                INNER JOIN users ON logs.user_id=users.id
                 ORDER BY date DESC;
                 """;
 
@@ -46,13 +45,12 @@ public class LogsController {
         return resultSet;
     }
 
-    public void addLogEntry(UserModel userModel) {
+    public void addLogEntry(int id, String event) {
         try {
-            String query = "INSERT INTO logs (username, name, event, date) values(?,?,?, DEFAULT)";
+            String query = "INSERT INTO logs (user_id, event, date) values(?,?, DEFAULT)";
             prepStatement = connection.prepareStatement(query);
-            prepStatement.setString(1, userModel.getUsername());
-            prepStatement.setString(2, userModel.getInTime());
-            prepStatement.setString(3, userModel.getOutTime());
+            prepStatement.setInt(1, id);
+            prepStatement.setString(2, event);
 
             prepStatement.executeUpdate();
         } catch (SQLException e) {

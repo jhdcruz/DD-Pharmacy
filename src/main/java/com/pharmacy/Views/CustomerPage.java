@@ -13,11 +13,15 @@ import java.sql.SQLException;
 
 public class CustomerPage extends javax.swing.JPanel {
 
-    /**
-     * Creates new form CustomerPage
-     */
-    public CustomerPage() {
+    CustomerController customerController;
+    int id;
+
+    public CustomerPage(int id) {
+        this.id = id;
+
         initComponents();
+
+        customerController = new CustomerController(id);
         loadDataSet();
     }
 
@@ -300,7 +304,7 @@ public class CustomerPage extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        new AddCustomerDialog(custTable);
+        new AddCustomerDialog(custTable, id);
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
@@ -324,7 +328,7 @@ public class CustomerPage extends javax.swing.JPanel {
                 customerModel.setPhone(phoneText.getText());
 
                 EventQueue.invokeLater(() -> {
-                    new CustomerController().updateCustomer(customerModel);
+                    customerController.updateCustomer(customerModel);
                     loadDataSet();
                 });
             }
@@ -341,7 +345,7 @@ public class CustomerPage extends javax.swing.JPanel {
                 "Confirmation",
                 JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
-                new CustomerController().deleteCustomer(custTable.getValueAt(custTable.getSelectedRow(), 0).toString());
+                customerController.deleteCustomer(custTable.getValueAt(custTable.getSelectedRow(), 0).toString());
                 loadDataSet();
             }
         }
@@ -387,7 +391,6 @@ public class CustomerPage extends javax.swing.JPanel {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                CustomerController customerController = new CustomerController();
                 custTable.setModel(new DataTableModel().buildTableModel(customerController.getCustomers()));
                 processColumns();
             } catch (SQLException e) {
@@ -399,7 +402,6 @@ public class CustomerPage extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         EventQueue.invokeLater(() -> {
             try {
-                CustomerController customerController = new CustomerController();
                 custTable.setModel(new DataTableModel().buildTableModel(customerController.getCustomerSearch(text)));
                 processColumns();
             } catch (SQLException e) {

@@ -10,8 +10,15 @@ import java.sql.SQLException;
 
 public class TimesheetPage extends javax.swing.JPanel {
 
-    public TimesheetPage() {
+    UserController userController;
+    int id;
+
+    public TimesheetPage(int id) {
+        this.id = id;
+
         initComponents();
+
+        userController = new UserController(id);
         loadDataSet();
     }
 
@@ -138,7 +145,6 @@ public class TimesheetPage extends javax.swing.JPanel {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                UserController userController = new UserController();
                 timesheetTable.setModel(new DataTableModel().buildTableModel(userController.getTimesheet()));
             } catch (SQLException e) {
                 throw new RuntimeException(e);

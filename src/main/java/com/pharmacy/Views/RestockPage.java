@@ -16,15 +16,23 @@ import java.sql.SQLException;
 public class RestockPage extends javax.swing.JPanel {
 
     MedicineModel medicineModel;
+    MedicineController medicineController;
+    SupplierController supplierController;
+
     Dashboard dashboard;
 
     int quantity;
     String medCode = null;
+    int id;
 
-    public RestockPage(Dashboard dashboard) {
+    public RestockPage(Dashboard dashboard, int id) {
+        this.id = id;
         this.dashboard = dashboard;
 
         initComponents();
+
+        medicineController = new MedicineController(id);
+        supplierController = new SupplierController(id);
         loadDataSet();
     }
 
@@ -325,24 +333,24 @@ public class RestockPage extends javax.swing.JPanel {
 
         if (codeText.getText().equals("") || dateInput.getDate() == null
             || quantityText.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Please enter all the required details.");
+            JOptionPane.showMessageDialog(this, "Please enter all the required details.");
         } else {
             // store purchase info
             try {
-                ResultSet resultSet = new MedicineController().getMedicineName(codeText.getText());
+                ResultSet resultSet = medicineController.getMedicineName(codeText.getText());
 
                 if (resultSet.next()) {
                     double costPrice = Double.parseDouble(costText.getText());
                     double totalCost = costPrice * Integer.parseInt(quantityText.getText());
 
-                    medicineModel.setSupplierCode(new SupplierController().getSupplierCode(suppComboBox.getSelectedItem().toString()));
+                    medicineModel.setSupplierCode(supplierController.getSupplierCode(suppComboBox.getSelectedItem().toString()));
                     medicineModel.setMedicineCode(codeText.getText());
                     medicineModel.setDate(dateInput.getDate());
                     medicineModel.setQuantity(Integer.parseInt(quantityText.getText()));
                     medicineModel.setTotalCost(totalCost);
 
                     EventQueue.invokeLater(() -> {
-                        new MedicineController().addRestockInfo(medicineModel);
+                        medicineController.addRestockInfo(medicineModel);
                         loadDataSet();
                     });
                 } else {
@@ -368,8 +376,8 @@ public class RestockPage extends javax.swing.JPanel {
                 JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
                 EventQueue.invokeLater(() -> {
-                    new MedicineController().deleteRestockInfo((int) purchaseTable.getValueAt(purchaseTable.getSelectedRow(), 0));
-                    new MedicineController().reduceMedicineStock(medCode, quantity);
+                    medicineController.deleteRestockInfo((int) purchaseTable.getValueAt(purchaseTable.getSelectedRow(), 0));
+                    medicineController.reduceMedicineStock(medCode, quantity);
                     loadDataSet();
                 });
             }
@@ -404,7 +412,8 @@ public class RestockPage extends javax.swing.JPanel {
 
     private void codeTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codeTextKeyReleased
         try {
-            ResultSet resultSet = new MedicineController().getMedFromCode(codeText.getText());
+            ResultSet resultSet = medicineController.getMedFromCode(codeText.getText());
+
             if (resultSet.next()) {
                 nameText.setText(resultSet.getString("product_name"));
                 costText.setText(String.valueOf(resultSet.getDouble("cost_price")));
@@ -434,7 +443,6 @@ public class RestockPage extends javax.swing.JPanel {
     // Method to load and update combo box containing supplier names
     public void loadComboBox() {
         try {
-            SupplierController supplierController = new SupplierController();
             suppComboBox.setModel(supplierController.setComboItems(supplierController.getSuppliers()));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -445,7 +453,6 @@ public class RestockPage extends javax.swing.JPanel {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                MedicineController medicineController = new MedicineController();
                 purchaseTable.setModel(new DataTableModel().buildTableModel(medicineController.getRestockInfo()));
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -457,7 +464,6 @@ public class RestockPage extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         EventQueue.invokeLater(() -> {
             try {
-                MedicineController medicineController = new MedicineController();
                 purchaseTable.setModel(new DataTableModel().buildTableModel(medicineController.getRestockSearch(text)));
             } catch (SQLException e) {
                 e.printStackTrace();

@@ -13,10 +13,12 @@ import java.time.LocalDateTime;
 
 public class Dashboard extends javax.swing.JFrame {
 
-    CardLayout layout;
-    String username;
     UserModel userModel;
+    CardLayout layout;
+
+    String username;
     LocalDateTime outTime;
+    int id;
 
     public Dashboard(String username, String userType, UserModel userModel) {
         initComponents();
@@ -35,15 +37,17 @@ public class Dashboard extends javax.swing.JFrame {
             notForEmployee();
         }
 
+        id = new UserController(id).getUserId(username);
+
         // Panel Layout set to Card Layout to allow switching between different sections
         displayPanel.setLayout(layout);
-        displayPanel.add("Home", new HomePage(username));
-        displayPanel.add("Users", new UsersPage());
-        displayPanel.add("Customers", new CustomerPage());
-        displayPanel.add("Medicine", new MedicinePage(this));
-        displayPanel.add("Suppliers", new SupplierPage());
-        displayPanel.add("Restock", new RestockPage(this));
-        displayPanel.add("Timesheet", new TimesheetPage());
+        displayPanel.add("Home", new HomePage(username, id));
+        displayPanel.add("Users", new UsersPage(id));
+        displayPanel.add("Customers", new CustomerPage(id));
+        displayPanel.add("Medicine", new MedicinePage(this, id));
+        displayPanel.add("Suppliers", new SupplierPage(id));
+        displayPanel.add("Restock", new RestockPage(this, id));
+        displayPanel.add("Timesheet", new TimesheetPage(id));
         displayPanel.add("Logs", new LogsPage());
 
         this.addWindowListener(new WindowAdapter() {
@@ -53,7 +57,7 @@ public class Dashboard extends javax.swing.JFrame {
                 userModel.setOutTime(String.valueOf(outTime));
                 userModel.setUsername(username);
 
-                new UserController().addTimesheetEntry(userModel);
+                new UserController(id).addTimesheetEntry(userModel);
                 super.windowClosing(e);
             }
         });
@@ -64,7 +68,6 @@ public class Dashboard extends javax.swing.JFrame {
         setVisible(true);
         setMinimumSize(new Dimension(1220, 660));
     }
-
 
     // Allows only the ADMINISTRATOR type user to view and manipulate 'Users' and 'User Logs'
     public void notForEmployee() {
@@ -257,19 +260,19 @@ public class Dashboard extends javax.swing.JFrame {
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, 0)
                     .addComponent(medButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(custButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(suppButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(purchaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(usersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(timesheetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(logButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 130, Short.MAX_VALUE)
                     .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -285,7 +288,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(mainPanelLayout.createSequentialGroup()
                     .addComponent(navPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, 0)
-                    .addComponent(displayPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 754, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(displayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 754, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -323,7 +326,7 @@ public class Dashboard extends javax.swing.JFrame {
             userModel.setOutTime(String.valueOf(outTime));
             userModel.setUsername(username);
 
-            new UserController().addTimesheetEntry(userModel);
+            new UserController(id).addTimesheetEntry(userModel);
             dispose();
 
             new LoginPage();

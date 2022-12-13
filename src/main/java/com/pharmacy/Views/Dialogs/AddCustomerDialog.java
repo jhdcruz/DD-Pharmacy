@@ -14,10 +14,15 @@ import java.sql.SQLException;
 
 public class AddCustomerDialog extends javax.swing.JDialog {
 
+    CustomerController customerController;
     private final JTable custTable;
 
-    public AddCustomerDialog(JTable custTable) {
+    private final int id;
+
+    public AddCustomerDialog(JTable custTable, int id) {
+        this.id = id;
         this.custTable = custTable;
+
         initComponents();
 
         setResizable(false);
@@ -33,6 +38,7 @@ public class AddCustomerDialog extends javax.swing.JDialog {
         getRootPane().setDefaultButton(addButton);
 
         setVisible(true);
+        customerController = new CustomerController(id);
     }
 
     /**
@@ -239,7 +245,7 @@ public class AddCustomerDialog extends javax.swing.JDialog {
             customerModel.setPhone(phoneText.getText());
 
             EventQueue.invokeLater(() -> {
-                new CustomerController().addCustomer(customerModel);
+                customerController.addCustomer(customerModel);
                 loadDataSet();
             });
 
@@ -250,7 +256,6 @@ public class AddCustomerDialog extends javax.swing.JDialog {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                CustomerController customerController = new CustomerController();
                 custTable.setModel(new DataTableModel().buildTableModel(customerController.getCustomers()));
             } catch (SQLException e) {
                 e.printStackTrace();

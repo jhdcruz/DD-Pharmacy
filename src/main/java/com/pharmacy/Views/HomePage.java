@@ -15,19 +15,25 @@ import java.util.Date;
 public class HomePage extends javax.swing.JPanel {
 
     ResultSet resultSet = null;
+
+    UserController userController;
+    ;
     UserModel userModel;
 
     String username;
+    int id;
 
     /**
      * Creates new form HomePage
      */
-    public HomePage(String username) {
+    public HomePage(String username, int logId) {
         this.username = username;
+        this.id = logId;
         userModel = new UserModel();
 
         initComponents();
 
+        userController = new UserController(id);
         getUser();
         greetUser(userModel.getName());
         setupDateTime();
@@ -197,7 +203,7 @@ public class HomePage extends javax.swing.JPanel {
             updatedUserModel.setUsername(usernameText.getText());
 
             EventQueue.invokeLater(() -> {
-                new UserController().updateUser(updatedUserModel);
+                userController.updateUser(updatedUserModel);
             });
         }
     }//GEN-LAST:event_updateButtonActionPerformed
@@ -212,14 +218,14 @@ public class HomePage extends javax.swing.JPanel {
 
             if (verify != null) {
                 // password contains the decrypted password
-                boolean match = new UserController().matchPasswords(username, verify);
+                boolean match = userController.matchPasswords(username, verify);
 
                 // if matches, change password to the new one
                 if (match) {
                     String newPassword = JOptionPane.showInputDialog(this, "Enter new password for " + username + ":", "Change Password", JOptionPane.PLAIN_MESSAGE);
 
                     if (newPassword != null) {
-                        new UserController().updatePass(userModel.getId(), newPassword);
+                        userController.updatePass(userModel.getId(), userModel.getUsername(), newPassword);
                         JOptionPane.showMessageDialog(this, "Password changed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                     }
                 } else {
@@ -234,7 +240,7 @@ public class HomePage extends javax.swing.JPanel {
 
     private void getUser() {
         try {
-            resultSet = new UserController().findUser(username);
+            resultSet = userController.findUser(username);
 
             if (resultSet.next()) {
                 // save to user model

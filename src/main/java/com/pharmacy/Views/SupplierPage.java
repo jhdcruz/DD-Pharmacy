@@ -13,8 +13,15 @@ import java.sql.SQLException;
 
 public class SupplierPage extends javax.swing.JPanel {
 
-    public SupplierPage() {
+    SupplierController supplierController;
+    private final int id;
+
+    public SupplierPage(int id) {
+        this.id = id;
+
         initComponents();
+
+        supplierController = new SupplierController(id);
         loadDataSet();
     }
 
@@ -284,7 +291,7 @@ public class SupplierPage extends javax.swing.JPanel {
     }//GEN-LAST:event_suppTableMouseClicked
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        new AddSupplierDialog(suppTable);
+        new AddSupplierDialog(suppTable, id);
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
@@ -307,7 +314,7 @@ public class SupplierPage extends javax.swing.JPanel {
                 supplierModel.setPhone(phoneText.getText());
 
                 EventQueue.invokeLater(() -> {
-                    new SupplierController().updateSupplier(supplierModel, code);
+                    supplierController.updateSupplier(supplierModel, code);
                     loadDataSet();
                 });
             }
@@ -325,7 +332,7 @@ public class SupplierPage extends javax.swing.JPanel {
                 JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
                 EventQueue.invokeLater(() -> {
-                    new SupplierController().deleteSupplier(suppTable.getValueAt(suppTable.getSelectedRow(), 0).toString());
+                    supplierController.deleteSupplier(suppTable.getValueAt(suppTable.getSelectedRow(), 0).toString(), suppTable.getValueAt(suppTable.getSelectedRow(), 1).toString());
                     loadDataSet();
                 });
             }
@@ -342,7 +349,6 @@ public class SupplierPage extends javax.swing.JPanel {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                SupplierController supplierController = new SupplierController();
                 suppTable.setModel(new DataTableModel().buildTableModel(supplierController.getSuppliers()));
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -354,7 +360,6 @@ public class SupplierPage extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         EventQueue.invokeLater(() -> {
             try {
-                SupplierController supplierController = new SupplierController();
                 suppTable.setModel(new DataTableModel().buildTableModel(supplierController.searchSuppliers(text)));
             } catch (SQLException e) {
                 e.printStackTrace();

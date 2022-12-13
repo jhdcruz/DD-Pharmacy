@@ -5,7 +5,7 @@ import com.pharmacy.Controllers.SupplierController;
 import com.pharmacy.Models.MedicineModel;
 import com.pharmacy.Utils.DataTableModel;
 import com.pharmacy.Utils.StringFormatting;
-import com.pharmacy.Views.Dialogs.AddProductDialog;
+import com.pharmacy.Views.Dialogs.AddMedicineDialog;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -19,11 +19,17 @@ public class MedicinePage extends javax.swing.JPanel {
 
     Dashboard dashboard;
     MedicineModel medicineModel;
+    MedicineController medicineController;
 
-    public MedicinePage(Dashboard dashboard) {
+    int id;
+
+    public MedicinePage(Dashboard dashboard, int id) {
+        this.id = id;
         this.dashboard = dashboard;
 
         initComponents();
+
+        medicineController = new MedicineController(id);
         loadDataSet();
         loadComboBox();
     }
@@ -79,8 +85,10 @@ public class MedicinePage extends javax.swing.JPanel {
         suppCombo.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
+
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
             }
+
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
                 suppComboPopupMenuWillBecomeVisible(evt);
             }
@@ -382,7 +390,7 @@ public class MedicinePage extends javax.swing.JPanel {
                 medicineModel.setSuppliedBy(Objects.requireNonNull(suppCombo.getSelectedItem()).toString());
 
                 EventQueue.invokeLater(() -> {
-                    new MedicineController().updateMedicine(medicineModel);
+                    medicineController.updateMedicine(medicineModel);
                     loadDataSet();
                 });
             }
@@ -390,12 +398,12 @@ public class MedicinePage extends javax.swing.JPanel {
     }//GEN-LAST:event_editButtonActionPerformed
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        new AddProductDialog(medicineTable, dashboard);
+        new AddMedicineDialog(medicineTable, dashboard, id);
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         if (medicineTable.getSelectedRow() < 0)
-            JOptionPane.showMessageDialog(null, "Please select medicine from the table.");
+            JOptionPane.showMessageDialog(this, "Please select medicine from the table.");
         else {
             int opt = JOptionPane.showConfirmDialog(
                 null,
@@ -403,7 +411,7 @@ public class MedicinePage extends javax.swing.JPanel {
                 "Confirmation",
                 JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
-                new MedicineController().deleteMedicine(
+                medicineController.deleteMedicine(
                     (Integer) medicineTable.getValueAt(
                         medicineTable.getSelectedRow(), 0));
                 loadDataSet();
@@ -460,7 +468,7 @@ public class MedicinePage extends javax.swing.JPanel {
 
     public void loadComboBox() {
         try {
-            SupplierController supplierController = new SupplierController();
+            SupplierController supplierController = new SupplierController(id);
             suppCombo.setModel(supplierController.setComboItems(supplierController.getSuppliers()));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -488,7 +496,6 @@ public class MedicinePage extends javax.swing.JPanel {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                MedicineController medicineController = new MedicineController();
                 medicineTable.setModel(new DataTableModel().buildTableModel(medicineController.getMedicines()));
 
                 processColumns();
@@ -503,7 +510,6 @@ public class MedicinePage extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         EventQueue.invokeLater(() -> {
             try {
-                MedicineController medicineController = new MedicineController();
                 medicineTable.setModel(new DataTableModel().buildTableModel(medicineController.getMedicineSearch(text)));
 
                 processColumns();

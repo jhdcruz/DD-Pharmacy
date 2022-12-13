@@ -20,11 +20,17 @@ public class SupplierController {
     ResultSet resultSet = null;
 
     String supplierCode;
+    LogsController logsController;
 
-    public SupplierController() {
+    int logId;
+
+    public SupplierController(int id) {
+        this.logId = id;
+
         try {
             connection = new DatabaseInstance().getConnection();
             statement = connection.createStatement();
+            logsController = new LogsController();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -59,6 +65,7 @@ public class SupplierController {
                 preparedStatement.setString(4, supplierModel.getPhone());
 
                 preparedStatement.executeUpdate();
+                logsController.addLogEntry(logId, "Added new supplier: " + supplierModel.getSupplierName());
             }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -81,6 +88,7 @@ public class SupplierController {
             preparedStatement.setString(5, oldCode);
 
             preparedStatement.executeUpdate();
+            logsController.addLogEntry(logId, "Updated supplier: " + supplierModel.getSupplierCode() + " - " + supplierModel.getSupplierName());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -91,10 +99,11 @@ public class SupplierController {
      *
      * @param supplierCode supplier code to be deleted
      */
-    public void deleteSupplier(String supplierCode) {
+    public void deleteSupplier(String supplierCode, String supplierName) {
         try {
             String query = "DELETE FROM suppliers WHERE supplier_code='" + supplierCode + "'";
             statement.executeUpdate(query);
+            logsController.addLogEntry(logId, "Deleted supplier: " + supplierName);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }

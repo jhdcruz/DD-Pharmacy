@@ -16,14 +16,20 @@ public class MedicineController {
     PreparedStatement preparedStatement = null;
     Statement statement = null;
     ResultSet resultSet = null;
+    LogsController logsController;
 
     // Stock availability of certain medicine in inventory
     boolean available = false;
 
-    public MedicineController() {
+    int logId;
+
+    public MedicineController(int logId) {
+        this.logId = logId;
+
         try {
             connection = new DatabaseInstance().getConnection();
             statement = connection.createStatement();
+            logsController = new LogsController();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -80,6 +86,7 @@ public class MedicineController {
                 preparedStatement.setDate(8, date);
 
                 preparedStatement.executeUpdate();
+                logsController.addLogEntry(logId, "Added new medicine: " + medicineModel.getMedicineCode() + " | " + medicineModel.getMedicineName());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -90,7 +97,7 @@ public class MedicineController {
         java.sql.Date date = new java.sql.Date(medicineModel.getDate().getTime());
 
         try {
-            String query = "INSERT INTO purchaseinfo VALUES(null,?,?,?,?,?)";
+            String query = "INSERT INTO restock VALUES(null,?,?,?,?,?)";
 
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, medicineModel.getSupplierCode());
@@ -100,6 +107,7 @@ public class MedicineController {
             preparedStatement.setDouble(5, medicineModel.getTotalCost());
 
             preparedStatement.executeUpdate();
+            logsController.addLogEntry(logId, "Medicine restock: " + medicineModel.getMedicineCode() + " | " + medicineModel.getMedicineName());
         } catch (SQLException throwable) {
             throwable.printStackTrace();
         }
@@ -151,6 +159,7 @@ public class MedicineController {
             preparedStatement.setInt(9, medicineModel.getMedicineId());
 
             preparedStatement.executeUpdate();
+            logsController.addLogEntry(logId, "Updated medicine: " + medicineModel.getMedicineCode() + " | " + medicineModel.getMedicineName());
         } catch (SQLException throwable) {
             throwable.printStackTrace();
         }
@@ -175,6 +184,7 @@ public class MedicineController {
                 preparedStatement.setString(2, code);
                 preparedStatement.executeUpdate();
             }
+            logsController.addLogEntry(logId, "Medicine stock reduced: " + code + " due to deleted restock info");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -193,6 +203,7 @@ public class MedicineController {
             preparedStatement.setInt(1, pid);
 
             preparedStatement.executeUpdate();
+            logsController.addLogEntry(logId, "Deleted medicine with id: " + pid);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -200,11 +211,12 @@ public class MedicineController {
 
     public void deleteRestockInfo(int id) {
         try {
-            String query = "DELETE FROM purchaseinfo WHERE purchase_id=?";
+            String query = "DELETE FROM restock WHERE purchase_id=?";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
 
             preparedStatement.executeUpdate();
+            logsController.addLogEntry(logId, "Deleted restock info with id: " + id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -230,10 +242,10 @@ public class MedicineController {
     public ResultSet getRestockInfo() {
         try {
             String query = """
-                SELECT purchase_id, purchaseinfo.medicine_code,medicine_name,purchaseinfo.quantity,total_cost,date
-                FROM purchaseinfo
+                SELECT purchase_id, restock.medicine_code,medicine_name,restock.quantity,total_cost,date
+                FROM restock
                 INNER JOIN medicines
-                ON medicines.medicine_code=purchaseinfo.medicine_code
+                ON medicines.medicine_code=restock.medicine_code
                 ORDER BY date DESC;
                 """;
             resultSet = statement.executeQuery(query);
@@ -273,11 +285,11 @@ public class MedicineController {
     // Search method for purchase logs
     public ResultSet getRestockSearch(String text) {
         try {
-            String query = "SELECT purchase_id,purchaseinfo.medicine_code,medicines.medicine_name,quantity,total_cost\n"
-                + "FROM purchaseinfo INNER JOIN medicines ON purchaseinfo.medicine_code=medicines.medicine_code\n"
-                + "INNER JOIN suppliers ON purchaseinfo.supplier_code=suppliers.supplier_code\n"
+            String query = "SELECT purchase_id,restock.medicine_code,medicines.medicine_name,quantity,total_cost\n"
+                + "FROM restock INNER JOIN medicines ON restock.medicine_code=medicines.medicine_code\n"
+                + "INNER JOIN suppliers ON restock.supplier_code=suppliers.supplier_code\n"
                 + "WHERE purchase_id LIKE '%" + text + "%' OR medicine_code LIKE '%" + text + "%' OR medicine_name LIKE '%" + text + "%'\n"
-                + "OR suppliers.full_name LIKE '%" + text + "%' OR purchaseinfo.supplier_code LIKE '%" + text + "%'\n"
+                + "OR suppliers.full_name LIKE '%" + text + "%' OR restock.supplier_code LIKE '%" + text + "%'\n"
                 + "OR date LIKE '%" + text + "%' ORDER BY purchase_id";
 
             resultSet = statement.executeQuery(query);

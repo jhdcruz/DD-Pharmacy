@@ -16,14 +16,19 @@ import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.Objects;
 
-public class AddProductDialog extends javax.swing.JDialog {
+public class AddMedicineDialog extends javax.swing.JDialog {
 
+    MedicineController medicineController;
     private final JTable productTable;
     private final Dashboard dashboard;
+    private final int id;
 
-    public AddProductDialog(JTable productTable, Dashboard dashboard) {
+    public AddMedicineDialog(JTable productTable, Dashboard dashboard, int id) {
         this.productTable = productTable;
         this.dashboard = dashboard;
+        this.id = id;
+
+        medicineController = new MedicineController(id);
 
         initComponents();
 
@@ -268,7 +273,7 @@ public class AddProductDialog extends javax.swing.JDialog {
             medicineModel.setSuppliedBy(Objects.requireNonNull(suppCombo.getSelectedItem()).toString());
 
             EventQueue.invokeLater(() -> {
-                new MedicineController().addMedicine(medicineModel);
+                medicineController.addMedicine(medicineModel);
                 loadDataSet();
             });
 
@@ -317,7 +322,6 @@ public class AddProductDialog extends javax.swing.JDialog {
 
     public void loadDataSet() {
         try {
-            MedicineController medicineController = new MedicineController();
             productTable.setModel(new DataTableModel().buildTableModel(medicineController.getMedicines()));
             processColumns();
         } catch (SQLException e) {
@@ -326,8 +330,9 @@ public class AddProductDialog extends javax.swing.JDialog {
     }
 
     public void loadComboBox() {
+        SupplierController supplierController = new SupplierController(id);
+
         try {
-            SupplierController supplierController = new SupplierController();
             suppCombo.setModel(supplierController.setComboItems(supplierController.getSuppliers()));
         } catch (SQLException e) {
             e.printStackTrace();

@@ -3,7 +3,6 @@ package com.pharmacy.Controllers;
 import com.pharmacy.Database.DatabaseInstance;
 import com.pharmacy.Models.UserModel;
 import com.pharmacy.Utils.EncryptionUtils;
-import com.pharmacy.Views.UsersPage;
 
 import javax.swing.JOptionPane;
 import java.sql.Connection;
@@ -19,10 +18,17 @@ public class UserController {
     Statement statement = null;
     ResultSet resultSet = null;
 
-    public UserController() {
+    LogsController logsController;
+
+    int logId;
+
+    public UserController(int logId) {
+        this.logId = logId;
+
         try {
             conn = new DatabaseInstance().getConnection();
             statement = conn.createStatement();
+            logsController = new LogsController();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -55,6 +61,7 @@ public class UserController {
                 prepStatement.setString(5, userModel.getType());
 
                 prepStatement.executeUpdate();
+                logsController.addLogEntry(logId, "Added new user: " + userModel.getName());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -64,7 +71,7 @@ public class UserController {
     /**
      * Update existing user (password excluded!)
      * <p>
-     * See {@link #updatePass(int id, String password)} for updating
+     * See {@link #updatePass(int id, String username, String password)} for updating
      * password
      *
      * @param userModel populated UserModel
@@ -81,23 +88,24 @@ public class UserController {
             prepStatement.setInt(5, userModel.getId());
 
             prepStatement.executeUpdate();
+            logsController.addLogEntry(logId, "User updated: " + userModel.getId() + " - " + userModel.getName());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
 
     // Method to delete existing user
-    public void deleteUser(String id) {
+    public void deleteUser(int id, String username) {
         try {
             String query = "DELETE FROM users WHERE id=?";
             prepStatement = conn.prepareStatement(query);
-            prepStatement.setString(1, id);
+            prepStatement.setInt(1, id);
 
             prepStatement.executeUpdate();
+            logsController.addLogEntry(logId, "Deleted user: " + username);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
-        new UsersPage().loadDataSet();
     }
 
     // Method to retrieve data set to display in table
@@ -121,6 +129,22 @@ public class UserController {
         }
 
         return resultSet;
+    }
+
+    public int getUserId(String username) {
+        int id = 0;
+
+        try {
+            String query = "SELECT id FROM users WHERE username='" + username + "'";
+            resultSet = statement.executeQuery(query);
+            if (resultSet.next()) {
+                id = resultSet.getInt("id");
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+
+        return id;
     }
 
     public ResultSet findUser(String username) {
@@ -187,7 +211,7 @@ public class UserController {
         return false;
     }
 
-    public void updatePass(int id, String password) {
+    public void updatePass(int id, String username, String password) {
         try {
             String encryptedPass = new EncryptionUtils().encrypt(password);
 
@@ -196,6 +220,7 @@ public class UserController {
             prepStatement.setString(1, encryptedPass);
 
             prepStatement.executeUpdate();
+            logsController.addLogEntry(logId, "Password updated for user: " + username);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
