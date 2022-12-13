@@ -1,8 +1,8 @@
 package com.pharmacy.Views;
 
 import com.pharmacy.Controllers.CustomerController;
-import com.pharmacy.Controllers.ProductController;
-import com.pharmacy.Models.ProductModel;
+import com.pharmacy.Controllers.MedicineController;
+import com.pharmacy.Models.MedicineModel;
 import com.pharmacy.Utils.DataTableModel;
 
 import javax.swing.JOptionPane;
@@ -17,7 +17,7 @@ public class SalesPage extends javax.swing.JPanel {
     String username;
     Dashboard dashboard;
     int quantity;
-    String prodCode;
+    String medCode;
 
     public SalesPage(String username, Dashboard dashboard) {
         initComponents();
@@ -315,10 +315,10 @@ public class SalesPage extends javax.swing.JPanel {
                 "Confirmation",
                 JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
-                new ProductController().deleteSalesInfo(Integer.parseInt(
+                new MedicineController().deleteSalesInfo(Integer.parseInt(
                     salesTable.getValueAt(salesTable.getSelectedRow(), 0).toString()));
 
-                new ProductController().updateSoldStock(
+                new MedicineController().updateSoldStock(
                     salesTable.getValueAt(salesTable.getSelectedRow(), 1).toString(),
                     quantity
                 );
@@ -352,15 +352,15 @@ public class SalesPage extends javax.swing.JPanel {
                     double sellPrice = Double.parseDouble(priceText.getText());
                     double totalRevenue = sellPrice * Integer.parseInt(quantityText.getText());
 
-                    ProductModel productModel = new ProductModel();
-                    productModel.setCustomerCode(custCodeText.getText());
-                    productModel.setDate(jDateChooser1.getDate());
-                    productModel.setProductCode(prodCodeText.getText());
-                    productModel.setTotalRevenue(totalRevenue);
-                    productModel.setQuantity(Integer.parseInt(quantityText.getText()));
+                    MedicineModel medicineModel = new MedicineModel();
+                    medicineModel.setCustomerCode(custCodeText.getText());
+                    medicineModel.setDate(jDateChooser1.getDate());
+                    medicineModel.setMedicineCode(prodCodeText.getText());
+                    medicineModel.setTotalRevenue(totalRevenue);
+                    medicineModel.setQuantity(Integer.parseInt(quantityText.getText()));
 
                     EventQueue.invokeLater(() -> {
-                        new ProductController().sellProduct(productModel, username);
+                        new MedicineController().sellProduct(medicineModel, username);
                         loadDataSet();
                     });
                 } else {
@@ -383,7 +383,7 @@ public class SalesPage extends javax.swing.JPanel {
         }
 
         quantity = Integer.parseInt(data[3].toString());
-        prodCode = data[1].toString();
+        medCode = data[1].toString();
     }//GEN-LAST:event_salesTableMouseClicked
 
     private void custCodeTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custCodeTextKeyReleased
@@ -414,7 +414,7 @@ public class SalesPage extends javax.swing.JPanel {
                         + resultSet.getString("product_name")
                         + " | Available quantity: "
                         + resultSet.getString("quantity"));
-                    Double sellPrice = new ProductController().getProductSellPrice(prodCodeText.getText());
+                    Double sellPrice = new MedicineController().getMedicineSellPrice(prodCodeText.getText());
                     priceText.setText(sellPrice.toString());
                 } else {
                     prodNameLabel.setText("||   Product doesn't exist in Inventory.  ||");
@@ -445,8 +445,8 @@ public class SalesPage extends javax.swing.JPanel {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                ProductController productController = new ProductController();
-                salesTable.setModel(new DataTableModel().buildTableModel(productController.getSalesInfo()));
+                MedicineController medicineController = new MedicineController();
+                salesTable.setModel(new DataTableModel().buildTableModel(medicineController.getSalesInfo()));
                 resizeColumnWidths();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -458,8 +458,8 @@ public class SalesPage extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         EventQueue.invokeLater(() -> {
             try {
-                ProductController productController = new ProductController();
-                salesTable.setModel(new DataTableModel().buildTableModel(productController.getSalesSearch(text)));
+                MedicineController medicineController = new MedicineController();
+                salesTable.setModel(new DataTableModel().buildTableModel(medicineController.getSalesSearch(text)));
                 resizeColumnWidths();
             } catch (SQLException e) {
                 e.printStackTrace();

@@ -40,7 +40,7 @@ public class Dashboard extends javax.swing.JFrame {
         displayPanel.add("Home", new HomePage(username));
         displayPanel.add("Users", new UsersPage());
         displayPanel.add("Customers", new CustomerPage());
-        displayPanel.add("Products", new ProductPage(this));
+        displayPanel.add("Medicine", new MedicinePage(this));
         displayPanel.add("Suppliers", new SupplierPage());
         displayPanel.add("Sales", new SalesPage(username, this));
         displayPanel.add("Restock", new RestockPage(this));
@@ -85,8 +85,8 @@ public class Dashboard extends javax.swing.JFrame {
         layout.show(displayPanel, "Customers");
     }
 
-    public void addProdPage() {
-        layout.show(displayPanel, "Products");
+    public void addMedPage() {
+        layout.show(displayPanel, "Medicine");
     }
 
     public void addSuppPage() {
@@ -117,7 +117,7 @@ public class Dashboard extends javax.swing.JFrame {
         mainPanel = new javax.swing.JPanel();
         navPanel = new javax.swing.JPanel();
         homeButton = new javax.swing.JButton();
-        prodButton = new javax.swing.JButton();
+        medButton = new javax.swing.JButton();
         custButton = new javax.swing.JButton();
         suppButton = new javax.swing.JButton();
         salesButton = new javax.swing.JButton();
@@ -144,12 +144,12 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
-        prodButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
-        prodButton.setText("Products");
-        prodButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        prodButton.addActionListener(new java.awt.event.ActionListener() {
+        medButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        medButton.setText("Medicines");
+        medButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        medButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                prodButtonActionPerformed(evt);
+                medButtonActionPerformed(evt);
             }
         });
 
@@ -227,7 +227,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(navPanelLayout.createSequentialGroup()
                     .addGap(6, 6, 6)
                     .addGroup(navPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                        .addComponent(prodButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(medButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(custButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(suppButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(salesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -254,7 +254,7 @@ public class Dashboard extends javax.swing.JFrame {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, 0)
-                    .addComponent(prodButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(medButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(custButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -344,9 +344,9 @@ public class Dashboard extends javax.swing.JFrame {
         addCustPage();
     }//GEN-LAST:event_custButtonActionPerformed
 
-    private void prodButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prodButtonActionPerformed
-        addProdPage();
-    }//GEN-LAST:event_prodButtonActionPerformed
+    private void medButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medButtonActionPerformed
+        addMedPage();
+    }//GEN-LAST:event_medButtonActionPerformed
 
     private void homeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeButtonActionPerformed
         //dispose();
@@ -370,8 +370,8 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JButton logoutButton;
     private javax.swing.JButton logsButton;
     private javax.swing.JPanel mainPanel;
+    private javax.swing.JButton medButton;
     private javax.swing.JPanel navPanel;
-    private javax.swing.JButton prodButton;
     private javax.swing.JButton purchaseButton;
     private javax.swing.JButton salesButton;
     private javax.swing.JButton suppButton;

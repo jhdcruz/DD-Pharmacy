@@ -2,23 +2,23 @@ package com.pharmacy.Models;
 
 import java.util.Date;
 
-public class ProductModel {
+public class MedicineModel {
 
-    private int productId, quantity, userId;
+    private int medicineId, quantity, userId;
     private double costPrice, sellPrice;
     private Double totalCost, totalRevenue;
-    private String productCode, productName, customerCode, customerName, description;
+    private String medicineCode, medicineName, customerCode, customerName, description;
 
     private String supplierCode, suppliedBy;
 
     private Date date, expirationDate;
 
-    public int getProductId() {
-        return productId;
+    public int getMedicineId() {
+        return medicineId;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setMedicineId(int medicineId) {
+        this.medicineId = medicineId;
     }
 
 
@@ -70,20 +70,20 @@ public class ProductModel {
         this.totalRevenue = totalRevenue;
     }
 
-    public String getProductCode() {
-        return productCode;
+    public String getMedicineCode() {
+        return medicineCode;
     }
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
+    public void setMedicineCode(String medicineCode) {
+        this.medicineCode = medicineCode;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getMedicineName() {
+        return medicineName;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setMedicineName(String medicineName) {
+        this.medicineName = medicineName;
     }
 
     public Date getDate() {

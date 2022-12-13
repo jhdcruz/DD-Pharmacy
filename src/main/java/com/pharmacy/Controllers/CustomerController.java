@@ -146,15 +146,15 @@ public class CustomerController {
     }
 
     /**
-     * Get product info based on provided product code. This method is tailored
+     * Get medicine info based on provided medicine code. This method is tailored
      * for sales/pos usage.
      *
-     * @param prodCode product code
-     * @return result set of product details
+     * @param medCode medicine code
+     * @return result set of medicine details
      */
-    public ResultSet getProdName(String prodCode) {
+    public ResultSet getProdName(String medCode) {
         try {
-            String query = "SELECT product_name, quantity, sell_price FROM products WHERE product_code='" + prodCode + "'";
+            String query = "SELECT product_name, quantity, sell_price FROM products WHERE product_code='" + medCode + "'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();

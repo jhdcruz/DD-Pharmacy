@@ -1,7 +1,7 @@
 package com.pharmacy.Controllers;
 
 import com.pharmacy.Database.DatabaseInstance;
-import com.pharmacy.Models.ProductModel;
+import com.pharmacy.Models.MedicineModel;
 
 import javax.swing.JOptionPane;
 import java.sql.Connection;
@@ -10,17 +10,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class ProductController {
+public class MedicineController {
 
     Connection connection = null;
     PreparedStatement preparedStatement = null;
     Statement statement = null;
     ResultSet resultSet = null;
 
-    // Stock availability of certain product in inventory
+    // Stock availability of certain medicine in inventory
     boolean available = false;
 
-    public ProductController() {
+    public MedicineController() {
         try {
             connection = new DatabaseInstance().getConnection();
             statement = connection.createStatement();
@@ -29,11 +29,11 @@ public class ProductController {
         }
     }
 
-    public Double getProductSellPrice(String productCode) {
+    public Double getMedicineSellPrice(String medicineCode) {
         Double sellPrice = null;
 
         try {
-            String query = "SELECT sell_price FROM products WHERE product_code='" + productCode + "'";
+            String query = "SELECT sell_price FROM medicines WHERE medicine_code='" + medicineCode + "'";
             resultSet = statement.executeQuery(query);
 
             if (resultSet.next()) {
@@ -46,9 +46,9 @@ public class ProductController {
         return sellPrice;
     }
 
-    public boolean checkStock(String productCode) {
+    public boolean checkStock(String medicineCode) {
         try {
-            String query = "SELECT quantity FROM products WHERE product_code='" + productCode + "'";
+            String query = "SELECT quantity FROM medicines WHERE medicine_code='" + medicineCode + "'";
             resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
@@ -62,38 +62,38 @@ public class ProductController {
     }
 
     /**
-     * Add new product to the database
+     * Add new medicine to the database
      *
-     * @param productModel product model object
+     * @param medicineModel medicine model object
      */
-    public void addProduct(ProductModel productModel) {
-        java.sql.Date date = new java.sql.Date(productModel.getExpirationDate().getTime());
-        // check if product already exists
+    public void addMedicine(MedicineModel medicineModel) {
+        java.sql.Date date = new java.sql.Date(medicineModel.getExpirationDate().getTime());
+        // check if medicine already exists
         try {
-            String duplicateQuery = "SELECT * FROM products WHERE product_name='"
-                + productModel.getProductName()
+            String duplicateQuery = "SELECT * FROM medicines WHERE medicine_name='"
+                + medicineModel.getMedicineName()
                 + "' AND cost_price='"
-                + productModel.getCostPrice()
+                + medicineModel.getCostPrice()
                 + "' AND sell_price='"
-                + productModel.getSellPrice()
+                + medicineModel.getSellPrice()
                 + "' AND supplied_by='"
-                + productModel.getSuppliedBy()
+                + medicineModel.getSuppliedBy()
                 + "'";
             resultSet = statement.executeQuery(duplicateQuery);
 
             if (resultSet.next()) {
                 JOptionPane.showMessageDialog(null, "Product record already exists.");
             } else {
-                String productQuery = "INSERT INTO products VALUES(null,?,?,?,?,?,?,?,?,DEFAULT)";
-                preparedStatement = connection.prepareStatement(productQuery);
+                String medicineQuery = "INSERT INTO medicines VALUES(null,?,?,?,?,?,?,?,?,DEFAULT)";
+                preparedStatement = connection.prepareStatement(medicineQuery);
 
-                preparedStatement.setString(1, productModel.getProductCode());
-                preparedStatement.setString(2, productModel.getProductName());
-                preparedStatement.setString(3, productModel.getDescription());
-                preparedStatement.setDouble(4, productModel.getCostPrice());
-                preparedStatement.setDouble(5, productModel.getSellPrice());
-                preparedStatement.setInt(6, productModel.getQuantity());
-                preparedStatement.setString(7, productModel.getSuppliedBy());
+                preparedStatement.setString(1, medicineModel.getMedicineCode());
+                preparedStatement.setString(2, medicineModel.getMedicineName());
+                preparedStatement.setString(3, medicineModel.getDescription());
+                preparedStatement.setDouble(4, medicineModel.getCostPrice());
+                preparedStatement.setDouble(5, medicineModel.getSellPrice());
+                preparedStatement.setInt(6, medicineModel.getQuantity());
+                preparedStatement.setString(7, medicineModel.getSuppliedBy());
                 preparedStatement.setDate(8, date);
 
                 preparedStatement.executeUpdate();
@@ -103,69 +103,69 @@ public class ProductController {
         }
     }
 
-    public void addRestockInfo(ProductModel productModel) {
-        java.sql.Date date = new java.sql.Date(productModel.getDate().getTime());
+    public void addRestockInfo(MedicineModel medicineModel) {
+        java.sql.Date date = new java.sql.Date(medicineModel.getDate().getTime());
 
         try {
             String query = "INSERT INTO purchaseinfo VALUES(null,?,?,?,?,?)";
 
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, productModel.getSupplierCode());
-            preparedStatement.setString(2, productModel.getProductCode());
+            preparedStatement.setString(1, medicineModel.getSupplierCode());
+            preparedStatement.setString(2, medicineModel.getMedicineCode());
             preparedStatement.setDate(3, date);
-            preparedStatement.setInt(4, productModel.getQuantity());
-            preparedStatement.setDouble(5, productModel.getTotalCost());
+            preparedStatement.setInt(4, medicineModel.getQuantity());
+            preparedStatement.setDouble(5, medicineModel.getTotalCost());
 
             preparedStatement.executeUpdate();
         } catch (SQLException throwable) {
             throwable.printStackTrace();
         }
 
-        String prodCode = productModel.getProductCode();
+        String medCode = medicineModel.getMedicineCode();
 
-        // Check if products with stock already exists
-        if (checkStock(prodCode)) { // available = true
+        // Check if medicines with stock already exists
+        if (checkStock(medCode)) { // available = true
             try {
-                String query = "UPDATE products SET quantity=quantity+? WHERE product_code=?";
+                String query = "UPDATE medicines SET quantity=quantity+? WHERE medicine_code=?";
                 preparedStatement = connection.prepareStatement(query);
-                preparedStatement.setInt(1, productModel.getQuantity());
-                preparedStatement.setString(2, prodCode);
+                preparedStatement.setInt(1, medicineModel.getQuantity());
+                preparedStatement.setString(2, medCode);
 
                 preparedStatement.executeUpdate();
             } catch (SQLException throwable) {
                 throwable.printStackTrace();
             }
-        } else if (!checkStock(prodCode)) { // available = false
-            addProduct(productModel);
+        } else if (!checkStock(medCode)) { // available = false
+            addMedicine(medicineModel);
         }
     }
 
     /**
-     * Update/Edit existing products
+     * Update/Edit existing medicines
      *
-     * @param productModel product model object
+     * @param medicineModel medicine model object
      */
-    public void updateProduct(ProductModel productModel) {
-        java.sql.Date date = new java.sql.Date(productModel.getExpirationDate().getTime());
+    public void updateMedicine(MedicineModel medicineModel) {
+        java.sql.Date date = new java.sql.Date(medicineModel.getExpirationDate().getTime());
 
         try {
-            String productQuery = """
-                UPDATE products
-                SET product_code=?,product_name=?,description=?,cost_price=?,
+            String medicineQuery = """
+                UPDATE medicines
+                SET medicine_code=?,medicine_name=?,description=?,cost_price=?,
                     sell_price=?,quantity=?,expiration_date=?,supplied_by=?
                 WHERE pid=?;""";
-            preparedStatement = connection.prepareStatement(productQuery);
+            preparedStatement = connection.prepareStatement(medicineQuery);
 
-            preparedStatement.setString(1, productModel.getProductCode());
-            preparedStatement.setString(2, productModel.getProductName());
-            preparedStatement.setString(3, productModel.getDescription());
-            preparedStatement.setDouble(4, productModel.getCostPrice());
-            preparedStatement.setDouble(5, productModel.getSellPrice());
-            preparedStatement.setInt(6, productModel.getQuantity());
+            preparedStatement.setString(1, medicineModel.getMedicineCode());
+            preparedStatement.setString(2, medicineModel.getMedicineName());
+            preparedStatement.setString(3, medicineModel.getDescription());
+            preparedStatement.setDouble(4, medicineModel.getCostPrice());
+            preparedStatement.setDouble(5, medicineModel.getSellPrice());
+            preparedStatement.setInt(6, medicineModel.getQuantity());
             preparedStatement.setDate(7, date);
-            preparedStatement.setString(8, productModel.getSuppliedBy());
+            preparedStatement.setString(8, medicineModel.getSuppliedBy());
 
-            preparedStatement.setInt(9, productModel.getProductId());
+            preparedStatement.setInt(9, medicineModel.getMedicineId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException throwable) {
@@ -177,16 +177,16 @@ public class ProductController {
      * Handling of stocks in Purchase page (-)
      * when a restocking info is deleted
      *
-     * @param code     product code
-     * @param quantity quantity of product
+     * @param code     medicine code
+     * @param quantity quantity of medicine
      */
-    public void reduceProductStock(String code, int quantity) {
+    public void reduceMedicineStock(String code, int quantity) {
         try {
-            String query = "SELECT * FROM products WHERE product_code='" + code + "'";
+            String query = "SELECT * FROM medicines WHERE medicine_code='" + code + "'";
             resultSet = statement.executeQuery(query);
 
             if (resultSet.next()) {
-                String query2 = "UPDATE products SET quantity=quantity-? WHERE product_code=?";
+                String query2 = "UPDATE medicines SET quantity=quantity-? WHERE medicine_code=?";
                 preparedStatement = connection.prepareStatement(query2);
                 preparedStatement.setInt(1, quantity);
                 preparedStatement.setString(2, code);
@@ -200,16 +200,16 @@ public class ProductController {
     /**
      * Handling of stocks in Sales page (+)
      *
-     * @param code     product code
-     * @param quantity quantity of product
+     * @param code     medicine code
+     * @param quantity quantity of medicine
      */
     public void updateSoldStock(String code, int quantity) {
         try {
-            String query = "SELECT * FROM products WHERE product_code='" + code + "'";
+            String query = "SELECT * FROM medicines WHERE medicine_code='" + code + "'";
             resultSet = statement.executeQuery(query);
 
             if (resultSet.next()) {
-                String query2 = "UPDATE products SET quantity=quantity+? WHERE product_code=?";
+                String query2 = "UPDATE medicines SET quantity=quantity+? WHERE medicine_code=?";
                 preparedStatement = connection.prepareStatement(query2);
                 preparedStatement.setInt(1, quantity);
                 preparedStatement.setString(2, code);
@@ -221,13 +221,13 @@ public class ProductController {
     }
 
     /**
-     * Delete product from the database.
+     * Delete medicine from the database.
      *
-     * @param pid product id to be deleted
+     * @param pid medicine id to be deleted
      */
-    public void deleteProduct(int pid) {
+    public void deleteMedicine(int pid) {
         try {
-            String query = "DELETE FROM products WHERE pid=?";
+            String query = "DELETE FROM medicines WHERE pid=?";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, pid);
 
@@ -263,32 +263,32 @@ public class ProductController {
     }
 
     // Sales transaction handling
-    public void sellProduct(ProductModel productModel, String username) {
-        java.sql.Date date = new java.sql.Date(productModel.getDate().getTime());
+    public void sellProduct(MedicineModel medicineModel, String username) {
+        java.sql.Date date = new java.sql.Date(medicineModel.getDate().getTime());
         int quantity = 0;
 
         try {
-            String query = "SELECT * FROM products WHERE product_code='" + productModel.getProductCode() + "'";
+            String query = "SELECT * FROM medicines WHERE medicine_code='" + medicineModel.getMedicineCode() + "'";
             resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
                 quantity = resultSet.getInt("quantity");
             }
 
-            if (productModel.getQuantity() > quantity) {
-                JOptionPane.showMessageDialog(null, "Insufficient stock for this product.");
-            } else if (productModel.getQuantity() <= 0) {
+            if (medicineModel.getQuantity() > quantity) {
+                JOptionPane.showMessageDialog(null, "Insufficient stock for this medicine.");
+            } else if (medicineModel.getQuantity() <= 0) {
                 JOptionPane.showMessageDialog(null, "Please enter a valid quantity");
             } else {
-                String stockQuery = "UPDATE products SET quantity=quantity-'"
-                    + productModel.getQuantity()
-                    + "' WHERE product_code='"
-                    + productModel.getProductCode()
+                String stockQuery = "UPDATE medicines SET quantity=quantity-'"
+                    + medicineModel.getQuantity()
+                    + "' WHERE medicine_code='"
+                    + medicineModel.getMedicineCode()
                     + "'";
 
-                String salesQuery = "INSERT INTO salesinfo(date,product_code,customer_code,quantity,revenue,sold_by)"
-                    + "VALUES('" + date + "','" + productModel.getProductCode() + "','" + productModel.getCustomerCode()
-                    + "','" + productModel.getQuantity() + "','" + productModel.getTotalRevenue() + "','" + username + "')";
+                String salesQuery = "INSERT INTO salesinfo(date,medicine_code,customer_code,quantity,revenue,sold_by)"
+                    + "VALUES('" + date + "','" + medicineModel.getMedicineCode() + "','" + medicineModel.getCustomerCode()
+                    + "','" + medicineModel.getQuantity() + "','" + medicineModel.getTotalRevenue() + "','" + username + "')";
 
                 statement.executeUpdate(stockQuery);
                 statement.executeUpdate(salesQuery);
@@ -299,10 +299,10 @@ public class ProductController {
     }
 
     // Products data set retrieval for display
-    public ResultSet getProducts() {
+    public ResultSet getMedicines() {
         try {
             String query = """
-                SELECT pid, product_code, product_name, description, quantity, cost_price, sell_price, supplied_by, expiration_date, last_updated FROM products;
+                SELECT pid, medicine_code, medicine_name, description, quantity, cost_price, sell_price, supplied_by, expiration_date, last_updated FROM medicines;
                 """;
 
             resultSet = statement.executeQuery(query);
@@ -317,10 +317,10 @@ public class ProductController {
     public ResultSet getRestockInfo() {
         try {
             String query = """
-                SELECT purchase_id, purchaseinfo.product_code,product_name,purchaseinfo.quantity,total_cost,date
+                SELECT purchase_id, purchaseinfo.medicine_code,medicine_name,purchaseinfo.quantity,total_cost,date
                 FROM purchaseinfo
-                INNER JOIN products
-                ON products.product_code=purchaseinfo.product_code
+                INNER JOIN medicines
+                ON medicines.medicine_code=purchaseinfo.medicine_code
                 ORDER BY date DESC;
                 """;
             resultSet = statement.executeQuery(query);
@@ -335,11 +335,11 @@ public class ProductController {
     public ResultSet getSalesInfo() {
         try {
             String query = """
-                SELECT sales_id, products.product_name AS products_code,
+                SELECT sales_id, medicines.medicine_name AS medicines_code,
                 customers.full_name AS customer_code, salesinfo.quantity, revenue,
                 date, users.name AS sold_by
                 FROM salesinfo
-                INNER JOIN products ON salesinfo.product_code = products.product_code
+                INNER JOIN medicines ON salesinfo.medicine_code = medicines.medicine_code
                 INNER JOIN customers ON salesinfo.customer_code = customers.customer_code
                 INNER JOIN users ON salesinfo.sold_by = users.name
                 ORDER BY date DESC;
@@ -353,11 +353,11 @@ public class ProductController {
         return resultSet;
     }
 
-    // Search method for products
-    public ResultSet getProductSearch(String text) {
+    // Search method for medicines
+    public ResultSet getMedicineSearch(String text) {
         try {
-            String query = "SELECT pid, product_code, product_name, description, quantity, cost_price, sell_price, supplied_by, expiration_date, last_updated FROM products "
-                + "WHERE product_code LIKE '%" + text + "%' OR product_name LIKE '%" + text + "%' OR supplied_by LIKE '%" + text + "%'";
+            String query = "SELECT pid, medicine_code, medicine_name, description, quantity, cost_price, sell_price, supplied_by, expiration_date, last_updated FROM medicines "
+                + "WHERE medicine_code LIKE '%" + text + "%' OR medicine_name LIKE '%" + text + "%' OR supplied_by LIKE '%" + text + "%'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -368,8 +368,8 @@ public class ProductController {
 
     public ResultSet getProdFromCode(String text) {
         try {
-            String query = "SELECT * FROM products "
-                + "WHERE product_code='" + text + "' LIMIT 1";
+            String query = "SELECT * FROM medicines "
+                + "WHERE medicine_code='" + text + "' LIMIT 1";
 
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
@@ -383,15 +383,15 @@ public class ProductController {
     public ResultSet getSalesSearch(String text) {
         try {
             String query = """
-                SELECT sales_id, products.product_name AS products_code,
+                SELECT sales_id, medicines.medicine_name AS medicines_code,
                 customers.full_name AS customer_code, salesinfo.quantity, revenue,
                 date, users.name AS sold_by
                 FROM salesinfo
-                INNER JOIN products ON salesinfo.product_code = products.product_code
+                INNER JOIN medicines ON salesinfo.medicine_code = medicines.medicine_code
                 INNER JOIN customers ON salesinfo.customer_code = customers.customer_code
                 INNER JOIN users ON salesinfo.sold_by = users.name
-                WHERE salesinfo.product_code LIKE '%""" + text + "%'"
-                + "OR product_name LIKE '%" + text + "%' "
+                WHERE salesinfo.medicine_code LIKE '%""" + text + "%'"
+                + "OR medicine_name LIKE '%" + text + "%' "
                 + "OR users.name LIKE '%" + text + "%'"
                 + "OR customers.full_name LIKE '%" + text + "%'"
                 + "ORDER BY sales_id;";
@@ -407,10 +407,10 @@ public class ProductController {
     // Search method for purchase logs
     public ResultSet getRestockSearch(String text) {
         try {
-            String query = "SELECT purchase_id,purchaseinfo.product_code,products.product_name,quantity,total_cost\n"
-                + "FROM purchaseinfo INNER JOIN products ON purchaseinfo.product_code=products.product_code\n"
+            String query = "SELECT purchase_id,purchaseinfo.medicine_code,medicines.medicine_name,quantity,total_cost\n"
+                + "FROM purchaseinfo INNER JOIN medicines ON purchaseinfo.medicine_code=medicines.medicine_code\n"
                 + "INNER JOIN suppliers ON purchaseinfo.supplier_code=suppliers.supplier_code\n"
-                + "WHERE purchase_id LIKE '%" + text + "%' OR product_code LIKE '%" + text + "%' OR product_name LIKE '%" + text + "%'\n"
+                + "WHERE purchase_id LIKE '%" + text + "%' OR medicine_code LIKE '%" + text + "%' OR medicine_name LIKE '%" + text + "%'\n"
                 + "OR suppliers.full_name LIKE '%" + text + "%' OR purchaseinfo.supplier_code LIKE '%" + text + "%'\n"
                 + "OR date LIKE '%" + text + "%' ORDER BY purchase_id";
 
@@ -422,9 +422,9 @@ public class ProductController {
         return resultSet;
     }
 
-    public ResultSet getProductName(String code) {
+    public ResultSet getMedicineName(String code) {
         try {
-            String query = "SELECT product_name FROM products WHERE product_code='" + code + "'";
+            String query = "SELECT medicine_name FROM medicines WHERE medicine_code='" + code + "'";
             resultSet = statement.executeQuery(query);
         } catch (SQLException throwables) {
             throwables.printStackTrace();

@@ -37,7 +37,7 @@
                           <Component id="jSeparator3" alignment="0" min="-2" pref="301" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="599" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="593" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -78,7 +78,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Impact" size="24" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="PRODUCTS"/>
+        <Property name="text" type="java.lang.String" value="MEDICINES"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator1">
@@ -87,7 +87,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Product Details"/>
+            <TitledBorder title="Medicine Details"/>
           </Border>
         </Property>
         <Property name="enabled" type="boolean" value="false"/>
@@ -209,7 +209,7 @@
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="1">
-                <StringItem index="0" value="Product Supplier"/>
+                <StringItem index="0" value="Medicine Supplier..."/>
               </StringArray>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Select a supplier"/>
@@ -223,7 +223,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="addSuppButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="+ Add new supplier"/>
+            <Property name="text" type="java.lang.String" value="+  Add New Supplier"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -234,12 +234,12 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Product Code:"/>
+            <Property name="text" type="java.lang.String" value="Medicine Code:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Product Name:"/>
+            <Property name="text" type="java.lang.String" value="Medicine Name:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
@@ -295,7 +295,7 @@
         <Component class="javax.swing.JButton" name="editButton">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Liberation Sans" size="15" style="0"/>
+              <Font name="Liberation Sans" size="15" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Update"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -347,7 +347,7 @@
                 <Property name="columns" type="int" value="20"/>
                 <Property name="lineWrap" type="boolean" value="true"/>
                 <Property name="rows" type="int" value="5"/>
-                <Property name="toolTipText" type="java.lang.String" value="Brief description of the product (300 characters)"/>
+                <Property name="toolTipText" type="java.lang.String" value="Brief description of the medicine (1000 characters)"/>
                 <Property name="wrapStyleWord" type="boolean" value="true"/>
                 <Property name="autoscrolls" type="boolean" value="false"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -368,7 +368,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="productTable">
+        <Component class="javax.swing.JTable" name="medicineTable">
           <Properties>
             <Property name="autoCreateRowSorter" type="boolean" value="true"/>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
@@ -390,10 +390,10 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="productTableMouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="medicineTableMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="productTable.setAutoCreateRowSorter(true);&#xa;&#xa;DefaultTableCellRenderer centerCellRenderer = new DefaultTableCellRenderer();&#xa;centerCellRenderer.setHorizontalAlignment(SwingConstants.LEFT);&#xa;productTable.setDefaultRenderer(Object.class, centerCellRenderer);&#xa;productTable.getTableHeader().setDefaultRenderer(centerCellRenderer);&#xa;&#xa;productTable.setDefaultEditor(Object.class, null);"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="medicineTable.setAutoCreateRowSorter(true);&#xa;&#xa;DefaultTableCellRenderer centerCellRenderer = new DefaultTableCellRenderer();&#xa;centerCellRenderer.setHorizontalAlignment(SwingConstants.LEFT);&#xa;medicineTable.setDefaultRenderer(Object.class, centerCellRenderer);&#xa;medicineTable.getTableHeader().setDefaultRenderer(centerCellRenderer);&#xa;&#xa;medicineTable.setDefaultEditor(Object.class, null);"/>
           </AuxValues>
         </Component>
       </SubComponents>
@@ -429,7 +429,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Liberation Sans" size="15" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="+  Add New Product"/>
+        <Property name="text" type="java.lang.String" value="+  Add New Medicine"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>

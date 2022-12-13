@@ -1,8 +1,8 @@
 package com.pharmacy.Views;
 
-import com.pharmacy.Controllers.ProductController;
+import com.pharmacy.Controllers.MedicineController;
 import com.pharmacy.Controllers.SupplierController;
-import com.pharmacy.Models.ProductModel;
+import com.pharmacy.Models.MedicineModel;
 import com.pharmacy.Utils.DataTableModel;
 import com.pharmacy.Utils.StringFormatting;
 import com.pharmacy.Views.Dialogs.AddProductDialog;
@@ -15,12 +15,12 @@ import java.awt.EventQueue;
 import java.sql.SQLException;
 import java.util.Objects;
 
-public class ProductPage extends javax.swing.JPanel {
+public class MedicinePage extends javax.swing.JPanel {
 
     Dashboard dashboard;
-    ProductModel productModel;
+    MedicineModel medicineModel;
 
-    public ProductPage(Dashboard dashboard) {
+    public MedicinePage(Dashboard dashboard) {
         this.dashboard = dashboard;
 
         initComponents();
@@ -61,7 +61,7 @@ public class ProductPage extends javax.swing.JPanel {
         descriptionText = new javax.swing.JTextArea();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        productTable = new javax.swing.JTable();
+        medicineTable = new javax.swing.JTable();
         refreshButton = new javax.swing.JButton();
         searchText = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
@@ -69,12 +69,12 @@ public class ProductPage extends javax.swing.JPanel {
         jSeparator3 = new javax.swing.JSeparator();
 
         jLabel1.setFont(new java.awt.Font("Impact", 1, 24)); // NOI18N
-        jLabel1.setText("PRODUCTS");
+        jLabel1.setText("MEDICINES");
 
-        entryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Product Details"));
+        entryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Medicine Details"));
         entryPanel.setEnabled(false);
 
-        suppCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Product Supplier"}));
+        suppCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Medicine Supplier..."}));
         suppCombo.setToolTipText("Select a supplier");
         suppCombo.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
@@ -86,7 +86,7 @@ public class ProductPage extends javax.swing.JPanel {
             }
         });
 
-        addSuppButton.setText("+ Add new supplier");
+        addSuppButton.setText("+  Add New Supplier");
         addSuppButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         addSuppButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -94,9 +94,9 @@ public class ProductPage extends javax.swing.JPanel {
             }
         });
 
-        jLabel2.setText("Product Code:");
+        jLabel2.setText("Medicine Code:");
 
-        jLabel3.setText("Product Name:");
+        jLabel3.setText("Medicine Name:");
 
         jLabel5.setText("Quantity:");
 
@@ -114,7 +114,7 @@ public class ProductPage extends javax.swing.JPanel {
 
         sellText.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
-        editButton.setFont(new java.awt.Font("Liberation Sans", 0, 15)); // NOI18N
+        editButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         editButton.setText("Update");
         editButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         editButton.addActionListener(new java.awt.event.ActionListener() {
@@ -140,7 +140,7 @@ public class ProductPage extends javax.swing.JPanel {
         descriptionText.setColumns(20);
         descriptionText.setLineWrap(true);
         descriptionText.setRows(5);
-        descriptionText.setToolTipText("Brief description of the product (300 characters)");
+        descriptionText.setToolTipText("Brief description of the medicine (1000 characters)");
         descriptionText.setWrapStyleWord(true);
         descriptionText.setAutoscrolls(false);
         descriptionText.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
@@ -240,8 +240,8 @@ public class ProductPage extends javax.swing.JPanel {
                     .addContainerGap())
         );
 
-        productTable.setAutoCreateRowSorter(true);
-        productTable.setModel(new javax.swing.table.DefaultTableModel(
+        medicineTable.setAutoCreateRowSorter(true);
+        medicineTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object[][]{
                 {null, null, null, null},
                 {null, null, null, null},
@@ -260,25 +260,25 @@ public class ProductPage extends javax.swing.JPanel {
                 return canEdit[columnIndex];
             }
         });
-        productTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        productTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        productTable.setRowHeight(35);
-        productTable.setShowGrid(true);
-        productTable.getTableHeader().setReorderingAllowed(false);
-        productTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        medicineTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        medicineTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        medicineTable.setRowHeight(35);
+        medicineTable.setShowGrid(true);
+        medicineTable.getTableHeader().setReorderingAllowed(false);
+        medicineTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                productTableMouseClicked(evt);
+                medicineTableMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(productTable);
-        productTable.setAutoCreateRowSorter(true);
+        jScrollPane1.setViewportView(medicineTable);
+        medicineTable.setAutoCreateRowSorter(true);
 
         DefaultTableCellRenderer centerCellRenderer = new DefaultTableCellRenderer();
         centerCellRenderer.setHorizontalAlignment(SwingConstants.LEFT);
-        productTable.setDefaultRenderer(Object.class, centerCellRenderer);
-        productTable.getTableHeader().setDefaultRenderer(centerCellRenderer);
+        medicineTable.setDefaultRenderer(Object.class, centerCellRenderer);
+        medicineTable.getTableHeader().setDefaultRenderer(centerCellRenderer);
 
-        productTable.setDefaultEditor(Object.class, null);
+        medicineTable.setDefaultEditor(Object.class, null);
 
         refreshButton.setFont(new java.awt.Font("Liberation Sans", 0, 14)); // NOI18N
         refreshButton.setText("REFRESH");
@@ -300,7 +300,7 @@ public class ProductPage extends javax.swing.JPanel {
         jLabel9.setFocusable(false);
 
         addButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
-        addButton.setText("+  Add New Product");
+        addButton.setText("+  Add New Medicine");
         addButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -331,7 +331,7 @@ public class ProductPage extends javax.swing.JPanel {
                                 .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 593, Short.MAX_VALUE)))
                     .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -362,28 +362,28 @@ public class ProductPage extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        if (productTable.getSelectedRow() < 0)
-            JOptionPane.showMessageDialog(null, "Please select product from the table.");
+        if (medicineTable.getSelectedRow() < 0)
+            JOptionPane.showMessageDialog(this, "Please select medicine from the table.");
         else {
-            productModel = new ProductModel();
+            medicineModel = new MedicineModel();
             if (nameText.getText().equals("") || costText.getText().equals("")
                 || sellText.getText().equals("") || quantityText.getText().equals("")) {
                 JOptionPane.showMessageDialog(this, "Please enter all the required details.");
             } else {
-                int pid = (int) productTable.getValueAt(productTable.getSelectedRow(), 0);
+                int pid = (int) medicineTable.getValueAt(medicineTable.getSelectedRow(), 0);
 
-                productModel.setProductId(pid);
-                productModel.setProductCode(codeText.getText());
-                productModel.setProductName(nameText.getText());
-                productModel.setQuantity(Integer.parseInt(quantityText.getText()));
-                productModel.setCostPrice(Double.parseDouble(costText.getText()));
-                productModel.setSellPrice(Double.parseDouble(sellText.getText()));
-                productModel.setExpirationDate(expirationDate.getDate());
-                productModel.setDescription(descriptionText.getText());
-                productModel.setSuppliedBy(Objects.requireNonNull(suppCombo.getSelectedItem()).toString());
+                medicineModel.setMedicineId(pid);
+                medicineModel.setMedicineCode(codeText.getText());
+                medicineModel.setMedicineName(nameText.getText());
+                medicineModel.setQuantity(Integer.parseInt(quantityText.getText()));
+                medicineModel.setCostPrice(Double.parseDouble(costText.getText()));
+                medicineModel.setSellPrice(Double.parseDouble(sellText.getText()));
+                medicineModel.setExpirationDate(expirationDate.getDate());
+                medicineModel.setDescription(descriptionText.getText());
+                medicineModel.setSuppliedBy(Objects.requireNonNull(suppCombo.getSelectedItem()).toString());
 
                 EventQueue.invokeLater(() -> {
-                    new ProductController().updateProduct(productModel);
+                    new MedicineController().updateMedicine(medicineModel);
                     loadDataSet();
                 });
             }
@@ -391,37 +391,37 @@ public class ProductPage extends javax.swing.JPanel {
     }//GEN-LAST:event_editButtonActionPerformed
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        new AddProductDialog(productTable, dashboard);
+        new AddProductDialog(medicineTable, dashboard);
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        if (productTable.getSelectedRow() < 0)
-            JOptionPane.showMessageDialog(null, "Please select product from the table.");
+        if (medicineTable.getSelectedRow() < 0)
+            JOptionPane.showMessageDialog(null, "Please select medicine from the table.");
         else {
             int opt = JOptionPane.showConfirmDialog(
                 null,
-                "Are you sure you want to delete this product?",
+                "Are you sure you want to delete this medicine?",
                 "Confirmation",
                 JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
-                new ProductController().deleteProduct(
-                    (Integer) productTable.getValueAt(
-                        productTable.getSelectedRow(), 0));
+                new MedicineController().deleteMedicine(
+                    (Integer) medicineTable.getValueAt(
+                        medicineTable.getSelectedRow(), 0));
                 loadDataSet();
             }
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     //static String productName;
-    private void productTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productTableMouseClicked
-        int row = productTable.getSelectedRow();
-        int col = productTable.getColumnCount();
+    private void medicineTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medicineTableMouseClicked
+        int row = medicineTable.getSelectedRow();
+        int col = medicineTable.getColumnCount();
 
         Object[] data = new Object[col];
 
         // get cell values
         for (int i = 0; i < col; i++) {
-            data[i] = productTable.getValueAt(row, i);
+            data[i] = medicineTable.getValueAt(row, i);
         }
 
         codeText.setText(data[1].toString());
@@ -432,7 +432,7 @@ public class ProductPage extends javax.swing.JPanel {
         sellText.setText(data[6].toString());
         suppCombo.setSelectedItem(data[7]);
         expirationDate.setDate(new StringFormatting().stringToDate(data[8].toString()));
-    }//GEN-LAST:event_productTableMouseClicked
+    }//GEN-LAST:event_medicineTableMouseClicked
 
     private void addSuppButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSuppButtonActionPerformed
         dashboard.addSuppPage();
@@ -470,27 +470,27 @@ public class ProductPage extends javax.swing.JPanel {
 
     private void processColumns() {
         // hide pid
-        productTable.getColumnModel().getColumn(0).setMinWidth(0);
-        productTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        medicineTable.getColumnModel().getColumn(0).setMinWidth(0);
+        medicineTable.getColumnModel().getColumn(0).setMaxWidth(0);
 
         // resize column widths
-        productTable.getColumnModel().getColumn(1).setPreferredWidth(111);
-        productTable.getColumnModel().getColumn(2).setPreferredWidth(121);
-        productTable.getColumnModel().getColumn(3).setPreferredWidth(151);
-        productTable.getColumnModel().getColumn(4).setPreferredWidth(81);
-        productTable.getColumnModel().getColumn(5).setPreferredWidth(81);
-        productTable.getColumnModel().getColumn(6).setPreferredWidth(81);
-        productTable.getColumnModel().getColumn(7).setPreferredWidth(101);
-        productTable.getColumnModel().getColumn(8).setPreferredWidth(121);
-        productTable.getColumnModel().getColumn(9).setPreferredWidth(171);
+        medicineTable.getColumnModel().getColumn(1).setPreferredWidth(111);
+        medicineTable.getColumnModel().getColumn(2).setPreferredWidth(121);
+        medicineTable.getColumnModel().getColumn(3).setPreferredWidth(151);
+        medicineTable.getColumnModel().getColumn(4).setPreferredWidth(81);
+        medicineTable.getColumnModel().getColumn(5).setPreferredWidth(81);
+        medicineTable.getColumnModel().getColumn(6).setPreferredWidth(81);
+        medicineTable.getColumnModel().getColumn(7).setPreferredWidth(101);
+        medicineTable.getColumnModel().getColumn(8).setPreferredWidth(121);
+        medicineTable.getColumnModel().getColumn(9).setPreferredWidth(171);
     }
 
     // Method to load data into table
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                ProductController productController = new ProductController();
-                productTable.setModel(new DataTableModel().buildTableModel(productController.getProducts()));
+                MedicineController medicineController = new MedicineController();
+                medicineTable.setModel(new DataTableModel().buildTableModel(medicineController.getMedicines()));
 
                 processColumns();
                 loadComboBox();
@@ -504,8 +504,8 @@ public class ProductPage extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         EventQueue.invokeLater(() -> {
             try {
-                ProductController productController = new ProductController();
-                productTable.setModel(new DataTableModel().buildTableModel(productController.getProductSearch(text)));
+                MedicineController medicineController = new MedicineController();
+                medicineTable.setModel(new DataTableModel().buildTableModel(medicineController.getMedicineSearch(text)));
 
                 processColumns();
             } catch (SQLException throwables) {
@@ -538,8 +538,8 @@ public class ProductPage extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JTable medicineTable;
     private javax.swing.JTextField nameText;
-    private javax.swing.JTable productTable;
     private javax.swing.JTextField quantityText;
     private javax.swing.JButton refreshButton;
     private javax.swing.JTextField searchText;

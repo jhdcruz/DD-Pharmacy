@@ -1,8 +1,8 @@
 package com.pharmacy.Views.Dialogs;
 
-import com.pharmacy.Controllers.ProductController;
+import com.pharmacy.Controllers.MedicineController;
 import com.pharmacy.Controllers.SupplierController;
-import com.pharmacy.Models.ProductModel;
+import com.pharmacy.Models.MedicineModel;
 import com.pharmacy.Utils.DataTableModel;
 import com.pharmacy.Views.Dashboard;
 
@@ -253,22 +253,22 @@ public class AddProductDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        ProductModel productModel = new ProductModel();
+        MedicineModel medicineModel = new MedicineModel();
         if (nameText.getText().equals("") || costText.getText().equals("")
             || sellText.getText().equals(""))
             JOptionPane.showMessageDialog(null, "Please enter all the required details.");
         else {
-            productModel.setProductCode(codeText.getText());
-            productModel.setProductName(nameText.getText());
-            productModel.setQuantity(Integer.parseInt(quantityText.getText()));
-            productModel.setCostPrice(Double.parseDouble(costText.getText()));
-            productModel.setSellPrice(Double.parseDouble(sellText.getText()));
-            productModel.setExpirationDate(expirationDate.getDate());
-            productModel.setDescription(descriptionText.getText());
-            productModel.setSuppliedBy(Objects.requireNonNull(suppCombo.getSelectedItem()).toString());
+            medicineModel.setMedicineCode(codeText.getText());
+            medicineModel.setMedicineName(nameText.getText());
+            medicineModel.setQuantity(Integer.parseInt(quantityText.getText()));
+            medicineModel.setCostPrice(Double.parseDouble(costText.getText()));
+            medicineModel.setSellPrice(Double.parseDouble(sellText.getText()));
+            medicineModel.setExpirationDate(expirationDate.getDate());
+            medicineModel.setDescription(descriptionText.getText());
+            medicineModel.setSuppliedBy(Objects.requireNonNull(suppCombo.getSelectedItem()).toString());
 
             EventQueue.invokeLater(() -> {
-                new ProductController().addProduct(productModel);
+                new MedicineController().addMedicine(medicineModel);
                 loadDataSet();
             });
 
@@ -317,8 +317,8 @@ public class AddProductDialog extends javax.swing.JDialog {
 
     public void loadDataSet() {
         try {
-            ProductController productController = new ProductController();
-            productTable.setModel(new DataTableModel().buildTableModel(productController.getProducts()));
+            MedicineController medicineController = new MedicineController();
+            productTable.setModel(new DataTableModel().buildTableModel(medicineController.getMedicines()));
             processColumns();
         } catch (SQLException e) {
             e.printStackTrace();

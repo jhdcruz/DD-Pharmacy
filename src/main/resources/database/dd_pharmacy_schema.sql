@@ -17,16 +17,16 @@ USE `dd_pharmacy`;
 
 
 --
--- Table structure for table `products`
+-- Table structure for table `medicines`
 --
-DROP TABLE IF EXISTS `products`;
+DROP TABLE IF EXISTS `medicines`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8 */;
-CREATE TABLE `products`
+CREATE TABLE `medicines`
 (
     `pid`             INT AUTO_INCREMENT,
-    `product_code`    VARCHAR(45)   NOT NULL,
-    `product_name`    VARCHAR(100)  NOT NULL,
+    `medicine_code`   VARCHAR(45)   NOT NULL,
+    `medicine_name`   VARCHAR(100)  NOT NULL,
     `description`     VARCHAR(1200) NOT NULL,
     `cost_price`      DOUBLE        NOT NULL,
     `sell_price`      DOUBLE        NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE `products`
     `expiration_date` DATETIME      NOT NULL,
     `last_updated`    DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`pid`),
-    UNIQUE KEY `product_code_UNIQUE` (`product_code`)
+    UNIQUE KEY `medicine_code_UNIQUE` (`medicine_code`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 9000
   DEFAULT CHARSET = utf8
@@ -75,7 +75,7 @@ CREATE TABLE `purchaseinfo`
 (
     `purchase_id`   INT         NOT NULL AUTO_INCREMENT,
     `supplier_code` VARCHAR(20) NOT NULL,
-    `product_code`  VARCHAR(20) NOT NULL,
+    `medicine_code` VARCHAR(20) NOT NULL,
     `date`          DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `quantity`      INT         NOT NULL,
     `total_cost`    DOUBLE      NOT NULL,
@@ -95,7 +95,7 @@ DROP TABLE IF EXISTS `salesinfo`;
 CREATE TABLE `salesinfo`
 (
     `sales_id`      INT          NOT NULL AUTO_INCREMENT,
-    `product_code`  VARCHAR(20)  NOT NULL,
+    `medicine_code` VARCHAR(20)  NOT NULL,
     `customer_code` VARCHAR(20)  NOT NULL,
     `quantity`      INT          NOT NULL,
     `revenue`       DOUBLE       NOT NULL,
@@ -171,12 +171,12 @@ CREATE TABLE `users`
 -- ---------------------------------------------
 
 --
--- Sample products
+-- Sample medicines
 --
-LOCK TABLES `products` WRITE;
-/*!40000 ALTER TABLE `products`
+LOCK TABLES `medicines` WRITE;
+/*!40000 ALTER TABLE `medicines`
     DISABLE KEYS */;
-INSERT INTO `products`
+INSERT INTO `medicines`
 VALUES (9000, 'UNILAB001', 'Acyclovir (200mg)',
         'Antiviral medication primarily used for the treatment of herpes simplex virus infections, chickenpox, shingles, prevention of cytomegalovirus infections following transplant and severe complications of Epstein–Barr virus infection. | 100 Capsules',
         220, 228, 42, 'Unilab, Inc.',
@@ -208,7 +208,7 @@ VALUES (9000, 'UNILAB001', 'Acyclovir (200mg)',
         'Treat or prevent excessive blood loss from major trauma, postpartum bleeding, surgery, tooth removal, nosebleeds, heavy menstruation, and hereditary angioedema. | 60 Tablets',
         238, 244, 19, 'ADP Pharma Corp.',
         '2023-05-16 00:00:00', '2022-12-12 21:55:29');
-/*!40000 ALTER TABLE `products`
+/*!40000 ALTER TABLE `medicines`
     ENABLE KEYS */;
 UNLOCK TABLES;
 
