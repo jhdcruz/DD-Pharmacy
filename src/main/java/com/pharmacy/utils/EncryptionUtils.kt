@@ -13,6 +13,7 @@ import javax.crypto.IllegalBlockSizeException
 import javax.crypto.NoSuchPaddingException
 import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
+import javax.swing.JOptionPane
 
 /**
  * Encryption and Decryption with AES + GCM
@@ -58,18 +59,8 @@ class EncryptionUtils {
             byteBuffer.put(iv)
             byteBuffer.put(cipherText)
             byteBuffer.array()
-        } catch (e: NoSuchAlgorithmException) {
-            throw RuntimeException(e)
-        } catch (e: NoSuchPaddingException) {
-            throw RuntimeException(e)
-        } catch (e: IllegalBlockSizeException) {
-            throw RuntimeException(e)
-        } catch (e: BadPaddingException) {
-            throw RuntimeException(e)
-        } catch (e: InvalidAlgorithmParameterException) {
-            throw RuntimeException(e)
-        } catch (e: InvalidKeyException) {
-            throw RuntimeException(e)
+        } catch (e: Exception) {
+            throw EncryptionException(e)
         }
     }
 
@@ -90,19 +81,64 @@ class EncryptionUtils {
             // Use everything from 12 bytes on as ciphertext
             val plainText = cipher.doFinal(encrypted, GCM_IV_LENGTH, encrypted.size - GCM_IV_LENGTH)
             String(plainText, StandardCharsets.UTF_8)
-        } catch (e: NoSuchAlgorithmException) {
-            throw RuntimeException(e)
-        } catch (e: NoSuchPaddingException) {
-            throw RuntimeException(e)
-        } catch (e: IllegalBlockSizeException) {
-            throw RuntimeException(e)
-        } catch (e: BadPaddingException) {
-            throw RuntimeException(e)
-        } catch (e: InvalidAlgorithmParameterException) {
-            throw RuntimeException(e)
-        } catch (e: InvalidKeyException) {
-            throw RuntimeException(e)
+        } catch (e: Exception) {
+            throw EncryptionException(e)
         }
+    }
+
+    fun EncryptionException(e: Exception): Throwable {
+        when (e) {
+            is NoSuchAlgorithmException -> JOptionPane.showMessageDialog(
+                null,
+                e.message,
+                "IT Personnel Intervention Required",
+                JOptionPane.ERROR_MESSAGE
+            )
+
+            is NoSuchPaddingException -> JOptionPane.showMessageDialog(
+                null,
+                e.message,
+                "IT Personnel Intervention Required",
+                JOptionPane.ERROR_MESSAGE
+            )
+
+            is InvalidKeyException -> JOptionPane.showMessageDialog(
+                null,
+                e.message,
+                "IT Personnel Intervention Required",
+                JOptionPane.ERROR_MESSAGE
+            )
+
+            is InvalidAlgorithmParameterException -> JOptionPane.showMessageDialog(
+                null,
+                e.message,
+                "IT Personnel Intervention Required",
+                JOptionPane.ERROR_MESSAGE
+            )
+
+            is IllegalBlockSizeException -> JOptionPane.showMessageDialog(
+                null,
+                e.message,
+                "IT Personnel Intervention Required",
+                JOptionPane.ERROR_MESSAGE
+            )
+
+            is BadPaddingException -> JOptionPane.showMessageDialog(
+                null,
+                e.message,
+                "IT Personnel Intervention Required",
+                JOptionPane.ERROR_MESSAGE
+            )
+
+            else -> JOptionPane.showMessageDialog(
+                null,
+                e.message,
+                "IT Personnel Intervention Required",
+                JOptionPane.ERROR_MESSAGE
+            )
+        }
+
+        return e
     }
 
     companion object {

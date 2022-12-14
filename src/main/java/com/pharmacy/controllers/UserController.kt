@@ -18,20 +18,20 @@ class UserController(private var logId: Int) {
         try {
             connection = DatabaseInstance().getConnection()
             statement = connection!!.createStatement()
-        } catch (ex: SQLException) {
-            ex.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
     }
 
     val users: ResultSet?
         get() {
-            var resultSet: ResultSet? = null
+            val resultSet: ResultSet?
 
             try {
                 val query = "SELECT id, name, username, phone, user_type FROM users"
                 resultSet = statement!!.executeQuery(query)
-            } catch (sqlException: SQLException) {
-                sqlException.printStackTrace()
+            } catch (e: SQLException) {
+                throw SQLException(e)
             }
 
             return resultSet
@@ -57,8 +57,10 @@ class UserController(private var logId: Int) {
                 val encryptionUtils = EncryptionUtils()
                 val secretKey = encryptionUtils.generateKeyBytes()
 
-                val insertQuery = ("INSERT INTO users (name,phone,username,password,user_type,secret_key) "
-                    + "VALUES(?,?,?,?,?,?)")
+                val insertQuery = """
+                    INSERT INTO users (name,phone,username,password,user_type,secret_key)
+                    VALUES(?,?,?,?,?,?);
+                    """.trimIndent()
 
                 val prepStatement: PreparedStatement = connection!!.prepareStatement(insertQuery)
                 prepStatement.setString(1, userModel.name)
@@ -71,17 +73,14 @@ class UserController(private var logId: Int) {
                 prepStatement.executeUpdate()
                 LogsController().addLogEntry(logId, "Added new user: " + userModel.name)
             }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
     }
 
     /**
      * Update existing user (password excluded!)
-     *
-     *
-     * See [.updatePass] for updating
-     * password
+     * See [.updatePass] for updating password
      *
      * @param userModel populated UserModel
      */
@@ -98,8 +97,8 @@ class UserController(private var logId: Int) {
 
             prepStatement.executeUpdate()
             LogsController().addLogEntry(logId, "User updated: " + userModel.id + " - " + userModel.name)
-        } catch (throwables: SQLException) {
-            throwables.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
     }
 
@@ -112,8 +111,8 @@ class UserController(private var logId: Int) {
 
             prepStatement.executeUpdate()
             LogsController().addLogEntry(logId, "Deleted user: $username")
-        } catch (sqlException: SQLException) {
-            sqlException.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
     }
 
@@ -122,11 +121,24 @@ class UserController(private var logId: Int) {
         var resultSet: ResultSet? = null
 
         try {
-            val query =
-                "SELECT id, username, name, phone, user_type FROM users WHERE name LIKE '%$search%' OR phone LIKE '%$search%' OR user_type LIKE '%$search%'"
-            resultSet = statement!!.executeQuery(query)
-        } catch (sqlException: SQLException) {
-            sqlException.printStackTrace()
+            val query = """
+                SELECT id, username, name, phone, user_type
+                FROM users
+                WHERE name LIKE ?
+                OR username LIKE ?
+                OR phone LIKE ?
+                OR user_type LIKE ?;
+                """.trimIndent()
+
+            val prepStatement: PreparedStatement = connection!!.prepareStatement(query)
+            prepStatement.setString(1, "%$search%")
+            prepStatement.setString(2, "%$search%")
+            prepStatement.setString(3, "%$search%")
+            prepStatement.setString(4, "%$search%")
+
+            resultSet = prepStatement.executeQuery()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
 
         return resultSet
@@ -143,8 +155,8 @@ class UserController(private var logId: Int) {
             if (resultSet!!.next()) {
                 id = resultSet.getInt("id")
             }
-        } catch (sqlException: SQLException) {
-            sqlException.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
 
         return id
@@ -156,8 +168,8 @@ class UserController(private var logId: Int) {
         try {
             val query = "SELECT id, username, name, phone, user_type FROM users WHERE username='$username'"
             resultSet = statement!!.executeQuery(query)
-        } catch (sqlException: SQLException) {
-            sqlException.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
 
         return resultSet
@@ -179,8 +191,8 @@ class UserController(private var logId: Int) {
                 val decryptedPass = EncryptionUtils().decrypt(encryptedPassword, secretKey)
                 return decryptedPass == password
             }
-        } catch (sqlException: SQLException) {
-            sqlException.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
 
         return false
@@ -202,8 +214,8 @@ class UserController(private var logId: Int) {
 
             prepStatement.executeUpdate()
             LogsController().addLogEntry(logId, "Password updated for user: $username")
-        } catch (sqlException: SQLException) {
-            sqlException.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
     }
 }

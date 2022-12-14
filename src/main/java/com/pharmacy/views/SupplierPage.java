@@ -352,7 +352,7 @@ public class SupplierPage extends javax.swing.JPanel {
             try {
                 suppTable.setModel(new DataTableModel().buildTableModel(new SupplierController(id).getSuppliers()));
             } catch (SQLException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
             }
         });
     }
@@ -363,7 +363,7 @@ public class SupplierPage extends javax.swing.JPanel {
             try {
                 suppTable.setModel(new DataTableModel().buildTableModel(new SupplierController(id).searchSuppliers(text)));
             } catch (SQLException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
             }
         });
     }

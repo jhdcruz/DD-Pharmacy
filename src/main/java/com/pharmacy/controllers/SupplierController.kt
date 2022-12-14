@@ -11,7 +11,7 @@ import java.util.*
 import javax.swing.DefaultComboBoxModel
 import javax.swing.JOptionPane
 
-class SupplierController(var logId: Int) {
+class SupplierController(private var logId: Int) {
     private var connection: Connection? = null
     private var statement: Statement? = null
 
@@ -22,19 +22,19 @@ class SupplierController(var logId: Int) {
             connection = DatabaseInstance().getConnection()
             statement = connection!!.createStatement()
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
     }
 
     val suppliers: ResultSet?
         get() {
-            var resultSet: ResultSet? = null
+            val resultSet: ResultSet?
 
             try {
                 val query = "SELECT supplier_code, full_name, location, contact, last_updated FROM suppliers"
                 resultSet = statement!!.executeQuery(query)
-            } catch (e: Exception) {
-                e.printStackTrace()
+            } catch (e: SQLException) {
+                throw SQLException(e)
             }
 
             return resultSet
@@ -74,8 +74,8 @@ class SupplierController(var logId: Int) {
                 preparedStatement.executeUpdate()
                 LogsController().addLogEntry(logId, "Added new supplier: " + supplierModel.supplierName)
             }
-        } catch (sqlException: SQLException) {
-            sqlException.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
     }
 
@@ -101,7 +101,7 @@ class SupplierController(var logId: Int) {
                 "Updated supplier: " + supplierModel.supplierCode + " - " + supplierModel.supplierName
             )
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
     }
 
@@ -116,8 +116,8 @@ class SupplierController(var logId: Int) {
 
             statement!!.executeUpdate(query)
             LogsController().addLogEntry(logId, "Deleted supplier: $supplierName")
-        } catch (sqlException: SQLException) {
-            sqlException.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
     }
 
@@ -133,7 +133,7 @@ class SupplierController(var logId: Int) {
                 supplierCode = resultSet.getString("supplier_code")
             }
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
 
         return supplierCode
@@ -153,8 +153,8 @@ class SupplierController(var logId: Int) {
                 + "WHERE supplier_code LIKE '%" + searchText + "%' OR location LIKE '%" + searchText + "%' "
                 + "OR full_name LIKE '%" + searchText + "%' OR contact LIKE '%" + searchText + "%'")
             resultSet = statement!!.executeQuery(query)
-        } catch (sqlException: SQLException) {
-            sqlException.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
 
         return resultSet

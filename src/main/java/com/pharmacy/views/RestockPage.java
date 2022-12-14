@@ -359,7 +359,7 @@ public class RestockPage extends javax.swing.JPanel {
                             Please add this medicine in the "Products" section before proceeding.""");
                     }
                 } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
                 }
             });
         }
@@ -428,7 +428,7 @@ public class RestockPage extends javax.swing.JPanel {
                 costText.setText("");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_codeTextKeyReleased
 
@@ -451,7 +451,7 @@ public class RestockPage extends javax.swing.JPanel {
             SupplierController supplierController = new SupplierController(id);
             suppComboBox.setModel(supplierController.setComboItems(supplierController.getSuppliers()));
         } catch (SQLException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -460,8 +460,8 @@ public class RestockPage extends javax.swing.JPanel {
         EventQueue.invokeLater(() -> {
             try {
                 purchaseTable.setModel(new DataTableModel().buildTableModel(new MedicineController(id).getRestockInfo()));
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
             }
         });
     }
@@ -472,7 +472,7 @@ public class RestockPage extends javax.swing.JPanel {
             try {
                 purchaseTable.setModel(new DataTableModel().buildTableModel(new MedicineController(id).getRestockSearch(text)));
             } catch (SQLException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
             }
         });
     }

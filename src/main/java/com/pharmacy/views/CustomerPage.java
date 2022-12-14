@@ -388,7 +388,7 @@ public class CustomerPage extends javax.swing.JPanel {
                 custTable.setModel(new DataTableModel().buildTableModel(new CustomerController(id).getCustomers()));
                 processColumns();
             } catch (SQLException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
             }
         });
     }
@@ -399,7 +399,7 @@ public class CustomerPage extends javax.swing.JPanel {
                 custTable.setModel(new DataTableModel().buildTableModel(new CustomerController(id).getCustomerSearch(text)));
                 processColumns();
             } catch (SQLException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
             }
         });
     }

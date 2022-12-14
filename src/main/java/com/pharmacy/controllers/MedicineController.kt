@@ -21,8 +21,8 @@ class MedicineController(private var logId: Int) {
         try {
             connection = DatabaseInstance().getConnection()
             statement = connection!!.createStatement()
-        } catch (ex: Exception) {
-            ex.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
     }
 
@@ -38,8 +38,8 @@ class MedicineController(private var logId: Int) {
                 """.trimIndent()
 
                 resultSet = statement!!.executeQuery(query)
-            } catch (throwables: SQLException) {
-                throwables.printStackTrace()
+            } catch (e: SQLException) {
+                throw SQLException(e)
             }
 
             return resultSet
@@ -59,8 +59,8 @@ class MedicineController(private var logId: Int) {
 
                 """.trimIndent()
                 resultSet = statement!!.executeQuery(query)
-            } catch (throwables: SQLException) {
-                throwables.printStackTrace()
+            } catch (e: SQLException) {
+                throw SQLException(e)
             }
 
             return resultSet
@@ -77,7 +77,7 @@ class MedicineController(private var logId: Int) {
                 available = true
             }
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
 
         return available
@@ -127,7 +127,7 @@ class MedicineController(private var logId: Int) {
                 )
             }
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
     }
 
@@ -149,8 +149,8 @@ class MedicineController(private var logId: Int) {
                 logId,
                 "Medicine restock: " + medicineModel.medicineCode + " | " + medicineModel.medicineName
             )
-        } catch (throwable: SQLException) {
-            throwable.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
 
         val medCode = medicineModel.medicineCode
@@ -164,8 +164,8 @@ class MedicineController(private var logId: Int) {
                 preparedStatement.setString(2, medCode)
 
                 preparedStatement.executeUpdate()
-            } catch (throwable: SQLException) {
-                throwable.printStackTrace()
+            } catch (e: SQLException) {
+                throw SQLException(e)
             }
         } else if (!checkStock(medCode)) { // available = false
             addMedicine(medicineModel)
@@ -204,8 +204,8 @@ class MedicineController(private var logId: Int) {
                 logId,
                 "Updated medicine: " + medicineModel.medicineCode + " | " + medicineModel.medicineName
             )
-        } catch (throwable: SQLException) {
-            throwable.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
     }
 
@@ -233,8 +233,8 @@ class MedicineController(private var logId: Int) {
                 preparedStatement.executeUpdate()
             }
             LogsController().addLogEntry(logId, "Medicine stock reduced: $code due to deleted restock info")
-        } catch (throwables: SQLException) {
-            throwables.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
     }
 
@@ -253,7 +253,7 @@ class MedicineController(private var logId: Int) {
 
             LogsController().addLogEntry(logId, "Deleted medicine with id: $pid")
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
     }
 
@@ -267,7 +267,7 @@ class MedicineController(private var logId: Int) {
             preparedStatement.executeUpdate()
             LogsController().addLogEntry(logId, "Deleted restock info with id: $id")
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
     }
 
@@ -282,7 +282,7 @@ class MedicineController(private var logId: Int) {
                     + "WHERE medicine_code LIKE '%" + text + "%' OR medicine_name LIKE '%" + text + "%' OR supplied_by LIKE '%" + text + "%'")
             resultSet = statement!!.executeQuery(query)
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
 
         return resultSet
@@ -296,7 +296,7 @@ class MedicineController(private var logId: Int) {
                 + "WHERE medicine_code='" + text + "' LIMIT 1")
             resultSet = statement!!.executeQuery(query)
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
 
         return resultSet
@@ -321,7 +321,7 @@ class MedicineController(private var logId: Int) {
                 """.trimIndent()
             resultSet = statement!!.executeQuery(query)
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
 
         return resultSet
@@ -333,8 +333,8 @@ class MedicineController(private var logId: Int) {
         try {
             val query = "SELECT medicine_name FROM medicines WHERE medicine_code='$code'"
             resultSet = statement!!.executeQuery(query)
-        } catch (throwables: SQLException) {
-            throwables.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
 
         return resultSet

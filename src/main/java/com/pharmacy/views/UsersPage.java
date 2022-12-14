@@ -422,7 +422,7 @@ public class UsersPage extends javax.swing.JPanel {
 
                 processColumns();
             } catch (SQLException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
             }
         });
     }
@@ -433,8 +433,8 @@ public class UsersPage extends javax.swing.JPanel {
                 userTable.setModel(new DataTableModel().buildTableModel(new UserController(id).getUsers()));
 
                 processColumns();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
             }
         });
     }

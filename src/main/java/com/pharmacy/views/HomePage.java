@@ -251,7 +251,7 @@ public class HomePage extends javax.swing.JPanel {
                 phoneText.setText(userModel.getPhone());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
         }
     }
 

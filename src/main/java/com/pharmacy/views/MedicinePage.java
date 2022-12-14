@@ -471,7 +471,7 @@ public class MedicinePage extends javax.swing.JPanel {
             SupplierController supplierController = new SupplierController(id);
             suppCombo.setModel(supplierController.setComboItems(supplierController.getSuppliers()));
         } catch (SQLException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -500,8 +500,8 @@ public class MedicinePage extends javax.swing.JPanel {
 
                 processColumns();
                 loadComboBox();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
             }
         });
     }
@@ -513,8 +513,8 @@ public class MedicinePage extends javax.swing.JPanel {
                 medicineTable.setModel(new DataTableModel().buildTableModel(new MedicineController(id).getMedicineSearch(text)));
 
                 processColumns();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
             }
         });
     }

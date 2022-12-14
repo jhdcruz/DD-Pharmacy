@@ -16,8 +16,8 @@ class TimesheetController {
         try {
             connection = DatabaseInstance().getConnection()
             statement = connection!!.createStatement()
-        } catch (ex: SQLException) {
-            ex.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
     }
 
@@ -34,8 +34,8 @@ class TimesheetController {
                 """.trimIndent()
 
                 resultSet = statement!!.executeQuery(query)
-            } catch (sqlException: SQLException) {
-                sqlException.printStackTrace()
+            } catch (e: SQLException) {
+                throw SQLException(e)
             }
 
             return resultSet
@@ -55,7 +55,7 @@ class TimesheetController {
 
             prepStatement.executeUpdate()
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
     }
 
@@ -81,8 +81,8 @@ class TimesheetController {
             prepStatement.setString(4, "%$search%")
 
             resultSet = prepStatement.executeQuery()
-        } catch (sqlException: SQLException) {
-            sqlException.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
 
         return resultSet

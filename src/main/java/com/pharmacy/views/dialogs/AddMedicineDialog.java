@@ -321,7 +321,7 @@ public class AddMedicineDialog extends javax.swing.JDialog {
             productTable.setModel(new DataTableModel().buildTableModel(new MedicineController(id).getMedicines()));
             processColumns();
         } catch (SQLException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -331,7 +331,7 @@ public class AddMedicineDialog extends javax.swing.JDialog {
         try {
             suppCombo.setModel(supplierController.setComboItems(supplierController.getSuppliers()));
         } catch (SQLException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
         }
     }
 

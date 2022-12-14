@@ -4,6 +4,7 @@ import com.pharmacy.controllers.TimesheetController;
 import com.pharmacy.utils.DataTableModel;
 import java.awt.EventQueue;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -141,7 +142,7 @@ public class TimesheetPage extends javax.swing.JPanel {
                 TimesheetController timesheetController = new TimesheetController();
                 timesheetTable.setModel(new DataTableModel().buildTableModel(timesheetController.getTimesheet()));
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
             }
         });
     }
@@ -152,8 +153,8 @@ public class TimesheetPage extends javax.swing.JPanel {
             try {
                 TimesheetController timesheetController = new TimesheetController();
                 timesheetTable.setModel(new DataTableModel().buildTableModel(timesheetController.searchTimesheet(text)));
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
             }
         });
     }

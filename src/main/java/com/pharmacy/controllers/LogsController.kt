@@ -17,13 +17,13 @@ class LogsController {
         try {
             connection = DatabaseInstance().getConnection()
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
     }
 
     val logs: ResultSet?
         get() {
-            var resultSet: ResultSet? = null
+            val resultSet: ResultSet?
 
             try {
                 val query = """
@@ -35,8 +35,8 @@ class LogsController {
 
                 val statement: Statement = connection!!.createStatement()
                 resultSet = statement.executeQuery(query)
-            } catch (sqlException: SQLException) {
-                sqlException.printStackTrace()
+            } catch (e: SQLException) {
+                throw SQLException(e)
             }
 
             return resultSet
@@ -53,12 +53,12 @@ class LogsController {
 
             prepStatement.executeUpdate()
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
     }
 
     fun searchLogs(search: String): ResultSet? {
-        var resultSet: ResultSet? = null
+        val resultSet: ResultSet?
 
         try {
             val query = """
@@ -77,8 +77,8 @@ class LogsController {
             prepStatement.setString(3, "%$search%")
 
             resultSet = prepStatement.executeQuery()
-        } catch (sqlException: SQLException) {
-            sqlException.printStackTrace()
+        } catch (e: SQLException) {
+            throw SQLException(e)
         }
 
         return resultSet

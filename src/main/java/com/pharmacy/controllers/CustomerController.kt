@@ -18,7 +18,7 @@ class CustomerController(private val id: Int) {
             connection = DatabaseInstance().getConnection()
             statement = connection!!.createStatement()
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
     }
 
@@ -30,7 +30,7 @@ class CustomerController(private val id: Int) {
                 val query = "SELECT * FROM customers"
                 resultSet = statement!!.executeQuery(query)
             } catch (e: SQLException) {
-                e.printStackTrace()
+                throw SQLException(e)
             }
 
             return resultSet
@@ -66,7 +66,7 @@ class CustomerController(private val id: Int) {
                 LogsController().addLogEntry(id, "Added customer " + customerModel.name + " to database.")
             }
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
     }
 
@@ -94,7 +94,7 @@ class CustomerController(private val id: Int) {
 
             LogsController().addLogEntry(id, "Updated customer " + customerModel.name)
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
     }
 
@@ -110,7 +110,7 @@ class CustomerController(private val id: Int) {
 
             LogsController().addLogEntry(id, "Deleted customer: $customerName ($customerCode)")
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
     }
 
@@ -145,7 +145,7 @@ class CustomerController(private val id: Int) {
 
             resultSet = prepStatement.executeQuery()
         } catch (e: SQLException) {
-            e.printStackTrace()
+            throw SQLException(e)
         }
 
         return resultSet
