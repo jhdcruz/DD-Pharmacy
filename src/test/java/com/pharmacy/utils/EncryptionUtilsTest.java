@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class EncryptionUtilsTest {
 
     @Test
-    void generateKeyBytes() {
+    void testGenerateKeyBytes() {
         EncryptionUtils encryptionUtils = new EncryptionUtils();
         byte[] keyBytes = encryptionUtils.generateKeyBytes();
 
@@ -15,7 +15,7 @@ class EncryptionUtilsTest {
     }
 
     @Test
-    void encrypt() {
+    void testEncrypt() {
         EncryptionUtils encryptionUtils = new EncryptionUtils();
         byte[] secretKey = encryptionUtils.generateKeyBytes();
 
@@ -26,7 +26,7 @@ class EncryptionUtilsTest {
     }
 
     @Test
-    void decrypt() {
+    void testDecrypt() {
         EncryptionUtils encryptionUtils = new EncryptionUtils();
         byte[] secretKey = encryptionUtils.generateKeyBytes();
 
