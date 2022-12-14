@@ -45,7 +45,7 @@ class LogsController {
 
     fun addLogEntry(id: Int, event: String?) {
         try {
-            val query = "INSERT INTO logs (user_id, event, date) values(?,?, DEFAULT)"
+            val query = "INSERT INTO logs (user_id, event, date) values(?,?, DEFAULT);"
 
             val prepStatement: PreparedStatement = connection!!.prepareStatement(query)
             prepStatement.setInt(1, id)
@@ -55,5 +55,32 @@ class LogsController {
         } catch (e: SQLException) {
             e.printStackTrace()
         }
+    }
+
+    fun searchLogs(search: String): ResultSet? {
+        var resultSet: ResultSet? = null
+
+        try {
+            val query = """
+                SELECT users.username AS user_id,event,date
+                FROM logs
+                INNER JOIN users ON logs.user_id=users.id
+                WHERE users.username LIKE ?
+                OR event LIKE ?
+                OR date LIKE ?
+                ORDER BY date DESC;
+                """.trimIndent()
+
+            val prepStatement: PreparedStatement = connection!!.prepareStatement(query)
+            prepStatement.setString(1, "%$search%")
+            prepStatement.setString(2, "%$search%")
+            prepStatement.setString(3, "%$search%")
+
+            resultSet = prepStatement.executeQuery()
+        } catch (sqlException: SQLException) {
+            sqlException.printStackTrace()
+        }
+
+        return resultSet
     }
 }

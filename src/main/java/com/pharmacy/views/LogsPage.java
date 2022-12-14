@@ -146,6 +146,18 @@ public class LogsPage extends javax.swing.JPanel {
         });
     }
 
+    // Method to display search result in table
+    public void loadSearchData(String text) {
+        EventQueue.invokeLater(() -> {
+            try {
+                LogsController logsController = new LogsController();
+                logTable.setModel(new DataTableModel().buildTableModel(logsController.searchLogs(text)));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
