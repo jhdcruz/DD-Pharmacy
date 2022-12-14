@@ -4,14 +4,13 @@ import com.pharmacy.controllers.MedicineController;
 import com.pharmacy.controllers.SupplierController;
 import com.pharmacy.models.MedicineModel;
 import com.pharmacy.utils.DataTableModel;
-
-import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class RestockPage extends javax.swing.JPanel {
 
@@ -415,8 +414,9 @@ public class RestockPage extends javax.swing.JPanel {
         try {
             ResultSet resultSet = medicineController.getMedFromCode(codeText.getText());
 
+            assert resultSet != null;
             if (resultSet.next()) {
-                nameText.setText(resultSet.getString("product_name"));
+                nameText.setText(resultSet.getString("medicine_name"));
                 costText.setText(String.valueOf(resultSet.getDouble("cost_price")));
             } else {
                 nameText.setText("");

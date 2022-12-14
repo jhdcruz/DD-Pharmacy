@@ -106,7 +106,7 @@ class MedicineController(private var logId: Int) {
             resultSet = statement!!.executeQuery(duplicateQuery)
 
             if (resultSet!!.next()) {
-                JOptionPane.showMessageDialog(null, "Product record already exists.")
+                JOptionPane.showMessageDialog(null, "Medicine record already exists.")
             } else {
                 val medicineQuery = "INSERT INTO medicines VALUES(null,?,?,?,?,?,?,?,?,DEFAULT)"
 
