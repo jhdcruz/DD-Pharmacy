@@ -23,7 +23,7 @@ class TimesheetController {
 
     val timesheet: ResultSet?
         get() {
-            var resultSet: ResultSet? = null
+            val resultSet: ResultSet?
 
             try {
                 val query = """

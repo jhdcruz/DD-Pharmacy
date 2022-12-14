@@ -28,7 +28,7 @@ class MedicineController(private var logId: Int) {
 
     val medicines: ResultSet?
         get() {
-            var resultSet: ResultSet? = null
+            val resultSet: ResultSet?
 
             try {
                 val query = """
@@ -47,7 +47,7 @@ class MedicineController(private var logId: Int) {
 
     val restockInfo: ResultSet?
         get() {
-            var resultSet: ResultSet? = null
+            val resultSet: ResultSet?
 
             try {
                 val query = """
@@ -56,8 +56,8 @@ class MedicineController(private var logId: Int) {
                 INNER JOIN medicines
                 ON medicines.medicine_code=restock.medicine_code
                 ORDER BY date DESC;
-
                 """.trimIndent()
+
                 resultSet = statement!!.executeQuery(query)
             } catch (e: SQLException) {
                 throw SQLException(e)
@@ -70,9 +70,15 @@ class MedicineController(private var logId: Int) {
         val resultSet: ResultSet?
 
         try {
-            val query = "SELECT quantity FROM medicines WHERE medicine_code='$medicineCode'"
-            resultSet = statement!!.executeQuery(query)
+            val query = """
+                SELECT quantity FROM medicines
+                WHERE medicine_code = ?;
+                """.trimIndent()
 
+            val preparedStatement: PreparedStatement = connection!!.prepareStatement(query)
+            preparedStatement.setString(1, medicineCode)
+
+            resultSet = preparedStatement.executeQuery()
             while (resultSet!!.next()) {
                 available = true
             }
@@ -94,17 +100,21 @@ class MedicineController(private var logId: Int) {
 
         // check if medicine already exists
         try {
-            val duplicateQuery = ("SELECT * FROM medicines WHERE medicine_name='"
-                + medicineModel.medicineName
-                + "' AND cost_price='"
-                + medicineModel.costPrice
-                + "' AND sell_price='"
-                + medicineModel.sellPrice
-                + "' AND supplied_by='"
-                + medicineModel.suppliedBy
-                + "'")
-            resultSet = statement!!.executeQuery(duplicateQuery)
+            val duplicateQuery = """
+                SELECT * FROM medicines
+                WHERE medicine_name = ?
+                AND cost_price = ?
+                AND sell_price = ?
+                AND supplied_by = ?;
+                """.trimIndent()
 
+            val duplicateStatement: PreparedStatement = connection!!.prepareStatement(duplicateQuery)
+            duplicateStatement.setString(1, medicineModel.medicineName)
+            duplicateStatement.setDouble(2, medicineModel.costPrice!!)
+            duplicateStatement.setDouble(3, medicineModel.sellPrice!!)
+            duplicateStatement.setString(4, medicineModel.suppliedBy)
+
+            resultSet = duplicateStatement.executeQuery()
             if (resultSet!!.next()) {
                 JOptionPane.showMessageDialog(null, "Medicine record already exists.")
             } else {
@@ -123,7 +133,7 @@ class MedicineController(private var logId: Int) {
                 preparedStatement.executeUpdate()
                 LogsController().addLogEntry(
                     logId,
-                    "Added new medicine: " + medicineModel.medicineCode + " | " + medicineModel.medicineName
+                    "Added new medicine: ${medicineModel.medicineName} supplied by ${medicineModel.suppliedBy}"
                 )
             }
         } catch (e: SQLException) {
@@ -147,7 +157,7 @@ class MedicineController(private var logId: Int) {
             preparedStatement.executeUpdate()
             LogsController().addLogEntry(
                 logId,
-                "Medicine restock: " + medicineModel.medicineCode + " | " + medicineModel.medicineName
+                "Added new restock info for medicine: ${medicineModel.medicineCode} x${medicineModel.quantity}, supplied by ${medicineModel.supplierCode}"
             )
         } catch (e: SQLException) {
             throw SQLException(e)
@@ -202,7 +212,7 @@ class MedicineController(private var logId: Int) {
             preparedStatement.executeUpdate()
             LogsController().addLogEntry(
                 logId,
-                "Updated medicine: " + medicineModel.medicineCode + " | " + medicineModel.medicineName
+                "Updated medicine: [${medicineModel.medicineCode}]  ${medicineModel.medicineName} supplied by ${medicineModel.suppliedBy}"
             )
         } catch (e: SQLException) {
             throw SQLException(e)
@@ -220,9 +230,12 @@ class MedicineController(private var logId: Int) {
         val resultSet: ResultSet?
 
         try {
-            val medQuery = "SELECT * FROM medicines WHERE medicine_code='$code'"
-            resultSet = statement!!.executeQuery(medQuery)
+            val medQuery = "SELECT quantity FROM medicines WHERE medicine_code=?"
 
+            val medStatement: PreparedStatement = connection!!.prepareStatement(medQuery)
+            medStatement.setString(1, code)
+
+            resultSet = medStatement.executeQuery()
             if (resultSet!!.next()) {
                 val updateQuery = "UPDATE medicines SET quantity=quantity-? WHERE medicine_code=?"
 
@@ -241,17 +254,17 @@ class MedicineController(private var logId: Int) {
     /**
      * Delete medicine from the database.
      *
-     * @param pid medicine id to be deleted
+     * @param id medicine id to be deleted
      */
-    fun deleteMedicine(pid: Int) {
+    fun deleteMedicine(id: Int, name: String) {
         try {
             val query = "DELETE FROM medicines WHERE pid=?"
             val preparedStatement: PreparedStatement = connection!!.prepareStatement(query)
 
-            preparedStatement.setInt(1, pid)
+            preparedStatement.setInt(1, id)
             preparedStatement.executeUpdate()
 
-            LogsController().addLogEntry(logId, "Deleted medicine with id: $pid")
+            LogsController().addLogEntry(logId, "Deleted medicine: $name")
         } catch (e: SQLException) {
             throw SQLException(e)
         }
@@ -274,13 +287,30 @@ class MedicineController(private var logId: Int) {
 
     // Search method for medicines
     fun getMedicineSearch(text: String): ResultSet? {
-        var resultSet: ResultSet? = null
+        val resultSet: ResultSet?
 
         try {
-            val query =
-                ("SELECT pid, medicine_code, medicine_name, description, quantity, cost_price, sell_price, supplied_by, expiration_date, last_updated FROM medicines "
-                    + "WHERE medicine_code LIKE '%" + text + "%' OR medicine_name LIKE '%" + text + "%' OR supplied_by LIKE '%" + text + "%'")
-            resultSet = statement!!.executeQuery(query)
+            val query = """
+                SELECT medicine_code, medicine_name, description, quantity,
+                       cost_price, sell_price, supplied_by, expiration_date, last_updated
+                FROM medicines
+                WHERE medicine_code LIKE ?
+                OR medicine_name LIKE ?
+                OR description LIKE ?
+                OR quantity LIKE ?
+                OR cost_price LIKE ?
+                OR sell_price LIKE ?
+                OR supplied_by LIKE ?
+                OR expiration_date LIKE ?
+                OR last_updated LIKE ?
+                """.trimIndent()
+
+            val preparedStatement: PreparedStatement = connection!!.prepareStatement(query)
+            preparedStatement.setString(1, "%$text%")
+            preparedStatement.setString(2, "%$text%")
+            preparedStatement.setString(3, "%$text%")
+
+            resultSet = preparedStatement.executeQuery()
         } catch (e: SQLException) {
             throw SQLException(e)
         }
@@ -289,12 +319,19 @@ class MedicineController(private var logId: Int) {
     }
 
     fun getMedFromCode(text: String): ResultSet? {
-        var resultSet: ResultSet? = null
+        val resultSet: ResultSet?
 
         try {
-            val query = ("SELECT * FROM medicines "
-                + "WHERE medicine_code='" + text + "' LIMIT 1")
-            resultSet = statement!!.executeQuery(query)
+            val query = """
+                SELECT * FROM medicines
+                WHERE medicine_code=?
+                LIMIT 1;
+                """.trimIndent()
+
+            val preparedStatement: PreparedStatement = connection!!.prepareStatement(query)
+            preparedStatement.setString(1, text)
+
+            resultSet = preparedStatement.executeQuery()
         } catch (e: SQLException) {
             throw SQLException(e)
         }
@@ -304,22 +341,31 @@ class MedicineController(private var logId: Int) {
 
     // Search method for purchase logs
     fun getRestockSearch(text: String): ResultSet? {
-        var resultSet: ResultSet? = null
+        val resultSet: ResultSet?
 
         try {
             val query = """
-                SELECT purchase_id,restock.medicine_code,medicines.medicine_name,quantity,total_cost
+                SELECT purchase_id,restock.medicine_code,medicines.medicine_name,restock.quantity,total_cost
                 FROM restock INNER JOIN medicines ON restock.medicine_code=medicines.medicine_code
                 INNER JOIN suppliers ON restock.supplier_code=suppliers.supplier_code
-                WHERE purchase_id LIKE '%$text%'
-                OR medicine_code LIKE '%$text%'
-                OR medicine_name LIKE '%$text%'
-                OR suppliers.full_name LIKE '%$text%'
-                OR restock.supplier_code LIKE '%$text%'
-                OR date LIKE '%$text%'
-                ORDER BY purchase_id
+                WHERE purchase_id LIKE ?
+                OR restock.medicine_code LIKE ?
+                OR medicine_name LIKE ?
+                OR suppliers.full_name LIKE ?
+                OR restock.supplier_code LIKE ?
+                OR date LIKE ?
+                ORDER BY purchase_id;
                 """.trimIndent()
-            resultSet = statement!!.executeQuery(query)
+
+            val preparedStatement: PreparedStatement = connection!!.prepareStatement(query)
+            preparedStatement.setString(1, "%$text%")
+            preparedStatement.setString(2, "%$text%")
+            preparedStatement.setString(3, "%$text%")
+            preparedStatement.setString(4, "%$text%")
+            preparedStatement.setString(5, "%$text%")
+            preparedStatement.setString(6, "%$text%")
+
+            resultSet = preparedStatement.executeQuery()
         } catch (e: SQLException) {
             throw SQLException(e)
         }
@@ -328,11 +374,19 @@ class MedicineController(private var logId: Int) {
     }
 
     fun getMedicineName(code: String): ResultSet? {
-        var resultSet: ResultSet? = null
+        val resultSet: ResultSet?
 
         try {
-            val query = "SELECT medicine_name FROM medicines WHERE medicine_code='$code'"
-            resultSet = statement!!.executeQuery(query)
+            val query = """
+                SELECT medicine_name
+                FROM medicines
+                WHERE medicine_code=?
+                """.trimIndent()
+
+            val preparedStatement: PreparedStatement = connection!!.prepareStatement(query)
+            preparedStatement.setString(1, code)
+
+            resultSet = preparedStatement.executeQuery()
         } catch (e: SQLException) {
             throw SQLException(e)
         }

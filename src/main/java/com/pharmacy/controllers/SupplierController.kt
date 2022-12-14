@@ -31,7 +31,7 @@ class SupplierController(private var logId: Int) {
             val resultSet: ResultSet?
 
             try {
-                val query = "SELECT supplier_code, full_name, location, contact, last_updated FROM suppliers"
+                val query = "SELECT sid, supplier_code, full_name, location, contact, last_updated FROM suppliers"
                 resultSet = statement!!.executeQuery(query)
             } catch (e: SQLException) {
                 throw SQLException(e)
@@ -50,15 +50,19 @@ class SupplierController(private var logId: Int) {
 
         try {
             // check if supplier already exists
-            val duplicateQuery = ("SELECT * FROM suppliers WHERE full_name='"
-                + supplierModel.supplierName
-                + "' AND location='"
-                + supplierModel.location
-                + "' AND contact='"
-                + supplierModel.phone
-                + "'")
-            resultSet = statement!!.executeQuery(duplicateQuery)
+            val duplicateQuery = """
+                SELECT * FROM suppliers
+                WHERE full_name = ?
+                AND location = ?
+                AND contact = ?
+                """.trimIndent()
 
+            val duplicateStatement = connection!!.prepareStatement(duplicateQuery)
+            duplicateStatement.setString(1, supplierModel.name)
+            duplicateStatement.setString(2, supplierModel.location)
+            duplicateStatement.setString(3, supplierModel.phone)
+
+            resultSet = duplicateStatement.executeQuery()
             if (resultSet!!.next()) {
                 JOptionPane.showMessageDialog(null, "This supplier already exists.")
             } else {
@@ -66,13 +70,13 @@ class SupplierController(private var logId: Int) {
                 val insertQuery = "INSERT INTO suppliers VALUES(null,?,?,?,?,DEFAULT)"
 
                 val preparedStatement: PreparedStatement = connection!!.prepareStatement(insertQuery)
-                preparedStatement.setString(1, supplierModel.supplierCode)
-                preparedStatement.setString(2, supplierModel.supplierName)
+                preparedStatement.setString(1, supplierModel.code)
+                preparedStatement.setString(2, supplierModel.name)
                 preparedStatement.setString(3, supplierModel.location)
                 preparedStatement.setString(4, supplierModel.phone)
 
                 preparedStatement.executeUpdate()
-                LogsController().addLogEntry(logId, "Added new supplier: " + supplierModel.supplierName)
+                LogsController().addLogEntry(logId, "Added new supplier: " + supplierModel.name)
             }
         } catch (e: SQLException) {
             throw SQLException(e)
@@ -84,21 +88,21 @@ class SupplierController(private var logId: Int) {
      *
      * @param supplierModel populated supplier model
      */
-    fun updateSupplier(supplierModel: SupplierModel, oldCode: String?) {
+    fun updateSupplier(supplierModel: SupplierModel) {
         try {
-            val query = "UPDATE suppliers SET supplier_code=?, full_name=?,location=?,contact=? WHERE supplier_code=?"
+            val query = "UPDATE suppliers SET supplier_code=?, full_name=?,location=?,contact=? WHERE sid=?"
 
             val preparedStatement: PreparedStatement = connection!!.prepareStatement(query)
-            preparedStatement.setString(1, supplierModel.supplierCode)
-            preparedStatement.setString(2, supplierModel.supplierName)
+            preparedStatement.setString(1, supplierModel.code)
+            preparedStatement.setString(2, supplierModel.name)
             preparedStatement.setString(3, supplierModel.location)
             preparedStatement.setString(4, supplierModel.phone)
-            preparedStatement.setString(5, oldCode)
+            preparedStatement.setInt(5, supplierModel.id!!)
 
             preparedStatement.executeUpdate()
             LogsController().addLogEntry(
                 logId,
-                "Updated supplier: " + supplierModel.supplierCode + " - " + supplierModel.supplierName
+                "Updated supplier: [${supplierModel.code}] ${supplierModel.name}"
             )
         } catch (e: SQLException) {
             throw SQLException(e)
@@ -110,12 +114,18 @@ class SupplierController(private var logId: Int) {
      *
      * @param supplierCode supplier code to be deleted
      */
-    fun deleteSupplier(supplierCode: String, supplierName: String) {
+    fun deleteSupplier(id: String, name: String) {
         try {
-            val query = "DELETE FROM suppliers WHERE supplier_code='$supplierCode'"
+            val query = """
+                DELETE FROM suppliers
+                WHERE sid = ?
+                """.trimIndent()
 
-            statement!!.executeUpdate(query)
-            LogsController().addLogEntry(logId, "Deleted supplier: $supplierName")
+            val preparedStatement: PreparedStatement = connection!!.prepareStatement(query)
+            preparedStatement.setString(1, id)
+            preparedStatement.executeUpdate()
+
+            LogsController().addLogEntry(logId, "Deleted supplier: $name")
         } catch (e: SQLException) {
             throw SQLException(e)
         }
@@ -126,9 +136,15 @@ class SupplierController(private var logId: Int) {
         val resultSet: ResultSet?
 
         try {
-            val query = "SELECT supplier_code FROM suppliers WHERE full_name='$supplierName'"
-            resultSet = statement!!.executeQuery(query)
+            val query = """
+                SELECT supplier_code FROM suppliers
+                WHERE full_name = ?
+                """.trimIndent()
 
+            val preparedStatement: PreparedStatement = connection!!.prepareStatement(query)
+            preparedStatement.setString(1, supplierName)
+
+            resultSet = preparedStatement.executeQuery()
             while (resultSet!!.next()) {
                 supplierCode = resultSet.getString("supplier_code")
             }
@@ -146,13 +162,25 @@ class SupplierController(private var logId: Int) {
      * @return ResultSet of matched suppliers
      */
     fun searchSuppliers(searchText: String): ResultSet? {
-        var resultSet: ResultSet? = null
+        val resultSet: ResultSet?
 
         try {
-            val query = ("SELECT supplier_code, full_name, location, contact FROM suppliers "
-                + "WHERE supplier_code LIKE '%" + searchText + "%' OR location LIKE '%" + searchText + "%' "
-                + "OR full_name LIKE '%" + searchText + "%' OR contact LIKE '%" + searchText + "%'")
-            resultSet = statement!!.executeQuery(query)
+            val query = """
+                SELECT supplier_code, full_name, location, contact
+                FROM suppliers
+                WHERE supplier_code LIKE ?
+                OR location LIKE ?
+                OR full_name LIKE ?
+                OR contact LIKE ?
+                """.trimIndent()
+
+            val preparedStatement: PreparedStatement = connection!!.prepareStatement(query)
+            preparedStatement.setString(1, "%$searchText%")
+            preparedStatement.setString(2, "%$searchText%")
+            preparedStatement.setString(3, "%$searchText%")
+            preparedStatement.setString(4, "%$searchText%")
+
+            resultSet = preparedStatement.executeQuery()
         } catch (e: SQLException) {
             throw SQLException(e)
         }

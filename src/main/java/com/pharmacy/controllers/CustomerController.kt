@@ -24,7 +24,7 @@ class CustomerController(private val id: Int) {
 
     val customers: ResultSet?
         get() {
-            var resultSet: ResultSet? = null
+            val resultSet: ResultSet?
 
             try {
                 val query = "SELECT * FROM customers"
@@ -44,9 +44,23 @@ class CustomerController(private val id: Int) {
     fun addCustomer(customerModel: CustomerModel) {
         try {
             // check if customer already exists
-            val validateQuery =
-                "SELECT * FROM customers WHERE last_name='" + customerModel.lastName + "' AND first_name='" + customerModel.firstName + "' AND middle_name='" + customerModel.middleName + "'"
-            val resultSet: ResultSet = statement!!.executeQuery(validateQuery)
+            val validateQuery = """
+                SELECT * FROM customers
+                WHERE customer_code = ?
+                AND last_name = ?
+                AND first_name = ?
+                AND middle_name = ?
+                AND phone = ?;
+                """.trimIndent()
+
+            val validateStatement: PreparedStatement = connection!!.prepareStatement(validateQuery)
+            validateStatement.setString(1, customerModel.code)
+            validateStatement.setString(2, customerModel.lastName)
+            validateStatement.setString(3, customerModel.firstName)
+            validateStatement.setString(4, customerModel.middleName)
+            validateStatement.setString(5, customerModel.phone)
+
+            val resultSet: ResultSet = validateStatement.executeQuery()
 
             if (resultSet.next()) {
                 JOptionPane.showMessageDialog(null, "Customer already exists.")
@@ -78,9 +92,10 @@ class CustomerController(private val id: Int) {
      */
     fun updateCustomer(customerModel: CustomerModel) {
         try {
-            val query =
-                ("UPDATE customers SET customer_code=?, last_name=?,first_name=?, middle_name=?, conditions=?,phone=?"
-                    + "WHERE cid=?")
+            val query = """
+                UPDATE customers SET customer_code=?,last_name=?,first_name=?,middle_name=?,conditions=?,phone=?
+                WHERE cid=?
+                """.trimIndent()
 
             val preparedStatement: PreparedStatement = connection!!.prepareStatement(query)
             preparedStatement.setString(1, customerModel.code)
@@ -105,8 +120,14 @@ class CustomerController(private val id: Int) {
      */
     fun deleteCustomer(customerCode: Int, customerName: String) {
         try {
-            val query = "DELETE FROM customers WHERE cid='$customerCode'"
-            statement!!.executeUpdate(query)
+            val query = """
+                DELETE FROM customers
+                WHERE cid=?;
+                """.trimIndent()
+
+            val prepStatement: PreparedStatement = connection!!.prepareStatement(query)
+            prepStatement.setInt(1, customerCode)
+            prepStatement.executeUpdate()
 
             LogsController().addLogEntry(id, "Deleted customer: $customerName ($customerCode)")
         } catch (e: SQLException) {
@@ -122,7 +143,7 @@ class CustomerController(private val id: Int) {
      * @return database result that matches the search query
      */
     fun getCustomerSearch(search: String): ResultSet? {
-        var resultSet: ResultSet? = null
+        val resultSet: ResultSet?
 
         try {
             val query = """

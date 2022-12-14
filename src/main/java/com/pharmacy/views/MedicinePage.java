@@ -411,10 +411,13 @@ public class MedicinePage extends javax.swing.JPanel {
                 JOptionPane.YES_NO_OPTION);
 
             if (opt == JOptionPane.YES_OPTION) {
-                new MedicineController(id).deleteMedicine(
-                    (Integer) medicineTable.getValueAt(
-                        medicineTable.getSelectedRow(), 0));
-                loadDataSet();
+                EventQueue.invokeLater(() -> {
+                    int id = (Integer) medicineTable.getValueAt(medicineTable.getSelectedRow(), 0);
+                    String name = medicineTable.getValueAt(medicineTable.getSelectedRow(), 2).toString();
+
+                    new MedicineController(id).deleteMedicine(id, name);
+                    loadDataSet();
+                });
             }
         }
     }//GEN-LAST:event_deleteButtonActionPerformed

@@ -305,15 +305,16 @@ public class SupplierPage extends javax.swing.JPanel {
 
                 // get current supplier code in the table
                 int row = suppTable.getSelectedRow();
-                String code = (String) suppTable.getValueAt(row, 0);
+                int supplierId = (int) suppTable.getValueAt(row, 0);
 
-                supplierModel.setSupplierCode(codeText.getText());
-                supplierModel.setSupplierName(nameText.getText());
+                supplierModel.setId(supplierId);
+                supplierModel.setCode(codeText.getText());
+                supplierModel.setName(nameText.getText());
                 supplierModel.setLocation(locationText.getText());
                 supplierModel.setPhone(phoneText.getText());
 
                 EventQueue.invokeLater(() -> {
-                    new SupplierController(id).updateSupplier(supplierModel, code);
+                    new SupplierController(id).updateSupplier(supplierModel);
                     loadDataSet();
                 });
             }
@@ -331,10 +332,10 @@ public class SupplierPage extends javax.swing.JPanel {
                 JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
                 EventQueue.invokeLater(() -> {
-                    String code = suppTable.getValueAt(suppTable.getSelectedRow(), 0).toString();
-                    String name = suppTable.getValueAt(suppTable.getSelectedRow(), 1).toString();
+                    String supplierId = suppTable.getValueAt(suppTable.getSelectedRow(), 0).toString();
+                    String name = suppTable.getValueAt(suppTable.getSelectedRow(), 2).toString();
 
-                    new SupplierController(id).deleteSupplier(code, name);
+                    new SupplierController(id).deleteSupplier(supplierId, name);
                     loadDataSet();
                 });
             }
@@ -345,12 +346,18 @@ public class SupplierPage extends javax.swing.JPanel {
         loadSearchData(searchText.getText());
     }//GEN-LAST:event_searchTextKeyReleased
 
+    public void processColumns() {
+        // hide pid
+        suppTable.getColumnModel().getColumn(0).setMinWidth(0);
+        suppTable.getColumnModel().getColumn(0).setMaxWidth(0);
+    }
 
     // Method to load data into table
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
                 suppTable.setModel(new DataTableModel().buildTableModel(new SupplierController(id).getSuppliers()));
+                processColumns();
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
             }
@@ -362,6 +369,7 @@ public class SupplierPage extends javax.swing.JPanel {
         EventQueue.invokeLater(() -> {
             try {
                 suppTable.setModel(new DataTableModel().buildTableModel(new SupplierController(id).searchSuppliers(text)));
+                processColumns();
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
             }

@@ -42,15 +42,19 @@ class UserController(private var logId: Int) {
         val resultSet: ResultSet?
 
         try {
-            val duplicateQuery = ("SELECT * FROM users WHERE name='"
-                + userModel.name
-                + "' AND phone='"
-                + userModel.phone
-                + "' AND user_type='"
-                + userModel.type
-                + "'")
-            resultSet = statement!!.executeQuery(duplicateQuery)
+            val duplicateQuery = """
+                SELECT * FROM users
+                WHERE name=?
+                AND phone=?
+                AND user_type=?
+                """.trimIndent()
 
+            val duplicateStatement = connection!!.prepareStatement(duplicateQuery)
+            duplicateStatement.setString(1, userModel.name)
+            duplicateStatement.setString(2, userModel.phone)
+            duplicateStatement.setString(3, userModel.type)
+
+            resultSet = duplicateStatement.executeQuery()
             if (resultSet!!.next()) {
                 JOptionPane.showMessageDialog(null, "User already exists")
             } else {
@@ -71,7 +75,10 @@ class UserController(private var logId: Int) {
                 prepStatement.setBytes(6, secretKey)
 
                 prepStatement.executeUpdate()
-                LogsController().addLogEntry(logId, "Added new user: " + userModel.name)
+                LogsController().addLogEntry(
+                    logId,
+                    "Added new user: ${userModel.name} (${userModel.username})"
+                )
             }
         } catch (e: SQLException) {
             throw SQLException(e)
@@ -96,7 +103,10 @@ class UserController(private var logId: Int) {
             prepStatement.setInt(5, userModel.id!!)
 
             prepStatement.executeUpdate()
-            LogsController().addLogEntry(logId, "User updated: " + userModel.id + " - " + userModel.name)
+            LogsController().addLogEntry(
+                logId,
+                "Updated user: ${userModel.name} (${userModel.username})"
+            )
         } catch (e: SQLException) {
             throw SQLException(e)
         }
@@ -106,6 +116,7 @@ class UserController(private var logId: Int) {
     fun deleteUser(id: Int, username: String) {
         try {
             val query = "DELETE FROM users WHERE id=?"
+
             val prepStatement: PreparedStatement = connection!!.prepareStatement(query)
             prepStatement.setInt(1, id)
 
@@ -118,7 +129,7 @@ class UserController(private var logId: Int) {
 
 
     fun searchUsers(search: String): ResultSet? {
-        var resultSet: ResultSet? = null
+        val resultSet: ResultSet?
 
         try {
             val query = """
@@ -149,9 +160,16 @@ class UserController(private var logId: Int) {
         var id = 0
 
         try {
-            val query = "SELECT id FROM users WHERE username='$username'"
-            resultSet = statement!!.executeQuery(query)
+            val q = """
+                SELECT id
+                FROM users
+                WHERE username=?
+                """.trimIndent()
 
+            val prepStatement: PreparedStatement = connection!!.prepareStatement(q)
+            prepStatement.setString(1, username)
+
+            resultSet = prepStatement.executeQuery()
             if (resultSet!!.next()) {
                 id = resultSet.getInt("id")
             }
@@ -163,11 +181,19 @@ class UserController(private var logId: Int) {
     }
 
     fun findUser(username: String): ResultSet? {
-        var resultSet: ResultSet? = null
+        val resultSet: ResultSet?
 
         try {
-            val query = "SELECT id, username, name, phone, user_type FROM users WHERE username='$username'"
-            resultSet = statement!!.executeQuery(query)
+            val q = """
+                SELECT id, username, name, phone, user_type
+                FROM users
+                WHERE username=?
+                """.trimIndent()
+
+            val prepStatement: PreparedStatement = connection!!.prepareStatement(q)
+            prepStatement.setString(1, username)
+
+            resultSet = prepStatement.executeQuery()
         } catch (e: SQLException) {
             throw SQLException(e)
         }
@@ -179,11 +205,16 @@ class UserController(private var logId: Int) {
         val resultSet: ResultSet?
 
         try {
-            val query = ("SELECT password,secret_key FROM users WHERE username='"
-                + username
-                + "'")
-            resultSet = statement!!.executeQuery(query)
+            val q = """
+                SELECT password, secret_key
+                FROM users
+                WHERE username=?
+                """.trimIndent()
 
+            val prepStatement: PreparedStatement = connection!!.prepareStatement(q)
+            prepStatement.setString(1, username)
+
+            resultSet = prepStatement.executeQuery()
             if (resultSet!!.next()) {
                 val secretKey = resultSet.getBytes("secret_key")
                 val encryptedPassword = resultSet.getBytes("password")
@@ -205,12 +236,13 @@ class UserController(private var logId: Int) {
             val secretKey = encryptionUtils.generateKeyBytes()
             val encryptedPass = encryptionUtils.encrypt(password!!, secretKey)
 
-            val query = "UPDATE users SET password=?, secret_key=? WHERE id='$id'"
+            // db query
+            val query = "UPDATE users SET password=?, secret_key=? WHERE id=?"
 
-            // save new encrypted password
             val prepStatement: PreparedStatement = connection!!.prepareStatement(query)
             prepStatement.setBytes(1, encryptedPass)
             prepStatement.setBytes(2, secretKey)
+            prepStatement.setInt(3, id)
 
             prepStatement.executeUpdate()
             LogsController().addLogEntry(logId, "Password updated for user: $username")
