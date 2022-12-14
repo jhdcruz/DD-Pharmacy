@@ -309,6 +309,12 @@ class MedicineController(private var logId: Int) {
             preparedStatement.setString(1, "%$text%")
             preparedStatement.setString(2, "%$text%")
             preparedStatement.setString(3, "%$text%")
+            preparedStatement.setString(4, "%$text%")
+            preparedStatement.setString(5, "%$text%")
+            preparedStatement.setString(6, "%$text%")
+            preparedStatement.setString(7, "%$text%")
+            preparedStatement.setString(8, "%$text%")
+            preparedStatement.setString(9, "%$text%")
 
             resultSet = preparedStatement.executeQuery()
         } catch (e: SQLException) {
