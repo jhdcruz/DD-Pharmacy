@@ -29,8 +29,8 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Maven Install
-        run: mvn install
+      - name: Test
+        run: mvn test
 
       - name: Build and analyze
         env:
