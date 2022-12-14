@@ -12,15 +12,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 public class UsersPage extends javax.swing.JPanel {
 
-    UserController userController;
-    int id;
+    private final int id;
 
     public UsersPage(int id) {
         this.id = id;
 
         initComponents();
-
-        userController = new UserController(id);
         loadDataSet();
     }
 
@@ -324,7 +321,7 @@ public class UsersPage extends javax.swing.JPanel {
                 userModel.setType(userType);
 
                 EventQueue.invokeLater(() -> {
-                    userController.updateUser(userModel);
+                    new UserController(id).updateUser(userModel);
                     loadDataSet();
                 });
             }
@@ -350,7 +347,7 @@ public class UsersPage extends javax.swing.JPanel {
 
             if (opt == JOptionPane.YES_OPTION) {
                 EventQueue.invokeLater(() -> {
-                    userController.deleteUser((Integer) userTable.getValueAt(userTable.getSelectedRow(), 0), username);
+                    new UserController(id).deleteUser((Integer) userTable.getValueAt(userTable.getSelectedRow(), 0), username);
                     loadDataSet();
                 });
             }
@@ -399,7 +396,7 @@ public class UsersPage extends javax.swing.JPanel {
 
             if (password != null) {
                 EventQueue.invokeLater(() -> {
-                    userController.updatePass(selectedId, selectedUsername, password);
+                    new UserController(id).updatePass(selectedId, selectedUsername, password);
                     JOptionPane.showMessageDialog(this, "Password changed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 });
             }
@@ -421,7 +418,7 @@ public class UsersPage extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         EventQueue.invokeLater(() -> {
             try {
-                userTable.setModel(new DataTableModel().buildTableModel(userController.searchUsers(text)));
+                userTable.setModel(new DataTableModel().buildTableModel(new UserController(id).searchUsers(text)));
 
                 processColumns();
             } catch (SQLException e) {
@@ -433,7 +430,7 @@ public class UsersPage extends javax.swing.JPanel {
     public final void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                userTable.setModel(new DataTableModel().buildTableModel(userController.getUsers()));
+                userTable.setModel(new DataTableModel().buildTableModel(new UserController(id).getUsers()));
 
                 processColumns();
             } catch (SQLException ex) {

@@ -8,30 +8,24 @@ import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class RestockPage extends javax.swing.JPanel {
 
-    MedicineModel medicineModel;
-    MedicineController medicineController;
-    SupplierController supplierController;
+    private final Dashboard dashboard;
 
-    Dashboard dashboard;
-
-    int quantity;
-    String medCode = null;
-    int id;
+    private int quantity;
+    private String medCode = null;
+    private final int id;
 
     public RestockPage(Dashboard dashboard, int id) {
         this.id = id;
         this.dashboard = dashboard;
 
         initComponents();
-
-        medicineController = new MedicineController(id);
-        supplierController = new SupplierController(id);
         loadDataSet();
 
         // We're not using invokeLater inside combobox since
@@ -333,40 +327,41 @@ public class RestockPage extends javax.swing.JPanel {
     }//GEN-LAST:event_addSuppButtonActionPerformed
 
     private void purchaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchaseButtonActionPerformed
-        medicineModel = new MedicineModel();
+        MedicineModel medicineModel = new MedicineModel();
 
         if (codeText.getText().equals("") || dateInput.getDate() == null
             || quantityText.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Please enter all the required details.");
         } else {
             // store purchase info
-            try {
-                ResultSet resultSet = medicineController.getMedicineName(codeText.getText());
+            EventQueue.invokeLater(() -> {
+                ResultSet resultSet = new MedicineController(id).getMedicineName(codeText.getText());
 
                 assert resultSet != null;
-                if (resultSet.next()) {
-                    double costPrice = Double.parseDouble(costText.getText());
-                    double totalCost = costPrice * Integer.parseInt(quantityText.getText());
+                try {
+                    if (resultSet.next()) {
+                        String supplierName = new SupplierController(id).getSupplierCode(Objects.requireNonNull(suppComboBox.getSelectedItem()).toString());
+                        double costPrice = Double.parseDouble(costText.getText());
+                        double totalCost = costPrice * Integer.parseInt(quantityText.getText());
 
-                    medicineModel.setSupplierCode(supplierController.getSupplierCode(suppComboBox.getSelectedItem().toString()));
-                    medicineModel.setMedicineCode(codeText.getText());
-                    medicineModel.setDate(dateInput.getDate());
-                    medicineModel.setQuantity(Integer.parseInt(quantityText.getText()));
-                    medicineModel.setTotalCost(totalCost);
+                        medicineModel.setSupplierCode(supplierName);
+                        medicineModel.setMedicineCode(codeText.getText());
+                        medicineModel.setDate(dateInput.getDate());
+                        medicineModel.setQuantity(Integer.parseInt(quantityText.getText()));
+                        medicineModel.setTotalCost(totalCost);
 
-                    EventQueue.invokeLater(() -> {
-                        medicineController.addRestockInfo(medicineModel);
+                        new MedicineController(id).addRestockInfo(medicineModel);
                         loadDataSet();
-                    });
-                } else {
-                    // if no medicine has been found
-                    JOptionPane.showMessageDialog(this, """
-                        This seems to be a new medicine that hasn't been added yet.
-                        Please add this medicine in the "Products" section before proceeding.""");
+                    } else {
+                        // if no medicine has been found
+                        JOptionPane.showMessageDialog(this, """
+                            This seems to be a new medicine that hasn't been added yet.
+                            Please add this medicine in the "Products" section before proceeding.""");
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            });
         }
     }//GEN-LAST:event_purchaseButtonActionPerformed
 
@@ -379,10 +374,11 @@ public class RestockPage extends javax.swing.JPanel {
                 "Are you sure you want to delete this purchase?",
                 "Confirmation",
                 JOptionPane.YES_NO_OPTION);
+
             if (opt == JOptionPane.YES_OPTION) {
                 EventQueue.invokeLater(() -> {
-                    medicineController.deleteRestockInfo((int) purchaseTable.getValueAt(purchaseTable.getSelectedRow(), 0));
-                    medicineController.reduceMedicineStock(medCode, quantity);
+                    new MedicineController(id).deleteRestockInfo((int) purchaseTable.getValueAt(purchaseTable.getSelectedRow(), 0));
+                    new MedicineController(id).reduceMedicineStock(medCode, quantity);
                     loadDataSet();
                 });
             }
@@ -416,8 +412,10 @@ public class RestockPage extends javax.swing.JPanel {
     }//GEN-LAST:event_purchaseTableMouseClicked
 
     private void codeTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codeTextKeyReleased
+        ResultSet resultSet;
+
         try {
-            ResultSet resultSet = medicineController.getMedFromCode(codeText.getText());
+            resultSet = new MedicineController(id).getMedFromCode(codeText.getText());
 
             assert resultSet != null;
             if (resultSet.next()) {
@@ -432,7 +430,6 @@ public class RestockPage extends javax.swing.JPanel {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }//GEN-LAST:event_codeTextKeyReleased
 
     private void suppComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_suppComboBoxPopupMenuWillBecomeVisible
@@ -451,6 +448,7 @@ public class RestockPage extends javax.swing.JPanel {
     // Method to load and update combo box containing supplier names
     public void loadComboBox() {
         try {
+            SupplierController supplierController = new SupplierController(id);
             suppComboBox.setModel(supplierController.setComboItems(supplierController.getSuppliers()));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -461,7 +459,7 @@ public class RestockPage extends javax.swing.JPanel {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                purchaseTable.setModel(new DataTableModel().buildTableModel(medicineController.getRestockInfo()));
+                purchaseTable.setModel(new DataTableModel().buildTableModel(new MedicineController(id).getRestockInfo()));
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -472,7 +470,7 @@ public class RestockPage extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         EventQueue.invokeLater(() -> {
             try {
-                purchaseTable.setModel(new DataTableModel().buildTableModel(medicineController.getRestockSearch(text)));
+                purchaseTable.setModel(new DataTableModel().buildTableModel(new MedicineController(id).getRestockSearch(text)));
             } catch (SQLException e) {
                 e.printStackTrace();
             }

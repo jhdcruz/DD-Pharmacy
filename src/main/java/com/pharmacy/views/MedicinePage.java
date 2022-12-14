@@ -6,32 +6,30 @@ import com.pharmacy.models.MedicineModel;
 import com.pharmacy.utils.DataTableModel;
 import com.pharmacy.utils.StringFormatting;
 import com.pharmacy.views.dialogs.AddMedicineDialog;
-
-import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.sql.SQLException;
 import java.util.Objects;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class MedicinePage extends javax.swing.JPanel {
 
-    Dashboard dashboard;
-    MedicineModel medicineModel;
-    MedicineController medicineController;
+    private final Dashboard dashboard;
 
-    int id;
+    private final int id;
 
     public MedicinePage(Dashboard dashboard, int id) {
         this.id = id;
         this.dashboard = dashboard;
 
         initComponents();
-
-        medicineController = new MedicineController(id);
         loadDataSet();
-        loadComboBox();
+
+        // We're not using invokeLater inside combobox since
+        // suppComboBoxPopupMenuWillBecomeVisible will be stuck and not show
+        EventQueue.invokeLater(this::loadComboBox);
     }
 
     /**
@@ -372,7 +370,8 @@ public class MedicinePage extends javax.swing.JPanel {
         if (medicineTable.getSelectedRow() < 0)
             JOptionPane.showMessageDialog(this, "Please select medicine from the table.");
         else {
-            medicineModel = new MedicineModel();
+            MedicineModel medicineModel = new MedicineModel();
+
             if (nameText.getText().equals("") || costText.getText().equals("")
                 || sellText.getText().equals("") || quantityText.getText().equals("")) {
                 JOptionPane.showMessageDialog(this, "Please enter all the required details.");
@@ -390,7 +389,7 @@ public class MedicinePage extends javax.swing.JPanel {
                 medicineModel.setSuppliedBy(Objects.requireNonNull(suppCombo.getSelectedItem()).toString());
 
                 EventQueue.invokeLater(() -> {
-                    medicineController.updateMedicine(medicineModel);
+                    new MedicineController(id).updateMedicine(medicineModel);
                     loadDataSet();
                 });
             }
@@ -410,8 +409,9 @@ public class MedicinePage extends javax.swing.JPanel {
                 "Are you sure you want to delete this medicine?",
                 "Confirmation",
                 JOptionPane.YES_NO_OPTION);
+
             if (opt == JOptionPane.YES_OPTION) {
-                medicineController.deleteMedicine(
+                new MedicineController(id).deleteMedicine(
                     (Integer) medicineTable.getValueAt(
                         medicineTable.getSelectedRow(), 0));
                 loadDataSet();
@@ -482,12 +482,12 @@ public class MedicinePage extends javax.swing.JPanel {
 
         // resize column widths
         medicineTable.getColumnModel().getColumn(1).setPreferredWidth(111);
-        medicineTable.getColumnModel().getColumn(2).setPreferredWidth(121);
-        medicineTable.getColumnModel().getColumn(3).setPreferredWidth(151);
+        medicineTable.getColumnModel().getColumn(2).setPreferredWidth(131);
+        medicineTable.getColumnModel().getColumn(3).setPreferredWidth(161);
         medicineTable.getColumnModel().getColumn(4).setPreferredWidth(81);
         medicineTable.getColumnModel().getColumn(5).setPreferredWidth(81);
         medicineTable.getColumnModel().getColumn(6).setPreferredWidth(81);
-        medicineTable.getColumnModel().getColumn(7).setPreferredWidth(101);
+        medicineTable.getColumnModel().getColumn(7).setPreferredWidth(111);
         medicineTable.getColumnModel().getColumn(8).setPreferredWidth(121);
         medicineTable.getColumnModel().getColumn(9).setPreferredWidth(171);
     }
@@ -496,7 +496,7 @@ public class MedicinePage extends javax.swing.JPanel {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                medicineTable.setModel(new DataTableModel().buildTableModel(medicineController.getMedicines()));
+                medicineTable.setModel(new DataTableModel().buildTableModel(new MedicineController(id).getMedicines()));
 
                 processColumns();
                 loadComboBox();
@@ -510,7 +510,7 @@ public class MedicinePage extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         EventQueue.invokeLater(() -> {
             try {
-                medicineTable.setModel(new DataTableModel().buildTableModel(medicineController.getMedicineSearch(text)));
+                medicineTable.setModel(new DataTableModel().buildTableModel(new MedicineController(id).getMedicineSearch(text)));
 
                 processColumns();
             } catch (SQLException throwables) {

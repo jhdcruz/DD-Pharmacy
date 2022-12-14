@@ -12,12 +12,12 @@ import javax.swing.JOptionPane;
 
 public class Dashboard extends javax.swing.JFrame {
 
-    UserModel userModel;
-    CardLayout layout;
+    private final CardLayout layout;
 
-    String username;
-    LocalDateTime outTime;
-    int id;
+    private final String username;
+    private LocalDateTime outTime;
+
+    private final UserModel userModel;
 
     public Dashboard(String username, String userType, UserModel userModel) {
         initComponents();
@@ -38,7 +38,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         // TODO: Inherit `id` from login instead to reduce
         //       the number of queries to the database
-        id = new UserController(id).getUserId(username);
+        int id = new UserController(0).getUserId(username);
 
         // Panel Layout set to Card Layout to allow switching between different sections
         displayPanel.setLayout(layout);

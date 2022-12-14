@@ -12,15 +12,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 public class CustomerPage extends javax.swing.JPanel {
 
-    CustomerController customerController;
-    int id;
+    private final int id;
 
     public CustomerPage(int id) {
         this.id = id;
 
         initComponents();
-
-        customerController = new CustomerController(id);
         loadDataSet();
     }
 
@@ -326,7 +323,7 @@ public class CustomerPage extends javax.swing.JPanel {
                 customerModel.setPhone(phoneText.getText());
 
                 EventQueue.invokeLater(() -> {
-                    customerController.updateCustomer(customerModel);
+                    new CustomerController(id).updateCustomer(customerModel);
                     loadDataSet();
                 });
             }
@@ -343,11 +340,13 @@ public class CustomerPage extends javax.swing.JPanel {
                 "Confirmation",
                 JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
-                int customerId = (int) custTable.getValueAt(custTable.getSelectedRow(), 0);
-                String customerName = (String) custTable.getValueAt(custTable.getSelectedRow(), 2);
+                EventQueue.invokeLater(() -> {
+                    int customerId = (int) custTable.getValueAt(custTable.getSelectedRow(), 0);
+                    String customerName = (String) custTable.getValueAt(custTable.getSelectedRow(), 2);
+                    new CustomerController(id).deleteCustomer(customerId, customerName);
 
-                customerController.deleteCustomer(customerId, customerName);
-                loadDataSet();
+                    loadDataSet();
+                });
             }
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
@@ -377,7 +376,7 @@ public class CustomerPage extends javax.swing.JPanel {
         loadDataSet();
     }//GEN-LAST:event_refreshButtonActionPerformed
 
-    public void processColums() {
+    public void processColumns() {
         // hide pid
         custTable.getColumnModel().getColumn(0).setMinWidth(0);
         custTable.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -386,8 +385,8 @@ public class CustomerPage extends javax.swing.JPanel {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                custTable.setModel(new DataTableModel().buildTableModel(customerController.getCustomers()));
-                processColums();
+                custTable.setModel(new DataTableModel().buildTableModel(new CustomerController(id).getCustomers()));
+                processColumns();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -397,8 +396,8 @@ public class CustomerPage extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         EventQueue.invokeLater(() -> {
             try {
-                custTable.setModel(new DataTableModel().buildTableModel(customerController.getCustomerSearch(text)));
-                processColums();
+                custTable.setModel(new DataTableModel().buildTableModel(new CustomerController(id).getCustomerSearch(text)));
+                processColumns();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

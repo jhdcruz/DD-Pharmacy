@@ -4,24 +4,20 @@ import com.pharmacy.controllers.SupplierController;
 import com.pharmacy.models.SupplierModel;
 import com.pharmacy.utils.DataTableModel;
 import com.pharmacy.views.dialogs.AddSupplierDialog;
-
+import java.awt.EventQueue;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
-import java.awt.EventQueue;
-import java.sql.SQLException;
 
 public class SupplierPage extends javax.swing.JPanel {
 
-    SupplierController supplierController;
     private final int id;
 
     public SupplierPage(int id) {
         this.id = id;
 
         initComponents();
-
-        supplierController = new SupplierController(id);
         loadDataSet();
     }
 
@@ -283,8 +279,10 @@ public class SupplierPage extends javax.swing.JPanel {
         int col = suppTable.getColumnCount();
         Object[] data = new Object[col];
 
-        for (int i = 0; i < col; i++)
+        for (int i = 0; i < col; i++) {
             data[i] = suppTable.getValueAt(row, i);
+        }
+
         codeText.setText((String) data[0]);
         nameText.setText((String) data[1]);
         locationText.setText((String) data[2]);
@@ -315,7 +313,7 @@ public class SupplierPage extends javax.swing.JPanel {
                 supplierModel.setPhone(phoneText.getText());
 
                 EventQueue.invokeLater(() -> {
-                    supplierController.updateSupplier(supplierModel, code);
+                    new SupplierController(id).updateSupplier(supplierModel, code);
                     loadDataSet();
                 });
             }
@@ -333,7 +331,10 @@ public class SupplierPage extends javax.swing.JPanel {
                 JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
                 EventQueue.invokeLater(() -> {
-                    supplierController.deleteSupplier(suppTable.getValueAt(suppTable.getSelectedRow(), 0).toString(), suppTable.getValueAt(suppTable.getSelectedRow(), 1).toString());
+                    String code = suppTable.getValueAt(suppTable.getSelectedRow(), 0).toString();
+                    String name = suppTable.getValueAt(suppTable.getSelectedRow(), 1).toString();
+
+                    new SupplierController(id).deleteSupplier(code, name);
                     loadDataSet();
                 });
             }
@@ -341,8 +342,7 @@ public class SupplierPage extends javax.swing.JPanel {
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void searchTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextKeyReleased
-        String text = searchText.getText();
-        loadSearchData(text);
+        loadSearchData(searchText.getText());
     }//GEN-LAST:event_searchTextKeyReleased
 
 
@@ -350,7 +350,7 @@ public class SupplierPage extends javax.swing.JPanel {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                suppTable.setModel(new DataTableModel().buildTableModel(supplierController.getSuppliers()));
+                suppTable.setModel(new DataTableModel().buildTableModel(new SupplierController(id).getSuppliers()));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -361,7 +361,7 @@ public class SupplierPage extends javax.swing.JPanel {
     public void loadSearchData(String text) {
         EventQueue.invokeLater(() -> {
             try {
-                suppTable.setModel(new DataTableModel().buildTableModel(supplierController.searchSuppliers(text)));
+                suppTable.setModel(new DataTableModel().buildTableModel(new SupplierController(id).searchSuppliers(text)));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
