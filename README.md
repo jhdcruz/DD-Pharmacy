@@ -1,6 +1,10 @@
 # D&D Pharmacy Inventory Management System
 
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=jhdcruz_DD-Pharmacy&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=jhdcruz_DD-Pharmacy) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=jhdcruz_DD-Pharmacy&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=jhdcruz_DD-Pharmacy) [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=jhdcruz_DD-Pharmacy&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=jhdcruz_DD-Pharmacy)
+
 In Compliance to CIT 201: System Analysis and Design.
+
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=jhdcruz_DD-Pharmacy)](https://sonarcloud.io/summary/new_code?id=jhdcruz_DD-Pharmacy)
 
 ## Features
 
@@ -12,25 +16,24 @@ In Compliance to CIT 201: System Analysis and Design.
 - Basic User Timesheet
 - System/Application Event Logs
 
-> _* Password encryption/decryption is supported/implemented_
+> _* Password encryption/decryption is supported/implemented (AES/GCM/NoPadding)_
 
 ## Structure
 
 The software code are divided into multiple packages for modularity:
 
-- **`Controllers`**: Contains the data access layer of the software that interacts directly with the database and
-  its tables. Used for retrieval and modification of data.
+- **`controllers`**: Contains the controllers that interacts directly with the database and
+  its tables. Used for retrieval and modification of data abd interaction with `views`.
 
-- **`Models`**: Contains the data transfer layer that allows the data to be transferred between the data
-  access layer and the UI layer.
+- **`models`**: Contains the models that allows the data to be transferred between the controllers and the views.
 
-- **`Views`**: Contains all the GUI classes making up the interface layer of the software.
+- **`views`**: Contains all the GUI classes making up the interface layer of the software.
 
-- **`Views/Dialogs`**: Contains all the GUI dialog classes in support to the `Views`.
+- **`views/dialogs`**: Contains all the GUI dialog classes in support to the `Views`.
 
-- **`Database`**: Contains class and methods that is used to retrieve database connection and user authentication.
+- **`database`**: Contains class and methods that is used to retrieve database connection and user authentication.
 
-- **`Utils`**: Shared utility classes used by the other packages.
+- **`utils`**: Shared utility classes used by the other packages.
 
 ## Development
 
@@ -40,8 +43,9 @@ The main method is located in `com.pharmacy.Main`.
 
 #### Requires:
 
-- Maven
+- Maven 3.8
 - JDK 17
+- Kotlin 1.8.0
 
 Install dependencies:
 
@@ -55,7 +59,7 @@ Running the ff. command will produce a `.jar` file inside `./target` folder
 mvn clean compile assembly:single
 ```
 
-> The UI _(Views)_ were made in NetBeans, and are not compatible with IntelliJ IDEA.
+> The UI _(views)_ were made in NetBeans, and are not compatible with IntelliJ IDEA.
 
 ## Usage
 
@@ -79,21 +83,18 @@ Prepare the database with the software's schema located in:
 `src/main/resources/database/dd_pharmacy_schema.sql`
 
 Default admin account:
-user: `admin`
-pass: `admin`
 
-Default employee account:
-user: `emp`
-pass: `emp`
+- user: `admin`
+- pass: `admin`
 
-Create your own personal admin account, then delete the default account
-for security purposes.
+> Create your own personal admin account,
+> then delete the default account for security purposes.
 
 After, you can now use the software.
 
 ### Running the app (.jar)
 
-- Usually, double-clicking the `.jar` file is enough.
+- Usually, double-clicking the `.jar` file is enough _(assuming JRE is installed properly)_.
 
 - Running through the terminal:
 
