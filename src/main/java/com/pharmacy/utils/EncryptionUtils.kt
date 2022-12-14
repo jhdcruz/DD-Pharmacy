@@ -2,15 +2,10 @@ package com.pharmacy.utils
 
 import java.nio.ByteBuffer
 import java.nio.charset.StandardCharsets
-import java.security.InvalidAlgorithmParameterException
-import java.security.InvalidKeyException
-import java.security.NoSuchAlgorithmException
+import java.security.GeneralSecurityException
 import java.security.SecureRandom
 import java.security.spec.AlgorithmParameterSpec
-import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
-import javax.crypto.IllegalBlockSizeException
-import javax.crypto.NoSuchPaddingException
 import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import javax.swing.JOptionPane
@@ -59,8 +54,9 @@ class EncryptionUtils {
             byteBuffer.put(iv)
             byteBuffer.put(cipherText)
             byteBuffer.array()
-        } catch (e: Exception) {
-            throw EncryptionException(e)
+        } catch (e: GeneralSecurityException) {
+            JOptionPane.showMessageDialog(null, "Error: ${e.message}", "Error", JOptionPane.ERROR_MESSAGE)
+            ByteArray(0)
         }
     }
 
@@ -70,7 +66,7 @@ class EncryptionUtils {
      * @param encrypted iv with ciphertext
      * @return original plaintext
      */
-    fun decrypt(encrypted: ByteArray, secretKey: ByteArray): String {
+    fun decrypt(encrypted: ByteArray, secretKey: ByteArray): String? {
         return try {
             val cipher = Cipher.getInstance(ALGORITHM)
 
@@ -81,64 +77,15 @@ class EncryptionUtils {
             // Use everything from 12 bytes on as ciphertext
             val plainText = cipher.doFinal(encrypted, GCM_IV_LENGTH, encrypted.size - GCM_IV_LENGTH)
             String(plainText, StandardCharsets.UTF_8)
-        } catch (e: Exception) {
-            throw EncryptionException(e)
+        } catch (e: GeneralSecurityException) {
+            JOptionPane.showMessageDialog(
+                null,
+                e.message,
+                "IT Personnel Intervention Required",
+                JOptionPane.ERROR_MESSAGE
+            )
+            null
         }
-    }
-
-    fun EncryptionException(e: Exception): Throwable {
-        when (e) {
-            is NoSuchAlgorithmException -> JOptionPane.showMessageDialog(
-                null,
-                e.message,
-                "IT Personnel Intervention Required",
-                JOptionPane.ERROR_MESSAGE
-            )
-
-            is NoSuchPaddingException -> JOptionPane.showMessageDialog(
-                null,
-                e.message,
-                "IT Personnel Intervention Required",
-                JOptionPane.ERROR_MESSAGE
-            )
-
-            is InvalidKeyException -> JOptionPane.showMessageDialog(
-                null,
-                e.message,
-                "IT Personnel Intervention Required",
-                JOptionPane.ERROR_MESSAGE
-            )
-
-            is InvalidAlgorithmParameterException -> JOptionPane.showMessageDialog(
-                null,
-                e.message,
-                "IT Personnel Intervention Required",
-                JOptionPane.ERROR_MESSAGE
-            )
-
-            is IllegalBlockSizeException -> JOptionPane.showMessageDialog(
-                null,
-                e.message,
-                "IT Personnel Intervention Required",
-                JOptionPane.ERROR_MESSAGE
-            )
-
-            is BadPaddingException -> JOptionPane.showMessageDialog(
-                null,
-                e.message,
-                "IT Personnel Intervention Required",
-                JOptionPane.ERROR_MESSAGE
-            )
-
-            else -> JOptionPane.showMessageDialog(
-                null,
-                e.message,
-                "IT Personnel Intervention Required",
-                JOptionPane.ERROR_MESSAGE
-            )
-        }
-
-        return e
     }
 
     companion object {
