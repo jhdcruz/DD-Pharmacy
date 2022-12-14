@@ -2,10 +2,9 @@ package com.pharmacy.views;
 
 import com.pharmacy.database.DatabaseInstance;
 import com.pharmacy.models.UserModel;
-
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
+import java.awt.EventQueue;
 import java.time.LocalDateTime;
+import javax.swing.JOptionPane;
 
 public class LoginPage extends javax.swing.JFrame {
 
@@ -161,7 +160,7 @@ public class LoginPage extends javax.swing.JFrame {
 
             dispose();
 
-            SwingUtilities.invokeLater(() -> new Dashboard(username, userType, userModel));
+            EventQueue.invokeLater(() -> new Dashboard(username, userType, userModel));
         } else {
             JOptionPane.showMessageDialog(
                 null,

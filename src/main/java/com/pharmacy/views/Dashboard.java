@@ -2,13 +2,13 @@ package com.pharmacy.views;
 
 import com.pharmacy.controllers.UserController;
 import com.pharmacy.models.UserModel;
-
-import javax.swing.JOptionPane;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.LocalDateTime;
+import javax.swing.JOptionPane;
 
 public class Dashboard extends javax.swing.JFrame {
 
@@ -36,7 +36,8 @@ public class Dashboard extends javax.swing.JFrame {
             notForEmployee();
         }
 
-        id = new UserController(id).getUserId(username);
+        // TODO: Inherit `id` from login instead
+        EventQueue.invokeLater(() -> id = new UserController(id).getUserId(username));
 
         // Panel Layout set to Card Layout to allow switching between different sections
         displayPanel.setLayout(layout);
