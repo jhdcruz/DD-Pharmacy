@@ -7,6 +7,18 @@
         <option name="PATTERN" value="com.pharmacy.controllers.*" />
         <option name="ENABLED" value="true" />
       </pattern>
+      <pattern>
+        <option name="PATTERN" value="com.pharmacy.database.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+      <pattern>
+        <option name="PATTERN" value="com.pharmacy.models.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+      <pattern>
+        <option name="PATTERN" value="com.pharmacy.utils.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
     </extension>
     <method v="2">
       <option name="Make" enabled="true" />
