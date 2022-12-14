@@ -103,12 +103,12 @@ class CustomerController(private val id: Int) {
      *
      * @param customerCode customer code to be deleted
      */
-    fun deleteCustomer(customerCode: String) {
+    fun deleteCustomer(customerCode: Int, customerName: String) {
         try {
-            val query = "DELETE FROM customers WHERE customer_code='$customerCode'"
+            val query = "DELETE FROM customers WHERE cid='$customerCode'"
             statement!!.executeUpdate(query)
 
-            LogsController().addLogEntry(id, "Deleted customer: $customerCode")
+            LogsController().addLogEntry(id, "Deleted customer: $customerName ($customerCode)")
         } catch (e: SQLException) {
             e.printStackTrace()
         }

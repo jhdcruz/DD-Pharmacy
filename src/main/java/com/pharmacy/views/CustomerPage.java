@@ -4,12 +4,11 @@ import com.pharmacy.controllers.CustomerController;
 import com.pharmacy.models.CustomerModel;
 import com.pharmacy.utils.DataTableModel;
 import com.pharmacy.views.dialogs.AddCustomerDialog;
-
+import java.awt.EventQueue;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
-import java.awt.EventQueue;
-import java.sql.SQLException;
 
 public class CustomerPage extends javax.swing.JPanel {
 
@@ -344,7 +343,10 @@ public class CustomerPage extends javax.swing.JPanel {
                 "Confirmation",
                 JOptionPane.YES_NO_OPTION);
             if (opt == JOptionPane.YES_OPTION) {
-                customerController.deleteCustomer(custTable.getValueAt(custTable.getSelectedRow(), 0).toString());
+                int customerId = (int) custTable.getValueAt(custTable.getSelectedRow(), 0);
+                String customerName = (String) custTable.getValueAt(custTable.getSelectedRow(), 2);
+
+                customerController.deleteCustomer(customerId, customerName);
                 loadDataSet();
             }
         }
@@ -375,10 +377,17 @@ public class CustomerPage extends javax.swing.JPanel {
         loadDataSet();
     }//GEN-LAST:event_refreshButtonActionPerformed
 
+    public void processColums() {
+        // hide pid
+        custTable.getColumnModel().getColumn(0).setMinWidth(0);
+        custTable.getColumnModel().getColumn(0).setMaxWidth(0);
+    }
+
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
                 custTable.setModel(new DataTableModel().buildTableModel(customerController.getCustomers()));
+                processColums();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -389,6 +398,7 @@ public class CustomerPage extends javax.swing.JPanel {
         EventQueue.invokeLater(() -> {
             try {
                 custTable.setModel(new DataTableModel().buildTableModel(customerController.getCustomerSearch(text)));
+                processColums();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
