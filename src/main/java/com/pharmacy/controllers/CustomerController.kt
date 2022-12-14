@@ -121,20 +121,29 @@ class CustomerController(private val id: Int) {
      * @param searchQuery search query to be matched with customer data
      * @return database result that matches the search query
      */
-    fun getCustomerSearch(searchQuery: String): ResultSet? {
+    fun getCustomerSearch(search: String): ResultSet? {
         var resultSet: ResultSet? = null
 
         try {
-            val query = "SELECT customer_code,last_name,first_name,middle_name,conditions,phone,last_updated," +
-                "FROM customers " +
-                "WHERE customer_code LIKE '%" + searchQuery + "%' " +
-                "OR last_name LIKE '%" + searchQuery + "%'  " +
-                "OR first_name LIKE '%" + searchQuery + "%'  " +
-                "OR middle_name LIKE '%" + searchQuery + "%'  " +
-                "OR " + "conditions LIKE '%" + searchQuery + "%' " +
-                "OR phone LIKE '%" + searchQuery + "%'"
+            val query = """
+                SELECT * FROM customers
+                WHERE customer_code LIKE ?
+                OR last_name LIKE ?
+                OR first_name LIKE ?
+                OR middle_name LIKE ?
+                OR conditions LIKE ?
+                OR phone LIKE ?;
+                """.trimIndent()
 
-            resultSet = statement!!.executeQuery(query)
+            val prepStatement: PreparedStatement = connection!!.prepareStatement(query)
+            prepStatement.setString(1, "%$search%")
+            prepStatement.setString(2, "%$search%")
+            prepStatement.setString(3, "%$search%")
+            prepStatement.setString(4, "%$search%")
+            prepStatement.setString(5, "%$search%")
+            prepStatement.setString(6, "%$search%")
+
+            resultSet = prepStatement.executeQuery()
         } catch (e: SQLException) {
             e.printStackTrace()
         }
