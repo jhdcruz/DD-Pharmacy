@@ -42,7 +42,7 @@ class EncryptionUtils {
      * @param plaintext to encrypt (UTF-8)
      * @return encrypted message
      */
-    fun encrypt(plaintext: String, secretKey: ByteArray?): ByteArray {
+    fun encrypt(plaintext: String, secretKey: ByteArray): ByteArray {
         return try {
             // NEVER REUSE THIS IV WITH SAME KEY
             val iv = ByteArray(GCM_IV_LENGTH)
@@ -79,7 +79,7 @@ class EncryptionUtils {
      * @param encrypted iv with ciphertext
      * @return original plaintext
      */
-    fun decrypt(encrypted: ByteArray, secretKey: ByteArray?): String {
+    fun decrypt(encrypted: ByteArray, secretKey: ByteArray): String {
         return try {
             val cipher = Cipher.getInstance(ALGORITHM)
 
