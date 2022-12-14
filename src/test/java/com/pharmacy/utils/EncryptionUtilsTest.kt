@@ -1,39 +1,37 @@
-package com.pharmacy.utils;
+package com.pharmacy.utils
 
-import org.junit.jupiter.api.Test;
+import kotlin.test.assertEquals
+import org.junit.jupiter.api.Test
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-class EncryptionUtilsTest {
-
+internal class EncryptionUtilsTest {
     @Test
-    void testGenerateKeyBytes() {
-        EncryptionUtils encryptionUtils = new EncryptionUtils();
-        byte[] keyBytes = encryptionUtils.generateKeyBytes();
+    fun `test key bytes generation`() {
+        val encryptionUtils = EncryptionUtils()
+        val keyBytes = encryptionUtils.generateKeyBytes()
 
-        assertEquals(16, keyBytes.length);
+        assertEquals(16, keyBytes.size)
     }
 
     @Test
-    void testEncrypt() {
-        EncryptionUtils encryptionUtils = new EncryptionUtils();
-        byte[] secretKey = encryptionUtils.generateKeyBytes();
+    fun `test encryption`() {
+        val encryptionUtils = EncryptionUtils()
+        val secretKey = encryptionUtils.generateKeyBytes()
 
-        String message = "admin";
-        byte[] cipherText = encryptionUtils.encrypt(message, secretKey);
+        val message = "admin"
+        val cipherText = encryptionUtils.encrypt(message, secretKey)
 
-        assertEquals(33, cipherText.length);
+        assertEquals(33, cipherText.size)
     }
 
     @Test
-    void testDecrypt() {
-        EncryptionUtils encryptionUtils = new EncryptionUtils();
-        byte[] secretKey = encryptionUtils.generateKeyBytes();
+    fun `test decryption`() {
+        val encryptionUtils = EncryptionUtils()
+        val secretKey = encryptionUtils.generateKeyBytes()
 
-        String message = "admin";
-        byte[] cipherText = encryptionUtils.encrypt(message, secretKey);
-        String decrypted = encryptionUtils.decrypt(cipherText, secretKey);
+        val message = "admin"
+        val cipherText = encryptionUtils.encrypt(message, secretKey)
+        val decrypted = encryptionUtils.decrypt(cipherText, secretKey)
 
-        assertEquals(message, decrypted);
+        assertEquals(message, decrypted)
     }
 }

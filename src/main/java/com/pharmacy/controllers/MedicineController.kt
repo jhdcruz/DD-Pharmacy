@@ -1,53 +1,86 @@
-package com.pharmacy.controllers;
+package com.pharmacy.controllers
 
-import com.pharmacy.database.DatabaseInstance;
-import com.pharmacy.models.MedicineModel;
+import com.pharmacy.database.DatabaseInstance
+import com.pharmacy.models.MedicineModel
+import java.sql.Connection
+import java.sql.Date
+import java.sql.PreparedStatement
+import java.sql.ResultSet
+import java.sql.SQLException
+import java.sql.Statement
+import javax.swing.JOptionPane
 
-import javax.swing.JOptionPane;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-public class MedicineController {
-
-    Connection connection = null;
-    PreparedStatement preparedStatement = null;
-    Statement statement = null;
-    ResultSet resultSet = null;
-    LogsController logsController;
+class MedicineController(private var logId: Int) {
+    private var connection: Connection? = null
+    private var statement: Statement? = null
 
     // Stock availability of certain medicine in inventory
-    boolean available = false;
+    private var available = false
 
-    int logId;
-
-    public MedicineController(int logId) {
-        this.logId = logId;
-
+    init {
         try {
-            connection = new DatabaseInstance().getConnection();
-            statement = connection.createStatement();
-            logsController = new LogsController();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            connection = DatabaseInstance().getConnection()
+            statement = connection!!.createStatement()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
         }
     }
 
-    public boolean checkStock(String medicineCode) {
-        try {
-            String query = "SELECT quantity FROM medicines WHERE medicine_code='" + medicineCode + "'";
-            resultSet = statement.executeQuery(query);
+    val medicines: ResultSet?
+        get() {
+            var resultSet: ResultSet? = null
 
-            while (resultSet.next()) {
-                available = true;
+            try {
+                val query = """
+                SELECT pid, medicine_code, medicine_name, description, quantity,
+                cost_price, sell_price, supplied_by, expiration_date, last_updated
+                FROM medicines;
+                """.trimIndent()
+
+                resultSet = statement!!.executeQuery(query)
+            } catch (throwables: SQLException) {
+                throwables.printStackTrace()
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+            return resultSet
         }
 
-        return available;
+    val restockInfo: ResultSet?
+        get() {
+            var resultSet: ResultSet? = null
+
+            try {
+                val query = """
+                SELECT purchase_id, restock.medicine_code,medicine_name,restock.quantity,total_cost,date
+                FROM restock
+                INNER JOIN medicines
+                ON medicines.medicine_code=restock.medicine_code
+                ORDER BY date DESC;
+
+                """.trimIndent()
+                resultSet = statement!!.executeQuery(query)
+            } catch (throwables: SQLException) {
+                throwables.printStackTrace()
+            }
+
+            return resultSet
+        }
+
+    private fun checkStock(medicineCode: String?): Boolean {
+        val resultSet: ResultSet?
+
+        try {
+            val query = "SELECT quantity FROM medicines WHERE medicine_code='$medicineCode'"
+            resultSet = statement!!.executeQuery(query)
+
+            while (resultSet!!.next()) {
+                available = true
+            }
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        }
+
+        return available
     }
 
     /**
@@ -55,79 +88,87 @@ public class MedicineController {
      *
      * @param medicineModel medicine model object
      */
-    public void addMedicine(MedicineModel medicineModel) {
-        java.sql.Date date = new java.sql.Date(medicineModel.getExpirationDate().getTime());
+    fun addMedicine(medicineModel: MedicineModel) {
+        val resultSet: ResultSet?
+        val date = Date(medicineModel.expirationDate!!.time)
+
         // check if medicine already exists
         try {
-            String duplicateQuery = "SELECT * FROM medicines WHERE medicine_name='"
-                + medicineModel.getMedicineName()
+            val duplicateQuery = ("SELECT * FROM medicines WHERE medicine_name='"
+                + medicineModel.medicineName
                 + "' AND cost_price='"
-                + medicineModel.getCostPrice()
+                + medicineModel.costPrice
                 + "' AND sell_price='"
-                + medicineModel.getSellPrice()
+                + medicineModel.sellPrice
                 + "' AND supplied_by='"
-                + medicineModel.getSuppliedBy()
-                + "'";
-            resultSet = statement.executeQuery(duplicateQuery);
+                + medicineModel.suppliedBy
+                + "'")
+            resultSet = statement!!.executeQuery(duplicateQuery)
 
-            if (resultSet.next()) {
-                JOptionPane.showMessageDialog(null, "Product record already exists.");
+            if (resultSet!!.next()) {
+                JOptionPane.showMessageDialog(null, "Product record already exists.")
             } else {
-                String medicineQuery = "INSERT INTO medicines VALUES(null,?,?,?,?,?,?,?,?,DEFAULT)";
-                preparedStatement = connection.prepareStatement(medicineQuery);
+                val medicineQuery = "INSERT INTO medicines VALUES(null,?,?,?,?,?,?,?,?,DEFAULT)"
 
-                preparedStatement.setString(1, medicineModel.getMedicineCode());
-                preparedStatement.setString(2, medicineModel.getMedicineName());
-                preparedStatement.setString(3, medicineModel.getDescription());
-                preparedStatement.setDouble(4, medicineModel.getCostPrice());
-                preparedStatement.setDouble(5, medicineModel.getSellPrice());
-                preparedStatement.setInt(6, medicineModel.getQuantity());
-                preparedStatement.setString(7, medicineModel.getSuppliedBy());
-                preparedStatement.setDate(8, date);
+                val preparedStatement: PreparedStatement = connection!!.prepareStatement(medicineQuery)
+                preparedStatement.setString(1, medicineModel.medicineCode)
+                preparedStatement.setString(2, medicineModel.medicineName)
+                preparedStatement.setString(3, medicineModel.description)
+                preparedStatement.setDouble(4, medicineModel.costPrice!!)
+                preparedStatement.setDouble(5, medicineModel.sellPrice!!)
+                preparedStatement.setInt(6, medicineModel.quantity!!)
+                preparedStatement.setString(7, medicineModel.suppliedBy)
+                preparedStatement.setDate(8, date)
 
-                preparedStatement.executeUpdate();
-                logsController.addLogEntry(logId, "Added new medicine: " + medicineModel.getMedicineCode() + " | " + medicineModel.getMedicineName());
+                preparedStatement.executeUpdate()
+                LogsController().addLogEntry(
+                    logId,
+                    "Added new medicine: " + medicineModel.medicineCode + " | " + medicineModel.medicineName
+                )
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (e: SQLException) {
+            e.printStackTrace()
         }
     }
 
-    public void addRestockInfo(MedicineModel medicineModel) {
-        java.sql.Date date = new java.sql.Date(medicineModel.getDate().getTime());
+    fun addRestockInfo(medicineModel: MedicineModel) {
+        val date = Date(medicineModel.date!!.time)
 
         try {
-            String query = "INSERT INTO restock VALUES(null,?,?,?,?,?)";
+            val query = "INSERT INTO restock VALUES(null,?,?,?,?,?)"
 
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, medicineModel.getSupplierCode());
-            preparedStatement.setString(2, medicineModel.getMedicineCode());
-            preparedStatement.setDate(3, date);
-            preparedStatement.setInt(4, medicineModel.getQuantity());
-            preparedStatement.setDouble(5, medicineModel.getTotalCost());
+            val preparedStatement: PreparedStatement = connection!!.prepareStatement(query)
+            preparedStatement.setString(1, medicineModel.supplierCode)
+            preparedStatement.setString(2, medicineModel.medicineCode)
+            preparedStatement.setDate(3, date)
+            preparedStatement.setInt(4, medicineModel.quantity!!)
+            preparedStatement.setDouble(5, medicineModel.totalCost!!)
 
-            preparedStatement.executeUpdate();
-            logsController.addLogEntry(logId, "Medicine restock: " + medicineModel.getMedicineCode() + " | " + medicineModel.getMedicineName());
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
+            preparedStatement.executeUpdate()
+            LogsController().addLogEntry(
+                logId,
+                "Medicine restock: " + medicineModel.medicineCode + " | " + medicineModel.medicineName
+            )
+        } catch (throwable: SQLException) {
+            throwable.printStackTrace()
         }
 
-        String medCode = medicineModel.getMedicineCode();
-
+        val medCode = medicineModel.medicineCode
         // Check if medicines with stock already exists
         if (checkStock(medCode)) { // available = true
             try {
-                String query = "UPDATE medicines SET quantity=quantity+? WHERE medicine_code=?";
-                preparedStatement = connection.prepareStatement(query);
-                preparedStatement.setInt(1, medicineModel.getQuantity());
-                preparedStatement.setString(2, medCode);
+                val query = "UPDATE medicines SET quantity=quantity+? WHERE medicine_code=?"
 
-                preparedStatement.executeUpdate();
-            } catch (SQLException throwable) {
-                throwable.printStackTrace();
+                val preparedStatement: PreparedStatement = connection!!.prepareStatement(query)
+                preparedStatement.setInt(1, medicineModel.quantity!!)
+                preparedStatement.setString(2, medCode)
+
+                preparedStatement.executeUpdate()
+            } catch (throwable: SQLException) {
+                throwable.printStackTrace()
             }
         } else if (!checkStock(medCode)) { // available = false
-            addMedicine(medicineModel);
+            addMedicine(medicineModel)
         }
     }
 
@@ -136,32 +177,35 @@ public class MedicineController {
      *
      * @param medicineModel medicine model object
      */
-    public void updateMedicine(MedicineModel medicineModel) {
-        java.sql.Date date = new java.sql.Date(medicineModel.getExpirationDate().getTime());
+    fun updateMedicine(medicineModel: MedicineModel) {
+        val date = Date(medicineModel.expirationDate!!.time)
 
         try {
-            String medicineQuery = """
+            val medicineQuery = """
                 UPDATE medicines
                 SET medicine_code=?,medicine_name=?,description=?,cost_price=?,
                     sell_price=?,quantity=?,expiration_date=?,supplied_by=?
-                WHERE pid=?;""";
-            preparedStatement = connection.prepareStatement(medicineQuery);
+                WHERE pid=?;
+                """.trimIndent()
 
-            preparedStatement.setString(1, medicineModel.getMedicineCode());
-            preparedStatement.setString(2, medicineModel.getMedicineName());
-            preparedStatement.setString(3, medicineModel.getDescription());
-            preparedStatement.setDouble(4, medicineModel.getCostPrice());
-            preparedStatement.setDouble(5, medicineModel.getSellPrice());
-            preparedStatement.setInt(6, medicineModel.getQuantity());
-            preparedStatement.setDate(7, date);
-            preparedStatement.setString(8, medicineModel.getSuppliedBy());
+            val preparedStatement: PreparedStatement = connection!!.prepareStatement(medicineQuery)
+            preparedStatement.setString(1, medicineModel.medicineCode)
+            preparedStatement.setString(2, medicineModel.medicineName)
+            preparedStatement.setString(3, medicineModel.description)
+            preparedStatement.setDouble(4, medicineModel.costPrice!!)
+            preparedStatement.setDouble(5, medicineModel.sellPrice!!)
+            preparedStatement.setInt(6, medicineModel.quantity!!)
+            preparedStatement.setDate(7, date)
+            preparedStatement.setString(8, medicineModel.suppliedBy)
+            preparedStatement.setInt(9, medicineModel.medicineId!!)
 
-            preparedStatement.setInt(9, medicineModel.getMedicineId());
-
-            preparedStatement.executeUpdate();
-            logsController.addLogEntry(logId, "Updated medicine: " + medicineModel.getMedicineCode() + " | " + medicineModel.getMedicineName());
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
+            preparedStatement.executeUpdate()
+            LogsController().addLogEntry(
+                logId,
+                "Updated medicine: " + medicineModel.medicineCode + " | " + medicineModel.medicineName
+            )
+        } catch (throwable: SQLException) {
+            throwable.printStackTrace()
         }
     }
 
@@ -172,142 +216,127 @@ public class MedicineController {
      * @param code     medicine code
      * @param quantity quantity of medicine
      */
-    public void reduceMedicineStock(String code, int quantity) {
-        try {
-            String query = "SELECT * FROM medicines WHERE medicine_code='" + code + "'";
-            resultSet = statement.executeQuery(query);
+    fun reduceMedicineStock(code: String, quantity: Int) {
+        val resultSet: ResultSet?
 
-            if (resultSet.next()) {
-                String query2 = "UPDATE medicines SET quantity=quantity-? WHERE medicine_code=?";
-                preparedStatement = connection.prepareStatement(query2);
-                preparedStatement.setInt(1, quantity);
-                preparedStatement.setString(2, code);
-                preparedStatement.executeUpdate();
+        try {
+            val medQuery = "SELECT * FROM medicines WHERE medicine_code='$code'"
+            resultSet = statement!!.executeQuery(medQuery)
+
+            if (resultSet!!.next()) {
+                val updateQuery = "UPDATE medicines SET quantity=quantity-? WHERE medicine_code=?"
+
+                val preparedStatement: PreparedStatement = connection!!.prepareStatement(updateQuery)
+                preparedStatement.setInt(1, quantity)
+                preparedStatement.setString(2, code)
+
+                preparedStatement.executeUpdate()
             }
-            logsController.addLogEntry(logId, "Medicine stock reduced: " + code + " due to deleted restock info");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            LogsController().addLogEntry(logId, "Medicine stock reduced: $code due to deleted restock info")
+        } catch (throwables: SQLException) {
+            throwables.printStackTrace()
         }
     }
-
 
     /**
      * Delete medicine from the database.
      *
      * @param pid medicine id to be deleted
      */
-    public void deleteMedicine(int pid) {
+    fun deleteMedicine(pid: Int) {
         try {
-            String query = "DELETE FROM medicines WHERE pid=?";
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, pid);
+            val query = "DELETE FROM medicines WHERE pid=?"
+            val preparedStatement: PreparedStatement = connection!!.prepareStatement(query)
 
-            preparedStatement.executeUpdate();
-            logsController.addLogEntry(logId, "Deleted medicine with id: " + pid);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            preparedStatement.setInt(1, pid)
+            preparedStatement.executeUpdate()
+
+            LogsController().addLogEntry(logId, "Deleted medicine with id: $pid")
+        } catch (e: SQLException) {
+            e.printStackTrace()
         }
     }
 
-    public void deleteRestockInfo(int id) {
+    fun deleteRestockInfo(id: Int) {
         try {
-            String query = "DELETE FROM restock WHERE purchase_id=?";
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, id);
+            val query = "DELETE FROM restock WHERE purchase_id=?"
+            val preparedStatement: PreparedStatement = connection!!.prepareStatement(query)
 
-            preparedStatement.executeUpdate();
-            logsController.addLogEntry(logId, "Deleted restock info with id: " + id);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            preparedStatement.setInt(1, id)
+
+            preparedStatement.executeUpdate()
+            LogsController().addLogEntry(logId, "Deleted restock info with id: $id")
+        } catch (e: SQLException) {
+            e.printStackTrace()
         }
     }
 
-
-    // Products data set retrieval for display
-    public ResultSet getMedicines() {
-        try {
-            String query = """
-                SELECT pid, medicine_code, medicine_name, description, quantity, cost_price, sell_price, supplied_by, expiration_date, last_updated FROM medicines;
-                """;
-
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return resultSet;
-    }
-
-    // Purchase table data set retrieval
-    public ResultSet getRestockInfo() {
-        try {
-            String query = """
-                SELECT purchase_id, restock.medicine_code,medicine_name,restock.quantity,total_cost,date
-                FROM restock
-                INNER JOIN medicines
-                ON medicines.medicine_code=restock.medicine_code
-                ORDER BY date DESC;
-                """;
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return resultSet;
-    }
 
     // Search method for medicines
-    public ResultSet getMedicineSearch(String text) {
+    fun getMedicineSearch(text: String): ResultSet? {
+        var resultSet: ResultSet? = null
+
         try {
-            String query = "SELECT pid, medicine_code, medicine_name, description, quantity, cost_price, sell_price, supplied_by, expiration_date, last_updated FROM medicines "
-                + "WHERE medicine_code LIKE '%" + text + "%' OR medicine_name LIKE '%" + text + "%' OR supplied_by LIKE '%" + text + "%'";
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            val query =
+                ("SELECT pid, medicine_code, medicine_name, description, quantity, cost_price, sell_price, supplied_by, expiration_date, last_updated FROM medicines "
+                    + "WHERE medicine_code LIKE '%" + text + "%' OR medicine_name LIKE '%" + text + "%' OR supplied_by LIKE '%" + text + "%'")
+            resultSet = statement!!.executeQuery(query)
+        } catch (e: SQLException) {
+            e.printStackTrace()
         }
 
-        return resultSet;
+        return resultSet
     }
 
-    public ResultSet getMedFromCode(String text) {
-        try {
-            String query = "SELECT * FROM medicines "
-                + "WHERE medicine_code='" + text + "' LIMIT 1";
+    fun getMedFromCode(text: String): ResultSet? {
+        var resultSet: ResultSet? = null
 
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        try {
+            val query = ("SELECT * FROM medicines "
+                + "WHERE medicine_code='" + text + "' LIMIT 1")
+            resultSet = statement!!.executeQuery(query)
+        } catch (e: SQLException) {
+            e.printStackTrace()
         }
 
-        return resultSet;
+        return resultSet
     }
 
     // Search method for purchase logs
-    public ResultSet getRestockSearch(String text) {
-        try {
-            String query = "SELECT purchase_id,restock.medicine_code,medicines.medicine_name,quantity,total_cost\n"
-                + "FROM restock INNER JOIN medicines ON restock.medicine_code=medicines.medicine_code\n"
-                + "INNER JOIN suppliers ON restock.supplier_code=suppliers.supplier_code\n"
-                + "WHERE purchase_id LIKE '%" + text + "%' OR medicine_code LIKE '%" + text + "%' OR medicine_name LIKE '%" + text + "%'\n"
-                + "OR suppliers.full_name LIKE '%" + text + "%' OR restock.supplier_code LIKE '%" + text + "%'\n"
-                + "OR date LIKE '%" + text + "%' ORDER BY purchase_id";
+    fun getRestockSearch(text: String): ResultSet? {
+        var resultSet: ResultSet? = null
 
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        try {
+            val query = """
+                SELECT purchase_id,restock.medicine_code,medicines.medicine_name,quantity,total_cost
+                FROM restock INNER JOIN medicines ON restock.medicine_code=medicines.medicine_code
+                INNER JOIN suppliers ON restock.supplier_code=suppliers.supplier_code
+                WHERE purchase_id LIKE '%$text%'
+                OR medicine_code LIKE '%$text%'
+                OR medicine_name LIKE '%$text%'
+                OR suppliers.full_name LIKE '%$text%'
+                OR restock.supplier_code LIKE '%$text%'
+                OR date LIKE '%$text%'
+                ORDER BY purchase_id
+                """.trimIndent()
+            resultSet = statement!!.executeQuery(query)
+        } catch (e: SQLException) {
+            e.printStackTrace()
         }
 
-        return resultSet;
+        return resultSet
     }
 
-    public ResultSet getMedicineName(String code) {
+    fun getMedicineName(code: String): ResultSet? {
+        var resultSet: ResultSet? = null
+
         try {
-            String query = "SELECT medicine_name FROM medicines WHERE medicine_code='" + code + "'";
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            val query = "SELECT medicine_name FROM medicines WHERE medicine_code='$code'"
+            resultSet = statement!!.executeQuery(query)
+        } catch (throwables: SQLException) {
+            throwables.printStackTrace()
         }
 
-        return resultSet;
+        return resultSet
     }
 }

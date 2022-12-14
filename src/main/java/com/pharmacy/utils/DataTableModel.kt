@@ -1,72 +1,72 @@
-package com.pharmacy.utils;
+package com.pharmacy.utils
 
-import org.apache.commons.text.WordUtils;
+import java.sql.ResultSet
+import java.sql.SQLException
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
+import javax.swing.table.DefaultTableModel
+import org.apache.commons.text.WordUtils
 
-import javax.swing.table.DefaultTableModel;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-import java.util.Vector;
-
-public class DataTableModel {
+class DataTableModel {
 
     /**
      * Display database results and headers in a table.
      *
+     * TODO: Replace vectors with arrays/arraylists.
+     *
      * @param resultSet database result
      * @return table model that contains data and the data columns
      * @throws SQLException SQL exception thrown when database error occurs
+     *
      */
-    public DefaultTableModel buildTableModel(ResultSet resultSet) throws SQLException {
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        Vector<String> columnNames = new Vector<>();
-        int columnCount = metaData.getColumnCount();
+    @Throws(SQLException::class)
+    fun buildTableModel(resultSet: ResultSet): DefaultTableModel {
+        val metaData = resultSet.metaData
+        val columnNames = Vector<String>()
+        val columnCount = metaData.columnCount
 
         // add column names to the table column headers
-        for (int col = 1; col <= columnCount; col++) {
+        for (col in 1..columnCount) {
             // replace underscores with spaces
-            String columnName = metaData.getColumnName(col).replace("_", " ");
+            var columnName = metaData.getColumnName(col).replace("_", " ")
             // capitalize the first letter of each word
-            columnName = WordUtils.capitalizeFully(columnName);
+            columnName = WordUtils.capitalizeFully(columnName)
 
-            columnNames.add(columnName);
+            columnNames.add(columnName)
         }
 
-        Vector<Vector<Object>> data = new Vector<>();
+        val data = Vector<Vector<Any>>()
+
         while (resultSet.next()) {
-            Vector<Object> dataRow = new Vector<>();
+            val dataRow = Vector<Any>()
 
-            for (int col = 1; col <= columnCount; col++) {
-                dataRow.add(resultSet.getObject(col));
+            for (col in 1..columnCount) {
+                dataRow.add(resultSet.getObject(col))
 
-                // post-process data
-                switch (columnNames.get(col - 1)) {
-                    case "Date", "In Time", "Out Time", "Last Updated" -> {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a - MMM dd, yyyy", Locale.getDefault());
-                        LocalDateTime dateTime = LocalDateTime.parse(dataRow.get(col - 1).toString());
-
-                        dataRow.set(col - 1, dateTime.format(formatter));
+                when (columnNames[col - 1]) {
+                    "Date", "In Time", "Out Time", "Last Updated" -> {
+                        val formatter = DateTimeFormatter.ofPattern("hh:mm a - MMM dd, yyyy", Locale.getDefault())
+                        val dateTime = LocalDateTime.parse(dataRow[col - 1].toString())
+                        dataRow[col - 1] = dateTime.format(formatter)
                     }
 
-                    case "Expiration Date" -> {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy", Locale.getDefault());
-                        LocalDateTime dateTime = LocalDateTime.parse(dataRow.get(col - 1).toString());
-                        dataRow.set(col - 1, dateTime.format(formatter));
+                    "Expiration Date" -> {
+                        val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy", Locale.getDefault())
+                        val dateTime = LocalDateTime.parse(dataRow[col - 1].toString())
+                        dataRow[col - 1] = dateTime.format(formatter)
                     }
 
-                    case "Cost Price", "Sell Price", "Total Cost", "Revenue" -> {
-                        double price = Double.parseDouble(dataRow.get(col - 1).toString());
-                        dataRow.set(col - 1, String.format("%.2f", price));
+                    "Cost Price", "Sell Price", "Total Cost", "Revenue" -> {
+                        val price = dataRow[col - 1].toString().toDouble()
+                        dataRow[col - 1] = String.format("%.2f", price)
                     }
-                }
+                } // when
             } // for
 
-            data.add(dataRow);
+            data.add(dataRow)
         }
 
-        return new DefaultTableModel(data, columnNames);
+        return DefaultTableModel(data, columnNames)
     }
 }

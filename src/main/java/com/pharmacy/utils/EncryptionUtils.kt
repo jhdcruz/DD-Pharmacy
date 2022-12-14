@@ -1,50 +1,39 @@
-package com.pharmacy.utils;
+package com.pharmacy.utils
 
-import org.jetbrains.annotations.NotNull;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.GCMParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.AlgorithmParameterSpec;
-
+import java.nio.ByteBuffer
+import java.nio.charset.StandardCharsets
+import java.security.InvalidAlgorithmParameterException
+import java.security.InvalidKeyException
+import java.security.NoSuchAlgorithmException
+import java.security.SecureRandom
+import java.security.spec.AlgorithmParameterSpec
+import javax.crypto.BadPaddingException
+import javax.crypto.Cipher
+import javax.crypto.IllegalBlockSizeException
+import javax.crypto.NoSuchPaddingException
+import javax.crypto.spec.GCMParameterSpec
+import javax.crypto.spec.SecretKeySpec
 
 /**
  * Encryption and Decryption with AES + GCM
- * <p>
- * See <a href="https://gist.github.com/patrickfav/7e28d4eb4bf500f7ee8012c4a0cf7bbf">Reference</a>
- * by <i>Patrick Favre-Bulle</i>
+ *
+ * See [Reference](https://gist.github.com/patrickfav/7e28d4eb4bf500f7ee8012c4a0cf7bbf)
+ * by *Patrick Favre-Bulle*
  */
-public class EncryptionUtils {
-    private final SecureRandom secureRandom = new SecureRandom();
-    private static final int GCM_IV_LENGTH = 12;
-    private static final String ALGORITHM = "AES/GCM/NoPadding";
-
+class EncryptionUtils {
+    private val secureRandom = SecureRandom()
 
     /**
      * This generates a random byte array of 16 bytes
-     * <p>
      * Specifically used for generating a random key for AES encryption
-     * <p>
-     * See {@link #encrypt(String, byte[])},
-     * <p>
-     * See {@link #decrypt(byte[], byte[])}.
      *
      * @return random 16 byte array
      */
-    public byte[] generateKeyBytes() {
-        byte[] key = new byte[16];
-        secureRandom.nextBytes(key);
+    fun generateKeyBytes(): ByteArray {
+        val key = ByteArray(16)
+        secureRandom.nextBytes(key)
 
-        return key;
+        return key
     }
 
     /**
@@ -53,50 +42,71 @@ public class EncryptionUtils {
      * @param plaintext to encrypt (UTF-8)
      * @return encrypted message
      */
-    public byte[] encrypt(String plaintext, byte[] secretKey) {
-        try {
+    fun encrypt(plaintext: String, secretKey: ByteArray?): ByteArray {
+        return try {
             // NEVER REUSE THIS IV WITH SAME KEY
-            byte[] iv = new byte[GCM_IV_LENGTH];
-            secureRandom.nextBytes(iv);
+            val iv = ByteArray(GCM_IV_LENGTH)
+            secureRandom.nextBytes(iv)
 
-            final Cipher cipher = Cipher.getInstance(ALGORITHM);
-            GCMParameterSpec parameterSpec = new GCMParameterSpec(128, iv); //128 bit auth tag length
-            cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(secretKey, "AES"), parameterSpec);
+            val cipher = Cipher.getInstance(ALGORITHM)
+            val parameterSpec = GCMParameterSpec(128, iv) //128 bit auth tag length
+            cipher.init(Cipher.ENCRYPT_MODE, SecretKeySpec(secretKey, "AES"), parameterSpec)
 
-            byte[] cipherText = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
+            val cipherText = cipher.doFinal(plaintext.toByteArray(StandardCharsets.UTF_8))
+            val byteBuffer = ByteBuffer.allocate(iv.size + cipherText.size)
 
-            ByteBuffer byteBuffer = ByteBuffer.allocate(iv.length + cipherText.length);
-            byteBuffer.put(iv);
-            byteBuffer.put(cipherText);
-
-            return byteBuffer.array();
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
-                 InvalidAlgorithmParameterException | InvalidKeyException e) {
-            throw new RuntimeException(e);
+            byteBuffer.put(iv)
+            byteBuffer.put(cipherText)
+            byteBuffer.array()
+        } catch (e: NoSuchAlgorithmException) {
+            throw RuntimeException(e)
+        } catch (e: NoSuchPaddingException) {
+            throw RuntimeException(e)
+        } catch (e: IllegalBlockSizeException) {
+            throw RuntimeException(e)
+        } catch (e: BadPaddingException) {
+            throw RuntimeException(e)
+        } catch (e: InvalidAlgorithmParameterException) {
+            throw RuntimeException(e)
+        } catch (e: InvalidKeyException) {
+            throw RuntimeException(e)
         }
     }
 
     /**
-     * Decrypts encrypted message (see {@link #encrypt(String, byte[])}).
+     * Decrypts encrypted message (see [.encrypt]).
      *
      * @param encrypted iv with ciphertext
      * @return original plaintext
      */
-    public @NotNull String decrypt(byte[] encrypted, byte[] secretKey) {
-        try {
-            final Cipher cipher = Cipher.getInstance(ALGORITHM);
+    fun decrypt(encrypted: ByteArray, secretKey: ByteArray?): String {
+        return try {
+            val cipher = Cipher.getInstance(ALGORITHM)
 
             // use first 12 bytes for iv
-            AlgorithmParameterSpec gcmIv = new GCMParameterSpec(128, encrypted, 0, GCM_IV_LENGTH);
-            cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(secretKey, "AES"), gcmIv);
+            val gcmIv: AlgorithmParameterSpec = GCMParameterSpec(128, encrypted, 0, GCM_IV_LENGTH)
+            cipher.init(Cipher.DECRYPT_MODE, SecretKeySpec(secretKey, "AES"), gcmIv)
 
             // Use everything from 12 bytes on as ciphertext
-            byte[] plainText = cipher.doFinal(encrypted, GCM_IV_LENGTH, encrypted.length - GCM_IV_LENGTH);
-
-            return new String(plainText, StandardCharsets.UTF_8);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
-                 InvalidAlgorithmParameterException | InvalidKeyException e) {
-            throw new RuntimeException(e);
+            val plainText = cipher.doFinal(encrypted, GCM_IV_LENGTH, encrypted.size - GCM_IV_LENGTH)
+            String(plainText, StandardCharsets.UTF_8)
+        } catch (e: NoSuchAlgorithmException) {
+            throw RuntimeException(e)
+        } catch (e: NoSuchPaddingException) {
+            throw RuntimeException(e)
+        } catch (e: IllegalBlockSizeException) {
+            throw RuntimeException(e)
+        } catch (e: BadPaddingException) {
+            throw RuntimeException(e)
+        } catch (e: InvalidAlgorithmParameterException) {
+            throw RuntimeException(e)
+        } catch (e: InvalidKeyException) {
+            throw RuntimeException(e)
         }
+    }
+
+    companion object {
+        private const val GCM_IV_LENGTH = 12
+        private const val ALGORITHM = "AES/GCM/NoPadding"
     }
 }

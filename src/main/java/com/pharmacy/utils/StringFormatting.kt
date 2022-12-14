@@ -1,19 +1,18 @@
-package com.pharmacy.utils;
+package com.pharmacy.utils
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
-public class StringFormatting {
+class StringFormatting {
+    fun stringToDate(date: String?): Date? {
+        var dateFormat: Date? = null
 
-    public Date stringToDate(String date) {
-        Date dateFormat = null;
         try {
-            dateFormat = new SimpleDateFormat("MMM dd, yyyy").parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
+            dateFormat = SimpleDateFormat("MMM dd, yyyy").parse(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
         }
-
-        return dateFormat;
+        return dateFormat
     }
 }

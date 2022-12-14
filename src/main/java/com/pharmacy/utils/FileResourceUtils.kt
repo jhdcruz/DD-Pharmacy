@@ -1,31 +1,25 @@
-package com.pharmacy.utils;
+package com.pharmacy.utils
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import java.io.IOException
+import java.io.InputStream
+import java.util.*
 
-public class FileResourceUtils {
-
-
+class FileResourceUtils {
     /**
      * Get a file from the resources folder
      * works everywhere, IDEA, Unit tests and JAR file.
      *
      * @param fileName file name including path (if nested)
      * @return input stream of provided file
-     * @implNote <a href="https://mkyong.com/java/java-read-a-file-from-resources-folder/">Java – Read a file from resources folder</a>
+     * @implNote [Java – Read a file from resources folder](https://mkyong.com/java/java-read-a-file-from-resources-folder/)
      */
-    public InputStream getFileFromResourceAsStream(String fileName) {
+    private fun getFileFromResourceAsStream(fileName: String): InputStream {
         // The class loader that loaded the class
-        ClassLoader classLoader = getClass().getClassLoader();
-        InputStream inputStream = classLoader.getResourceAsStream(fileName);
+        val classLoader = javaClass.classLoader
+        val inputStream = classLoader.getResourceAsStream(fileName)
 
         // the stream holding the file content
-        if (inputStream == null) {
-            throw new IllegalArgumentException("file not found! " + fileName);
-        } else {
-            return inputStream;
-        }
+        return inputStream ?: throw IllegalArgumentException("file not found! $fileName")
     }
 
     /**
@@ -35,16 +29,14 @@ public class FileResourceUtils {
      * @param fileName file name including path (if nested)
      * @return value of the property
      */
-    public String getProperty(String key, String fileName) {
-        InputStream is = new FileResourceUtils().getFileFromResourceAsStream(fileName);
-        Properties prop = new Properties();
-
+    fun getProperty(key: String?, fileName: String): String {
+        val `is` = FileResourceUtils().getFileFromResourceAsStream(fileName)
+        val prop = Properties()
         try {
-            prop.load(is);
-        } catch (IOException e) {
-            e.printStackTrace();
+            prop.load(`is`)
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
-
-        return prop.getProperty(key);
+        return prop.getProperty(key)
     }
 }

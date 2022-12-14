@@ -1,60 +1,59 @@
-package com.pharmacy.controllers;
+package com.pharmacy.controllers
 
-import com.pharmacy.database.DatabaseInstance;
+import com.pharmacy.database.DatabaseInstance
+import java.sql.Connection
+import java.sql.PreparedStatement
+import java.sql.ResultSet
+import java.sql.SQLException
+import java.sql.Statement
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-public class LogsController {
-
-    Connection connection = null;
-    PreparedStatement prepStatement = null;
-    Statement statement = null;
-    ResultSet resultSet = null;
+class LogsController {
+    private var connection: Connection? = null
 
     /**
      * System/application logs
      */
-    public LogsController() {
+    init {
         try {
-            connection = new DatabaseInstance().getConnection();
-            statement = connection.createStatement();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            connection = DatabaseInstance().getConnection()
+        } catch (e: SQLException) {
+            e.printStackTrace()
         }
     }
 
+    val logs: ResultSet?
+        get() {
+            var resultSet: ResultSet? = null
 
-    public ResultSet getLogs() {
-        try {
-            String query = """
+            try {
+                val query = """
                 SELECT users.username AS user_id,event,date
                 FROM logs
                 INNER JOIN users ON logs.user_id=users.id
                 ORDER BY date DESC;
-                """;
+                """.trimIndent()
 
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+                val statement: Statement = connection!!.createStatement()
+                resultSet = statement.executeQuery(query)
+            } catch (sqlException: SQLException) {
+                sqlException.printStackTrace()
+            }
+
+            return resultSet
         }
 
-        return resultSet;
-    }
 
-    public void addLogEntry(int id, String event) {
+    fun addLogEntry(id: Int, event: String?) {
         try {
-            String query = "INSERT INTO logs (user_id, event, date) values(?,?, DEFAULT)";
-            prepStatement = connection.prepareStatement(query);
-            prepStatement.setInt(1, id);
-            prepStatement.setString(2, event);
+            val query = "INSERT INTO logs (user_id, event, date) values(?,?, DEFAULT)"
 
-            prepStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            val prepStatement: PreparedStatement = connection!!.prepareStatement(query)
+            prepStatement.setInt(1, id)
+            prepStatement.setString(2, event)
+
+            prepStatement.executeUpdate()
+        } catch (e: SQLException) {
+            e.printStackTrace()
         }
     }
 }

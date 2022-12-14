@@ -1,23 +1,24 @@
-package com.pharmacy;
+package com.pharmacy
 
-import com.formdev.flatlaf.FlatLightLaf;
-import com.pharmacy.views.LoginPage;
+import com.formdev.flatlaf.FlatLightLaf
+import com.pharmacy.views.LoginPage
+import java.awt.EventQueue
+import java.util.logging.Level
+import java.util.logging.Logger
+import javax.swing.UIManager
+import javax.swing.UnsupportedLookAndFeelException
 
-import javax.swing.UnsupportedLookAndFeelException;
-import java.awt.EventQueue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-public class Main {
-
-    public static void main(String[] args) {
-        // setting UI theme and LookAndFeel of the application
+object Main {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        // Setting UI theme and LookAndFeel of the application
         try {
-            javax.swing.UIManager.setLookAndFeel(new FlatLightLaf());
-        } catch (UnsupportedLookAndFeelException lookAndFeelException) {
-            Logger.getLogger(LoginPage.class.getName()).log(Level.INFO, null, lookAndFeelException);
+            UIManager.setLookAndFeel(FlatLightLaf())
+        } catch (lookAndFeelException: UnsupportedLookAndFeelException) {
+            Logger.getLogger(LoginPage::class.java.name)
+                .log(Level.SEVERE, "Unable to set look and feel.", lookAndFeelException)
         }
 
-        EventQueue.invokeLater(LoginPage::new);
+        EventQueue.invokeLater { LoginPage() }
     }
 }

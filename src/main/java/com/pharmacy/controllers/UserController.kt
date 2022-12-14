@@ -1,237 +1,246 @@
-package com.pharmacy.controllers;
+package com.pharmacy.controllers
 
-import com.pharmacy.database.DatabaseInstance;
-import com.pharmacy.models.UserModel;
-import com.pharmacy.utils.EncryptionUtils;
+import com.pharmacy.database.DatabaseInstance
+import com.pharmacy.models.UserModel
+import com.pharmacy.utils.EncryptionUtils
+import java.sql.Connection
+import java.sql.PreparedStatement
+import java.sql.ResultSet
+import java.sql.SQLException
+import java.sql.Statement
+import javax.swing.JOptionPane
 
-import javax.swing.JOptionPane;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+class UserController(private var logId: Int) {
+    private var connection: Connection? = null
+    private var statement: Statement? = null
 
-public class UserController {
-
-    Connection conn = null;
-    PreparedStatement prepStatement = null;
-    Statement statement = null;
-    ResultSet resultSet = null;
-
-    LogsController logsController;
-
-    int logId;
-
-    public UserController(int logId) {
-        this.logId = logId;
-
+    init {
         try {
-            conn = new DatabaseInstance().getConnection();
-            statement = conn.createStatement();
-            logsController = new LogsController();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            connection = DatabaseInstance().getConnection()
+            statement = connection!!.createStatement()
+        } catch (ex: SQLException) {
+            ex.printStackTrace()
         }
     }
 
-    // Methods to add new user
-    public void addUser(UserModel userModel) {
-        try {
-            String duplicateQuery = "SELECT * FROM users WHERE name='"
-                + userModel.getName()
-                + "' AND phone='"
-                + userModel.getPhone()
-                + "' AND user_type='"
-                + userModel.getType()
-                + "'";
-            resultSet = statement.executeQuery(duplicateQuery);
+    val users: ResultSet?
+        get() {
+            var resultSet: ResultSet? = null
 
-            if (resultSet.next()) {
-                JOptionPane.showMessageDialog(null, "User already exists");
-            } else {
-                EncryptionUtils encryptionUtils = new EncryptionUtils();
-                byte[] secretKey = encryptionUtils.generateKeyBytes();
-
-                String insertQuery = "INSERT INTO users (name,phone,username,password,user_type,secret_key) "
-                    + "VALUES(?,?,?,?,?,?)";
-                prepStatement = conn.prepareStatement(insertQuery);
-                prepStatement.setString(1, userModel.getName());
-                prepStatement.setString(2, userModel.getPhone());
-                prepStatement.setString(3, userModel.getUsername());
-                prepStatement.setBytes(4, encryptionUtils.encrypt(userModel.getPassword(), secretKey));
-                prepStatement.setString(5, userModel.getType());
-                prepStatement.setBytes(6, secretKey);
-
-                prepStatement.executeUpdate();
-                logsController.addLogEntry(logId, "Added new user: " + userModel.getName());
+            try {
+                val query = "SELECT id, name, username, phone, user_type FROM users"
+                resultSet = statement!!.executeQuery(query)
+            } catch (sqlException: SQLException) {
+                sqlException.printStackTrace()
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
+            return resultSet
+        }
+
+    val timesheet: ResultSet?
+        get() {
+            var resultSet: ResultSet? = null
+
+            try {
+                val query = """
+                SELECT users.name as name, users.username AS username, in_time, out_time
+                FROM timesheet
+                INNER JOIN users ON timesheet.username=users.username
+                ORDER BY in_time DESC;
+                """.trimIndent()
+                resultSet = statement!!.executeQuery(query)
+            } catch (sqlException: SQLException) {
+                sqlException.printStackTrace()
+            }
+
+            return resultSet
+        }
+
+    // Methods to add new user
+    fun addUser(userModel: UserModel) {
+        val resultSet: ResultSet?
+
+        try {
+            val duplicateQuery = ("SELECT * FROM users WHERE name='"
+                + userModel.name
+                + "' AND phone='"
+                + userModel.phone
+                + "' AND user_type='"
+                + userModel.type
+                + "'")
+            resultSet = statement!!.executeQuery(duplicateQuery)
+
+            if (resultSet!!.next()) {
+                JOptionPane.showMessageDialog(null, "User already exists")
+            } else {
+                val encryptionUtils = EncryptionUtils()
+                val secretKey = encryptionUtils.generateKeyBytes()
+
+                val insertQuery = ("INSERT INTO users (name,phone,username,password,user_type,secret_key) "
+                    + "VALUES(?,?,?,?,?,?)")
+
+                val prepStatement: PreparedStatement = connection!!.prepareStatement(insertQuery)
+                prepStatement.setString(1, userModel.name)
+                prepStatement.setString(2, userModel.phone)
+                prepStatement.setString(3, userModel.username)
+                prepStatement.setBytes(4, encryptionUtils.encrypt(userModel.password!!, secretKey))
+                prepStatement.setString(5, userModel.type)
+                prepStatement.setBytes(6, secretKey)
+
+                prepStatement.executeUpdate()
+                LogsController().addLogEntry(logId, "Added new user: " + userModel.name)
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
         }
     }
 
     /**
      * Update existing user (password excluded!)
-     * <p>
-     * See {@link #updatePass(int id, String username, String password)} for updating
+     *
+     *
+     * See [.updatePass] for updating
      * password
      *
      * @param userModel populated UserModel
      */
-    public void updateUser(UserModel userModel) {
-
+    fun updateUser(userModel: UserModel) {
         try {
-            String query = "UPDATE users SET username=?,name=?,phone=?,user_type=? WHERE id=?";
-            prepStatement = conn.prepareStatement(query);
-            prepStatement.setString(1, userModel.getUsername());
-            prepStatement.setString(2, userModel.getName());
-            prepStatement.setString(3, userModel.getPhone());
-            prepStatement.setString(4, userModel.getType());
-            prepStatement.setInt(5, userModel.getId());
+            val query = "UPDATE users SET username=?,name=?,phone=?,user_type=? WHERE id=?"
+            val prepStatement: PreparedStatement = connection!!.prepareStatement(query)
 
-            prepStatement.executeUpdate();
-            logsController.addLogEntry(logId, "User updated: " + userModel.getId() + " - " + userModel.getName());
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            prepStatement.setString(1, userModel.username)
+            prepStatement.setString(2, userModel.name)
+            prepStatement.setString(3, userModel.phone)
+            prepStatement.setString(4, userModel.type)
+            prepStatement.setInt(5, userModel.id!!)
+
+            prepStatement.executeUpdate()
+            LogsController().addLogEntry(logId, "User updated: " + userModel.id + " - " + userModel.name)
+        } catch (throwables: SQLException) {
+            throwables.printStackTrace()
         }
     }
 
     // Method to delete existing user
-    public void deleteUser(int id, String username) {
+    fun deleteUser(id: Int, username: String) {
         try {
-            String query = "DELETE FROM users WHERE id=?";
-            prepStatement = conn.prepareStatement(query);
-            prepStatement.setInt(1, id);
+            val query = "DELETE FROM users WHERE id=?"
+            val prepStatement: PreparedStatement = connection!!.prepareStatement(query)
+            prepStatement.setInt(1, id)
 
-            prepStatement.executeUpdate();
-            logsController.addLogEntry(logId, "Deleted user: " + username);
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            prepStatement.executeUpdate()
+            LogsController().addLogEntry(logId, "Deleted user: $username")
+        } catch (sqlException: SQLException) {
+            sqlException.printStackTrace()
         }
     }
 
-    // Method to retrieve data set to display in table
-    public ResultSet getUsers() {
+
+    fun searchUsers(search: String): ResultSet? {
+        var resultSet: ResultSet? = null
+
         try {
-            String query = "SELECT id, name, username, phone, user_type FROM users";
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            val query =
+                "SELECT * FROM users WHERE name LIKE '%$search%' OR phone LIKE '%$search%' OR user_type LIKE '%$search%'"
+            resultSet = statement!!.executeQuery(query)
+        } catch (sqlException: SQLException) {
+            sqlException.printStackTrace()
         }
 
-        return resultSet;
+        return resultSet
     }
 
-    public ResultSet searchUsers(String search) {
-        try {
-            String query = "SELECT * FROM users WHERE name LIKE '%" + search + "%' OR phone LIKE '%" + search + "%' OR user_type LIKE '%" + search + "%'";
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
-
-        return resultSet;
-    }
-
-    public int getUserId(String username) {
-        int id = 0;
+    fun getUserId(username: String): Int {
+        val resultSet: ResultSet?
+        var id = 0
 
         try {
-            String query = "SELECT id FROM users WHERE username='" + username + "'";
-            resultSet = statement.executeQuery(query);
-            if (resultSet.next()) {
-                id = resultSet.getInt("id");
+            val query = "SELECT id FROM users WHERE username='$username'"
+            resultSet = statement!!.executeQuery(query)
+
+            if (resultSet!!.next()) {
+                id = resultSet.getInt("id")
             }
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+        } catch (sqlException: SQLException) {
+            sqlException.printStackTrace()
         }
 
-        return id;
+        return id
     }
 
-    public ResultSet findUser(String username) {
+    fun findUser(username: String): ResultSet? {
+        var resultSet: ResultSet? = null
+
         try {
-            String query = "SELECT id, username, name, phone, user_type FROM users WHERE username='" + username + "'";
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            val query = "SELECT id, username, name, phone, user_type FROM users WHERE username='$username'"
+            resultSet = statement!!.executeQuery(query)
+        } catch (sqlException: SQLException) {
+            sqlException.printStackTrace()
         }
 
-        return resultSet;
+        return resultSet
     }
 
-    public ResultSet getTimesheet() {
+    fun addTimesheetEntry(userModel: UserModel) {
         try {
-            String query = """
-                SELECT users.name as name, users.username AS username, in_time, out_time
-                FROM timesheet
-                INNER JOIN users ON timesheet.username=users.username
-                ORDER BY in_time DESC;
-                """;
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
-
-        return resultSet;
-    }
-
-    public void addTimesheetEntry(UserModel userModel) {
-        try {
-            String query = """
+            val query = """
                 INSERT INTO timesheet (username, name, in_time, out_time) values(?,?,?,?);
-                """;
+                """.trimIndent()
 
-            prepStatement = conn.prepareStatement(query);
-            prepStatement.setString(1, userModel.getUsername());
-            prepStatement.setString(2, userModel.getUsername());
-            prepStatement.setString(3, userModel.getInTime());
-            prepStatement.setString(4, userModel.getOutTime());
+            val prepStatement: PreparedStatement = connection!!.prepareStatement(query)
+            prepStatement.setString(1, userModel.username)
+            prepStatement.setString(2, userModel.username)
+            prepStatement.setString(3, userModel.inTime)
+            prepStatement.setString(4, userModel.outTime)
 
-            prepStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            prepStatement.executeUpdate()
+        } catch (e: SQLException) {
+            e.printStackTrace()
         }
     }
 
-    public boolean matchPasswords(String username, String password) {
+    fun matchPasswords(username: String, password: String): Boolean {
+        val resultSet: ResultSet?
+
         try {
-            String query = "SELECT password,secret_key FROM users WHERE username='"
+            val query = ("SELECT password,secret_key FROM users WHERE username='"
                 + username
-                + "'";
-            resultSet = statement.executeQuery(query);
+                + "'")
+            resultSet = statement!!.executeQuery(query)
 
-            if (resultSet.next()) {
-                byte[] secretKey = resultSet.getBytes("secret_key");
-                byte[] encryptedPassword = resultSet.getBytes("password");
+            if (resultSet!!.next()) {
+                val secretKey = resultSet.getBytes("secret_key")
+                val encryptedPassword = resultSet.getBytes("password")
 
-                String decryptedPass = new EncryptionUtils().decrypt(encryptedPassword, secretKey);
-
-                return decryptedPass.equals(password);
+                val decryptedPass = EncryptionUtils().decrypt(encryptedPassword, secretKey)
+                return decryptedPass == password
             }
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+        } catch (sqlException: SQLException) {
+            sqlException.printStackTrace()
         }
 
-        return false;
+        return false
     }
 
-    public void updatePass(int id, String username, String password) {
+    fun updatePass(id: Int, username: String, password: String?) {
         try {
-            EncryptionUtils encryptionUtils = new EncryptionUtils();
-            byte[] secretKey = encryptionUtils.generateKeyBytes();
+            // encryption
+            val encryptionUtils = EncryptionUtils()
+            val secretKey = encryptionUtils.generateKeyBytes()
+            val encryptedPass = encryptionUtils.encrypt(password!!, secretKey)
 
-            byte[] encryptedPass = encryptionUtils.encrypt(password, secretKey);
+            val query = "UPDATE users SET password=?, secret_key=? WHERE id='$id'"
 
-            String query = "UPDATE users SET password=?, secret_key=? WHERE id='" + id + "'";
-            prepStatement = conn.prepareStatement(query);
-            prepStatement.setBytes(1, encryptedPass);
-            prepStatement.setBytes(2, secretKey);
+            // save new encrypted password
+            val prepStatement: PreparedStatement = connection!!.prepareStatement(query)
+            prepStatement.setBytes(1, encryptedPass)
+            prepStatement.setBytes(2, secretKey)
 
-            prepStatement.executeUpdate();
-            logsController.addLogEntry(logId, "Password updated for user: " + username);
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            prepStatement.executeUpdate()
+            LogsController().addLogEntry(logId, "Password updated for user: $username")
+        } catch (sqlException: SQLException) {
+            sqlException.printStackTrace()
         }
     }
 }
