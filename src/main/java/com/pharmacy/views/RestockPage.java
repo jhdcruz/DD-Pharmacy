@@ -33,6 +33,10 @@ public class RestockPage extends javax.swing.JPanel {
         medicineController = new MedicineController(id);
         supplierController = new SupplierController(id);
         loadDataSet();
+
+        // We're not using invokeLater inside combobox since
+        // suppComboBoxPopupMenuWillBecomeVisible will be stuck and not show
+        EventQueue.invokeLater(this::loadComboBox);
     }
 
     /**
@@ -339,6 +343,7 @@ public class RestockPage extends javax.swing.JPanel {
             try {
                 ResultSet resultSet = medicineController.getMedicineName(codeText.getText());
 
+                assert resultSet != null;
                 if (resultSet.next()) {
                     double costPrice = Double.parseDouble(costText.getText());
                     double totalCost = costPrice * Integer.parseInt(quantityText.getText());
@@ -416,9 +421,11 @@ public class RestockPage extends javax.swing.JPanel {
 
             assert resultSet != null;
             if (resultSet.next()) {
+                suppComboBox.setSelectedItem(resultSet.getString("supplied_by"));
                 nameText.setText(resultSet.getString("medicine_name"));
                 costText.setText(String.valueOf(resultSet.getDouble("cost_price")));
             } else {
+                suppComboBox.setSelectedIndex(-1);
                 nameText.setText("");
                 costText.setText("");
             }
