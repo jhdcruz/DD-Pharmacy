@@ -3,18 +3,15 @@ package com.pharmacy.views.dialogs;
 import com.pharmacy.controllers.SupplierController;
 import com.pharmacy.models.SupplierModel;
 import com.pharmacy.utils.DataTableModel;
-
+import java.awt.EventQueue;
+import java.awt.event.KeyEvent;
+import java.sql.SQLException;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
-import java.awt.EventQueue;
-import java.awt.event.KeyEvent;
-import java.sql.SQLException;
 
 public class AddSupplierDialog extends javax.swing.JDialog {
-
-    SupplierController supplierController;
 
     private final JTable suppTable;
     private final int id;
@@ -36,8 +33,6 @@ public class AddSupplierDialog extends javax.swing.JDialog {
 
         getRootPane().setDefaultButton(addButton);
         setVisible(true);
-
-        supplierController = new SupplierController(id);
     }
 
     /**
@@ -185,7 +180,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
             supplierModel.setPhone(phoneText.getText());
 
             EventQueue.invokeLater(() -> {
-                supplierController.addSupplier(supplierModel);
+                new SupplierController(id).addSupplier(supplierModel);
                 loadDataSet();
             });
 
@@ -200,9 +195,9 @@ public class AddSupplierDialog extends javax.swing.JDialog {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                suppTable.setModel(new DataTableModel().buildTableModel(supplierController.getSuppliers()));
+                suppTable.setModel(new DataTableModel().buildTableModel(new SupplierController(id).getSuppliers()));
             } catch (SQLException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong...", JOptionPane.WARNING_MESSAGE);
             }
         });
     }

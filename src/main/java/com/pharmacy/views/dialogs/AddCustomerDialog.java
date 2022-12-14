@@ -3,18 +3,16 @@ package com.pharmacy.views.dialogs;
 import com.pharmacy.controllers.CustomerController;
 import com.pharmacy.models.CustomerModel;
 import com.pharmacy.utils.DataTableModel;
-
+import java.awt.EventQueue;
+import java.awt.event.KeyEvent;
+import java.sql.SQLException;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
-import java.awt.EventQueue;
-import java.awt.event.KeyEvent;
-import java.sql.SQLException;
 
 public class AddCustomerDialog extends javax.swing.JDialog {
 
-    CustomerController customerController;
     private final JTable custTable;
 
     private final int id;
@@ -38,7 +36,6 @@ public class AddCustomerDialog extends javax.swing.JDialog {
         getRootPane().setDefaultButton(addButton);
 
         setVisible(true);
-        customerController = new CustomerController(id);
     }
 
     /**
@@ -245,7 +242,7 @@ public class AddCustomerDialog extends javax.swing.JDialog {
             customerModel.setPhone(phoneText.getText());
 
             EventQueue.invokeLater(() -> {
-                customerController.addCustomer(customerModel);
+                new CustomerController(id).addCustomer(customerModel);
                 loadDataSet();
             });
 
@@ -256,9 +253,9 @@ public class AddCustomerDialog extends javax.swing.JDialog {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                custTable.setModel(new DataTableModel().buildTableModel(customerController.getCustomers()));
+                custTable.setModel(new DataTableModel().buildTableModel(new CustomerController(id).getCustomers()));
             } catch (SQLException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
             }
         });
     }

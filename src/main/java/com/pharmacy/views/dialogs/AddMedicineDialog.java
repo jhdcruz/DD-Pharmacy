@@ -5,20 +5,18 @@ import com.pharmacy.controllers.SupplierController;
 import com.pharmacy.models.MedicineModel;
 import com.pharmacy.utils.DataTableModel;
 import com.pharmacy.views.Dashboard;
-
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.KeyStroke;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.Objects;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.KeyStroke;
 
 public class AddMedicineDialog extends javax.swing.JDialog {
 
-    MedicineController medicineController;
     private final JTable productTable;
     private final Dashboard dashboard;
     private final int id;
@@ -27,8 +25,6 @@ public class AddMedicineDialog extends javax.swing.JDialog {
         this.productTable = productTable;
         this.dashboard = dashboard;
         this.id = id;
-
-        medicineController = new MedicineController(id);
 
         initComponents();
 
@@ -273,7 +269,7 @@ public class AddMedicineDialog extends javax.swing.JDialog {
             medicineModel.setSuppliedBy(Objects.requireNonNull(suppCombo.getSelectedItem()).toString());
 
             EventQueue.invokeLater(() -> {
-                medicineController.addMedicine(medicineModel);
+                new MedicineController(id).addMedicine(medicineModel);
                 loadDataSet();
             });
 
@@ -322,7 +318,7 @@ public class AddMedicineDialog extends javax.swing.JDialog {
 
     public void loadDataSet() {
         try {
-            productTable.setModel(new DataTableModel().buildTableModel(medicineController.getMedicines()));
+            productTable.setModel(new DataTableModel().buildTableModel(new MedicineController(id).getMedicines()));
             processColumns();
         } catch (SQLException e) {
             e.printStackTrace();

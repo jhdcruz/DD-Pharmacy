@@ -3,26 +3,24 @@ package com.pharmacy.views.dialogs;
 import com.pharmacy.controllers.UserController;
 import com.pharmacy.models.UserModel;
 import com.pharmacy.utils.DataTableModel;
-
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.event.KeyEvent;
+import java.sql.SQLException;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.event.KeyEvent;
-import java.sql.SQLException;
 
 public class AddUserDialog extends JDialog {
 
-    UserController userController;
     private final JTable userTable;
-    private final int logId;
+    private final int id;
 
-    public AddUserDialog(JTable usersTable, int logId) {
+    public AddUserDialog(JTable usersTable, int id) {
         this.userTable = usersTable;
-        this.logId = logId;
+        this.id = id;
 
         initComponents();
 
@@ -39,7 +37,6 @@ public class AddUserDialog extends JDialog {
         entryPanel.registerKeyboardAction(actionEvent -> addButton.doClick(), KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         getRootPane().setDefaultButton(addButton);
-        userController = new UserController(logId);
     }
 
     /**
@@ -193,7 +190,7 @@ public class AddUserDialog extends JDialog {
             userModel.setType((String) userTypeCombo.getSelectedItem());
 
             EventQueue.invokeLater(() -> {
-                userController.addUser(userModel);
+                new UserController(id).addUser(userModel);
                 loadDataSet();
             });
 
@@ -211,11 +208,10 @@ public class AddUserDialog extends JDialog {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                userTable.setModel(new DataTableModel().buildTableModel(userController.getUsers()));
-
+                userTable.setModel(new DataTableModel().buildTableModel(new UserController(id).getUsers()));
                 processColumns();
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Something went wrong...", JOptionPane.WARNING_MESSAGE);
             }
         });
     }

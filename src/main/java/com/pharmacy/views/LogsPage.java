@@ -4,6 +4,7 @@ import com.pharmacy.controllers.LogsController;
 import com.pharmacy.utils.DataTableModel;
 import java.awt.EventQueue;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -141,7 +142,7 @@ public class LogsPage extends javax.swing.JPanel {
                 LogsController logsController = new LogsController();
                 logTable.setModel(new DataTableModel().buildTableModel(logsController.getLogs()));
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Cannot get logs", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
@@ -153,7 +154,7 @@ public class LogsPage extends javax.swing.JPanel {
                 LogsController logsController = new LogsController();
                 logTable.setModel(new DataTableModel().buildTableModel(logsController.searchLogs(text)));
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                JOptionPane.showMessageDialog(this, throwables.getMessage(), "Something went wrong...", JOptionPane.WARNING_MESSAGE);
             }
         });
     }
