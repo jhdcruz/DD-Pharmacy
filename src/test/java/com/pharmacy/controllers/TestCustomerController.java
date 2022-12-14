@@ -11,6 +11,9 @@ public class TestCustomerController {
      * <p>
      * Very useful if you get locked out due to encryption,
      * since manually adding a user to the database won't work
+     * <p>
+     * Just add @Test to the method and run the test
+     * make sure database is running and able to connect
      */
     public void addUserFallback() {
         UserModel userModel = new UserModel();
