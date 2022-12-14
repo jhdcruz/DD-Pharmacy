@@ -4,7 +4,6 @@ import com.pharmacy.controllers.UserController;
 import com.pharmacy.models.UserModel;
 import java.awt.CardLayout;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.LocalDateTime;
@@ -37,7 +36,7 @@ public class Dashboard extends javax.swing.JFrame {
         }
 
         // TODO: Inherit `id` from login instead
-        EventQueue.invokeLater(() -> id = new UserController(id).getUserId(username));
+        id = new UserController(id).getUserId(username);
 
         // Panel Layout set to Card Layout to allow switching between different sections
         displayPanel.setLayout(layout);
