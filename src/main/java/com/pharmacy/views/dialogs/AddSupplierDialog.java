@@ -174,8 +174,8 @@ public class AddSupplierDialog extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Please enter all the required details.");
         else {
             SupplierModel supplierModel = new SupplierModel();
-            supplierModel.setSupplierCode(codeText.getText());
-            supplierModel.setSupplierName(nameText.getText());
+            supplierModel.setCode(codeText.getText());
+            supplierModel.setName(nameText.getText());
             supplierModel.setLocation(locationText.getText());
             supplierModel.setPhone(phoneText.getText());
 
