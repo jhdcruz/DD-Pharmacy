@@ -37,25 +37,6 @@ class UserController(private var logId: Int) {
             return resultSet
         }
 
-    val timesheet: ResultSet?
-        get() {
-            var resultSet: ResultSet? = null
-
-            try {
-                val query = """
-                SELECT users.name as name, users.username AS username, in_time, out_time
-                FROM timesheet
-                INNER JOIN users ON timesheet.username=users.username
-                ORDER BY in_time DESC;
-                """.trimIndent()
-                resultSet = statement!!.executeQuery(query)
-            } catch (sqlException: SQLException) {
-                sqlException.printStackTrace()
-            }
-
-            return resultSet
-        }
-
     // Methods to add new user
     fun addUser(userModel: UserModel) {
         val resultSet: ResultSet?
@@ -142,7 +123,7 @@ class UserController(private var logId: Int) {
 
         try {
             val query =
-                "SELECT * FROM users WHERE name LIKE '%$search%' OR phone LIKE '%$search%' OR user_type LIKE '%$search%'"
+                "SELECT id, username, name, phone, user_type FROM users WHERE name LIKE '%$search%' OR phone LIKE '%$search%' OR user_type LIKE '%$search%'"
             resultSet = statement!!.executeQuery(query)
         } catch (sqlException: SQLException) {
             sqlException.printStackTrace()
@@ -180,24 +161,6 @@ class UserController(private var logId: Int) {
         }
 
         return resultSet
-    }
-
-    fun addTimesheetEntry(userModel: UserModel) {
-        try {
-            val query = """
-                INSERT INTO timesheet (username, name, in_time, out_time) values(?,?,?,?);
-                """.trimIndent()
-
-            val prepStatement: PreparedStatement = connection!!.prepareStatement(query)
-            prepStatement.setString(1, userModel.username)
-            prepStatement.setString(2, userModel.username)
-            prepStatement.setString(3, userModel.inTime)
-            prepStatement.setString(4, userModel.outTime)
-
-            prepStatement.executeUpdate()
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        }
     }
 
     fun matchPasswords(username: String, password: String): Boolean {

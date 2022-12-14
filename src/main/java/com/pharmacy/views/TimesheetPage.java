@@ -1,24 +1,16 @@
 package com.pharmacy.views;
 
-import com.pharmacy.controllers.UserController;
+import com.pharmacy.controllers.TimesheetController;
 import com.pharmacy.utils.DataTableModel;
-
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.EventQueue;
 import java.sql.SQLException;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class TimesheetPage extends javax.swing.JPanel {
 
-    UserController userController;
-    int id;
-
-    public TimesheetPage(int id) {
-        this.id = id;
-
+    public TimesheetPage() {
         initComponents();
-
-        userController = new UserController(id);
         loadDataSet();
     }
 
@@ -135,6 +127,7 @@ public class TimesheetPage extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void searchTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextKeyReleased
+        loadSearchData(searchText.getText());
     }//GEN-LAST:event_searchTextKeyReleased
 
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
@@ -145,9 +138,22 @@ public class TimesheetPage extends javax.swing.JPanel {
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
-                timesheetTable.setModel(new DataTableModel().buildTableModel(userController.getTimesheet()));
+                TimesheetController timesheetController = new TimesheetController();
+                timesheetTable.setModel(new DataTableModel().buildTableModel(timesheetController.getTimesheet()));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
+            }
+        });
+    }
+
+    // Method to display search result in table
+    public void loadSearchData(String text) {
+        EventQueue.invokeLater(() -> {
+            try {
+                TimesheetController timesheetController = new TimesheetController();
+                timesheetTable.setModel(new DataTableModel().buildTableModel(timesheetController.searchTimesheet(text)));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
         });
     }

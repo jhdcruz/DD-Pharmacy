@@ -2,11 +2,10 @@ package com.pharmacy.views;
 
 import com.pharmacy.controllers.LogsController;
 import com.pharmacy.utils.DataTableModel;
-
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.EventQueue;
 import java.sql.SQLException;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class LogsPage extends javax.swing.JPanel {
 
@@ -128,6 +127,7 @@ public class LogsPage extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void searchTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextKeyReleased
+        loadSearchData(searchText.getText());
     }//GEN-LAST:event_searchTextKeyReleased
 
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed

@@ -1,5 +1,6 @@
 package com.pharmacy.views;
 
+import com.pharmacy.controllers.TimesheetController;
 import com.pharmacy.controllers.UserController;
 import com.pharmacy.models.UserModel;
 import java.awt.CardLayout;
@@ -35,7 +36,8 @@ public class Dashboard extends javax.swing.JFrame {
             notForEmployee();
         }
 
-        // TODO: Inherit `id` from login instead
+        // TODO: Inherit `id` from login instead to reduce
+        //       the number of queries to the database
         id = new UserController(id).getUserId(username);
 
         // Panel Layout set to Card Layout to allow switching between different sections
@@ -46,7 +48,7 @@ public class Dashboard extends javax.swing.JFrame {
         displayPanel.add("Medicine", new MedicinePage(this, id));
         displayPanel.add("Suppliers", new SupplierPage(id));
         displayPanel.add("Restock", new RestockPage(this, id));
-        displayPanel.add("Timesheet", new TimesheetPage(id));
+        displayPanel.add("Timesheet", new TimesheetPage());
         displayPanel.add("Logs", new LogsPage());
 
         this.addWindowListener(new WindowAdapter() {
@@ -56,7 +58,7 @@ public class Dashboard extends javax.swing.JFrame {
                 userModel.setOutTime(String.valueOf(outTime));
                 userModel.setUsername(username);
 
-                new UserController(id).addTimesheetEntry(userModel);
+                new TimesheetController().addTimesheetEntry(userModel);
                 super.windowClosing(e);
             }
         });
@@ -325,7 +327,7 @@ public class Dashboard extends javax.swing.JFrame {
             userModel.setOutTime(String.valueOf(outTime));
             userModel.setUsername(username);
 
-            new UserController(id).addTimesheetEntry(userModel);
+            new TimesheetController().addTimesheetEntry(userModel);
             dispose();
 
             new LoginPage();

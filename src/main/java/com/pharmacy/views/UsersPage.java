@@ -4,12 +4,11 @@ import com.pharmacy.controllers.UserController;
 import com.pharmacy.models.UserModel;
 import com.pharmacy.utils.DataTableModel;
 import com.pharmacy.views.dialogs.AddUserDialog;
-
+import java.awt.EventQueue;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
-import java.awt.EventQueue;
-import java.sql.SQLException;
 
 public class UsersPage extends javax.swing.JPanel {
 
@@ -376,8 +375,7 @@ public class UsersPage extends javax.swing.JPanel {
     }//GEN-LAST:event_userTableMouseClicked
 
     private void searchTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextKeyReleased
-        String text = searchText.getText();
-        loadSearchData(text);
+        loadSearchData(searchText.getText());
     }//GEN-LAST:event_searchTextKeyReleased
 
     private void addUserButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserButtonActionPerformed
