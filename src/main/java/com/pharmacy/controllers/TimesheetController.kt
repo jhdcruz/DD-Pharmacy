@@ -60,7 +60,7 @@ class TimesheetController {
     }
 
     fun searchTimesheet(search: String): ResultSet? {
-        var resultSet: ResultSet? = null
+        val resultSet: ResultSet?
 
         try {
             val query = """
