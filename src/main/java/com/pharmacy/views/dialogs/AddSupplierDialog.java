@@ -192,10 +192,18 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+
+    private void processColumns() {
+        // hide pid
+        suppTable.getColumnModel().getColumn(0).setMinWidth(0);
+        suppTable.getColumnModel().getColumn(0).setMaxWidth(0);
+    }
+
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
                 suppTable.setModel(new DataTableModel().buildTableModel(new SupplierController(id).getSuppliers()));
+                processColumns();
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong...", JOptionPane.WARNING_MESSAGE);
             }

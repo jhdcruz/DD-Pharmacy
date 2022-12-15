@@ -250,10 +250,17 @@ public class AddCustomerDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
+    private void processColumns() {
+        // hide pid
+        custTable.getColumnModel().getColumn(0).setMinWidth(0);
+        custTable.getColumnModel().getColumn(0).setMaxWidth(0);
+    }
+
     public void loadDataSet() {
         EventQueue.invokeLater(() -> {
             try {
                 custTable.setModel(new DataTableModel().buildTableModel(new CustomerController(id).getCustomers()));
+                processColumns();
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Something went wrong", JOptionPane.WARNING_MESSAGE);
             }
