@@ -291,7 +291,7 @@ class MedicineController(private var logId: Int) {
 
         try {
             val query = """
-                SELECT medicine_code, medicine_name, description, quantity,
+                SELECT pid, medicine_code, medicine_name, description, quantity,
                        cost_price, sell_price, supplied_by, expiration_date, last_updated
                 FROM medicines
                 WHERE medicine_code LIKE ?
@@ -351,7 +351,7 @@ class MedicineController(private var logId: Int) {
 
         try {
             val query = """
-                SELECT purchase_id,restock.medicine_code,medicines.medicine_name,restock.quantity,total_cost
+                SELECT purchase_id,restock.medicine_code,medicines.medicine_name,restock.quantity,total_cost,date
                 FROM restock INNER JOIN medicines ON restock.medicine_code=medicines.medicine_code
                 INNER JOIN suppliers ON restock.supplier_code=suppliers.supplier_code
                 WHERE purchase_id LIKE ?

@@ -166,7 +166,7 @@ class SupplierController(private var logId: Int) {
 
         try {
             val query = """
-                SELECT supplier_code, full_name, location, contact
+                SELECT sid, supplier_code, full_name, location, contact, last_updated
                 FROM suppliers
                 WHERE supplier_code LIKE ?
                 OR location LIKE ?
