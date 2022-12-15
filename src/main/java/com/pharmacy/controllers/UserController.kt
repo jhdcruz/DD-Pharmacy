@@ -133,7 +133,7 @@ class UserController(private var logId: Int) {
 
         try {
             val query = """
-                SELECT id, username, name, phone, user_type
+                SELECT id, name, username, phone, user_type
                 FROM users
                 WHERE name LIKE ?
                 OR username LIKE ?
