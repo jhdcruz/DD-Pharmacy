@@ -4,8 +4,6 @@
 
 In Compliance to CIT 201: System Analysis and Design.
 
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=jhdcruz_DD-Pharmacy)](https://sonarcloud.io/summary/new_code?id=jhdcruz_DD-Pharmacy)
-
 ## Features
 
 - Medicine Inventory
